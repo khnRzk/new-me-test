@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akurana Nikkah Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F6F4F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE8;
+  --g1: #1B5E3B;
+  --g2: #2E7D54;
+  --g3: #4CAF78;
+  --g-pale: #EAF5EE;
+  --g-soft: #C8E6D4;
+  --rose: #B5534A;
+  --rose-pale: #FAEDEC;
+  --rose-soft: #F0C9C6;
+  --gold: #9A7B2F;
+  --gold-pale: #FAF4E1;
+  --ink: #1A1A1A;
+  --ink2: #444;
+  --ink3: #888;
+  --border: #E2DDD6;
+  --border2: #CBC5BB;
+  --r: 16px;
+  --rs: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+header {
+  background: var(--g1);
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+}
+.hdr {
+  max-width: 660px; margin: 0 auto;
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 11px;
+}
+.hdr-ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.hdr h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600; color: #fff; line-height: 1.1;
+}
+.hdr p { font-size: 10.5px; color: rgba(255,255,255,0.55); font-weight: 300; margin-top: 1px; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(160deg, #1B5E3B 0%, #0D3B24 60%, #152E1E 100%);
+  padding: 38px 24px 34px;
+  text-align: center; color: #fff;
+  position: relative; overflow: hidden;
+}
+.geo { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.geo span { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.06); }
+.geo span:nth-child(1){width:220px;height:220px;top:-60px;right:-60px;}
+.geo span:nth-child(2){width:130px;height:130px;top:15px;right:15px;}
+.geo span:nth-child(3){width:260px;height:260px;bottom:-110px;left:-80px;}
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 20px; padding: 5px 14px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: rgba(255,255,255,0.85);
+}
+.hero-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 21px; font-weight: 700;
+  line-height: 1.25; margin-bottom: 6px;
+  letter-spacing: -0.2px;
+  color: #fff;
+}
+.hero-heart {
+  display: inline-block;
+  font-size: 17px; vertical-align: middle;
+  margin-left: 3px;
+}
+.hero-sub {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px; font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.02em;
+  margin-bottom: 18px;
+}
+.verse {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 15px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.55; display: block; margin-bottom: 4px;
+}
+.vref {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: block; margin-bottom: 18px;
+}
+.hdesc {
+  font-size: 13px; color: rgba(255,255,255,0.6);
+  font-weight: 300; line-height: 1.65;
+  max-width: 280px; margin: 0 auto 22px;
+}
+.hbtns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hbtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.1);
+  color: #fff; text-decoration: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  transition: background 0.18s;
+}
+.hbtn:hover { background: rgba(255,255,255,0.18); }
+
+/* MAIN */
+main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
+
+/* CONTROLS */
+.controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.seg {
+  display: flex; background: var(--surface2);
+  border-radius: var(--rs); padding: 3px; gap: 3px;
+}
+.sb {
+  flex: 1; padding: 10px 8px; border: none; border-radius: 8px;
+  background: transparent; cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 500; color: var(--ink3);
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  white-space: nowrap;
+}
+.sb.sa { background: var(--g1); color: #fff; box-shadow: 0 2px 8px rgba(27,94,59,0.3); }
+.sb.sg { background: var(--g-pale); color: var(--g1); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.sb.sb2 { background: var(--rose-pale); color: var(--rose); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.cpill {
+  font-size: 10px; padding: 1px 6px; border-radius: 8px;
+  background: rgba(0,0,0,0.1); font-weight: 600;
+}
+.sa .cpill { background: rgba(255,255,255,0.2); }
+.sg .cpill { background: var(--g-soft); color: var(--g1); }
+.sb2 .cpill { background: var(--rose-soft); color: var(--rose); }
+.srow { position: relative; }
+.srow input {
+  width: 100%; padding: 11px 16px 11px 42px;
+  border: 1.5px solid var(--border); border-radius: var(--rs);
+  background: var(--surface);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.srow input::placeholder { color: var(--ink3); }
+.srow input:focus { border-color: var(--g2); box-shadow: 0 0 0 3px rgba(46,125,84,0.1); }
+.sico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+
+/* DIVIDER */
+.dvd {
+  display: flex; align-items: center; gap: 12px;
+  margin: 4px 0 18px; color: var(--ink3);
+  font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
+}
+.dvd::before,.dvd::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* CARDS */
+.list { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover { border-color: var(--border2); box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+.cstrip { height: 3px; }
+.gc .cstrip { background: linear-gradient(90deg, var(--g2), var(--g3)); }
+.bc .cstrip { background: linear-gradient(90deg, var(--rose), #D4837E); }
+
+.chead {
+  display: flex; align-items: center;
+  padding: 14px 16px 13px; gap: 13px;
+  cursor: pointer; user-select: none;
+}
+.ava {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0; position: relative;
+}
+.ava.g { background: var(--g-pale); }
+.ava.b { background: var(--rose-pale); }
+.adot {
+  position: absolute; bottom: 1px; right: 1px;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--surface);
+}
+.ava.g .adot { background: var(--g2); }
+.ava.b .adot { background: var(--rose); }
+
+.cmeta { flex: 1; min-width: 0; }
+.rrow { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+.rbadge {
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 6px;
+  letter-spacing: 0.03em;
+}
+.rbadge.g { background: var(--g-pale); color: var(--g1); }
+.rbadge.b { background: var(--rose-pale); color: var(--rose); }
+.copybtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; cursor: pointer; font-size: 12px;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.copybtn:hover { background: var(--g-pale); border-color: var(--g3); }
+.copybtn.ok { background: var(--g-pale); border-color: var(--g2); }
+.tpill {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.tpill.g { background: var(--g1); color: #fff; }
+.tpill.b { background: var(--rose); color: #fff; }
+.ctitle { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.csub { font-size: 12px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chv { color: var(--ink3); font-size: 18px; transition: transform 0.25s; flex-shrink: 0; }
+.chv.open { transform: rotate(180deg); }
+
+/* BODY */
+.cbody { display: none; border-top: 1px solid var(--border); padding: 16px; background: #FDFCFB; }
+.cbody.open { display: block; }
+.dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-bottom: 14px; }
+.di {}
+.di.full { grid-column: 1 / -1; }
+.dk { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink3); margin-bottom: 3px; }
+.dv { font-size: 13px; font-weight: 400; color: var(--ink2); line-height: 1.5; }
+
+.ebox {
+  background: linear-gradient(135deg, var(--g-pale), #F2FAF5);
+  border: 1px solid var(--g-soft);
+  border-radius: 10px; padding: 14px 14px 12px 18px;
+  margin-bottom: 14px; position: relative;
+}
+.ebox::before {
+  content: '"';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; color: var(--g-soft);
+  position: absolute; top: -6px; left: 8px; line-height: 1;
+}
+.etext {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 15px;
+  color: var(--ink2); line-height: 1.65;
+}
+
+.wabtn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; width: 100%; padding: 13px;
+  background: #25D366; color: #fff;
+  border: none; border-radius: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: background 0.2s, transform 0.1s; letter-spacing: 0.01em;
+}
+.wabtn:hover { background: #1ebe5d; }
+.wabtn:active { transform: scale(0.98); }
+
+/* EMPTY */
+.empty { text-align: center; padding: 56px 20px; color: var(--ink3); }
+.empty .ei { font-size: 40px; margin-bottom: 12px; }
+.empty p { font-size: 14px; line-height: 1.7; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
+  background: var(--ink); color: #fff;
+  padding: 10px 22px; border-radius: 24px;
+  font-size: 13px; font-weight: 500;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* FOOTER */
+footer { background: var(--g1); text-align: center; padding: 24px 16px; font-size: 12px; line-height: 2; }
+footer strong { color: #fff; font-size: 14px; display: block; }
+footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+footer a:hover { color: #fff; }
+.fsub { font-size: 10.5px; color: rgba(255,255,255,0.35); display: block; margin-top: 4px; }
+
+@media (max-width: 420px) {
+  .dgrid { grid-template-columns: 1fr; }
+  .di.full { grid-column: 1; }
+  .hero h2 { font-size: 25px; }
+  .sb { font-size: 12px; padding: 9px 6px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-ring">🕌</div>
+    <div>
+      <h1>Akurana Nikkah Service</h1>
+      <p>Connecting hearts the Halal way</p>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="geo"><span></span><span></span><span></span></div>
+  <div class="chip">💍 Akurana Nikkah Service</div>
+  <div class="hero-title">Connecting Hearts the Halal Way <span class="hero-heart">🤍</span></div>
+  <div class="hero-sub">Central Province, Sri Lanka · Islamic Matrimony</div>
+  <span class="verse">"And We created you in pairs."</span>
+  <span class="vref">— Qur'an 78:8</span>
+  <p class="hdesc">Browse profiles, copy the Ref No, and reach out via WhatsApp for full details.</p>
+  <div class="hbtns">
+    <a class="hbtn" href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank">📱 Join WhatsApp Group</a>
+    <a class="hbtn" href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank">📢 Follow Channel</a>
+  </div>
+</div>
+
+<main>
+  <div class="controls">
+    <div class="seg">
+      <button class="sb sa" onclick="setFilter('all',this)">All <span class="cpill" id="cnt-all">0</span></button>
+      <button class="sb"    onclick="setFilter('Groom',this)">👨 Grooms <span class="cpill" id="cnt-groom">0</span></button>
+      <button class="sb"    onclick="setFilter('Bride',this)">👩 Brides <span class="cpill" id="cnt-bride">0</span></button>
+    </div>
+    <div class="srow">
+      <span class="sico">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by ref no, location, education…" oninput="renderProfiles()">
+    </div>
+  </div>
+
+  <div class="dvd">profiles</div>
+  <div class="list" id="profilesList"></div>
+</main>
+
+<footer>
+  <strong>🕌 Akurana Nikkah Service</strong>
+  <a href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y">📱 WhatsApp Group</a>
+  &nbsp;·&nbsp;
+  <a href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20">📢 Channel</a>
+  <span class="fsub">All profiles are shared with consent · Akurana Nikkah Service</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ──────────────────────────────
+// Paste your published Google Sheet CSV URL here:
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRyoj5F8x7pl5oihREI7bJ7_5o2N6SBjBkNJOpxIkq-3POjm0ux3tm8gybOZYiX9RC5QStT0KoPPTXs/pub?gid=0&single=true&output=csv';
+
+// Fixed contact WhatsApp number (never changes)
+const CONTACT_WA = '0773226166';
+
+// ─── GOOGLE SHEET COLUMN HEADERS ─────────
+// Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
+// Optional:  DOB, Complexion, DressCode, FamilyStatus
+// Type must be exactly: Groom or Bride
+
+// ─── SAMPLE DATA ─────────────────────────
+const SAMPLE_DATA = [
+  {
+    RefNo: 'AKNS-0264', Type: 'Groom',
+    DOB: '20/06/1996', Height: "5' 10\"", Status: 'Unmarried',
+    Siblings: '1 Sister (Married)',
+    Education: 'BSc(Sp)Hons, Computer Engineering\nPostgraduate Diploma in ICT',
+    Occupation: 'IT Consultant (Sri Lanka)', Location: 'Gampola, Kandy',
+    Complexion: 'Fair', DressCode: 'Casual Islamic', FamilyStatus: 'Middle Class',
+    Expectations: 'Looking for Islamic good character from a respectable family background.'
+  },
+  {
+    RefNo: 'AKNS-0265', Type: 'Bride',
+    DOB: '14/03/1998', Height: "5' 4\"", Status: 'Unmarried',
+    Siblings: '1 Brother (Unmarried)',
+    Education: 'BA (Hons) in Arabic & Islamic Civilisation',
+    Occupation: 'Teacher (Government School)', Location: 'Akurana, Kandy',
+    Complexion: '', DressCode: 'Niqabi', FamilyStatus: '',
+    Expectations: 'Seeking a God-fearing, educated Muslim from a respectable family.'
+  },
+  {
+    RefNo: 'AKNS-0266', Type: 'Groom',
+    DOB: '', Height: "5' 8\"", Status: 'Unmarried',
+    Siblings: '2 Sisters (Both Married)', Education: 'MBBS (Medicine)',
+    Occupation: 'Medical Officer (Government Hospital)', Location: 'Colombo 05',
+    Complexion: '', DressCode: '', FamilyStatus: 'Upper Middle Class',
+    Expectations: 'Looking for a practising Muslim with good values and family background.'
+  },
+  {
+    RefNo: 'AKNS-0267', Type: 'Bride',
+    DOB: '22/08/1999', Height: "5' 3\"", Status: 'Unmarried',
+    Siblings: 'None', Education: 'LLB (Hons) in Law',
+    Occupation: 'Attorney-at-Law (Trainee)', Location: 'Matale',
+    Complexion: 'Wheatish', DressCode: '', FamilyStatus: '',
+    Expectations: 'Seeking a kind, practising Muslim who values family and Deen.'
+  }
+];
+
+// ─── STATE ───────────────────────────────
+let allProfiles = [];
+let currentFilter = 'all';
+let openCard = null;
+
+// ─── LOAD ────────────────────────────────
+async function loadData() {
+  if (!SHEET_CSV_URL) { allProfiles = SAMPLE_DATA; init(); return; }
+  try {
+    const r = await fetch(SHEET_CSV_URL);
+    allProfiles = parseCSV(await r.text());
+  } catch(e) { allProfiles = SAMPLE_DATA; }
+  init();
+}
+
+function parseCSV(csv) {
+  const lines = csv.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,''));
+  return lines.slice(1).map(line => {
+    const vals = []; let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch==='"') { inQ=!inQ; }
+      else if (ch===',' && !inQ) { vals.push(cur); cur=''; }
+      else { cur+=ch; }
+    }
+    vals.push(cur);
+    const obj = {};
+    headers.forEach((h,i) => { obj[h]=(vals[i]||'').trim(); });
+    return obj;
+  }).filter(p=>p.RefNo);
+}
+
+function init() {
+  const g = allProfiles.filter(p=>p.Type==='Groom').length;
+  const b = allProfiles.filter(p=>p.Type==='Bride').length;
+  document.getElementById('cnt-all').textContent = allProfiles.length;
+  document.getElementById('cnt-groom').textContent = g;
+  document.getElementById('cnt-bride').textContent = b;
+  renderProfiles();
+}
+
+// ─── FILTER ──────────────────────────────
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.sb').forEach(b => { b.className='sb'; });
+  el.classList.add(f==='all'?'sa':f==='Groom'?'sg':'sb2');
+  openCard = null;
+  renderProfiles();
+}
+
+function renderProfiles() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allProfiles.filter(p => {
+    const mf = currentFilter==='all' || p.Type===currentFilter;
+    const ms = !q ||
+      (p.RefNo||'').toLowerCase().includes(q) ||
+      (p.Location||'').toLowerCase().includes(q) ||
+      (p.Education||'').toLowerCase().includes(q) ||
+      (p.Occupation||'').toLowerCase().includes(q) ||
+      (p.FamilyStatus||'').toLowerCase().includes(q);
+    return mf && ms;
+  });
+
+  const el = document.getElementById('profilesList');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><div class="ei">🔍</div><p>No profiles found.<br>Try a different filter or search term.</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map((p,i) => buildCard(p,i)).join('');
+}
+
+// ─── BUILD CARD ───────────────────────────
+function buildCard(p, i) {
+  const isG = p.Type === 'Groom';
+  const c = isG ? 'g' : 'b';
+  const ico = isG ? '👨' : '👩';
+  const age = getAge(p.DOB);
+  const eduLines = (p.Education||'').split('\n').filter(Boolean);
+  const waNum = CONTACT_WA.replace(/^0/,'94');
+  const waMsg = encodeURIComponent(`Assalamu Alaikum, I am interested in profile ${p.RefNo}. Please share more details. JazakAllah Khair.`);
+  const waLink = `https://wa.me/${waNum}?text=${waMsg}`;
+
+  // Helper — only renders field if value is non-empty
+  const fi = (label, val, full=false) => val
+    ? `<div class="di${full?' full':''}"><div class="dk">${label}</div><div class="dv">${val}</div></div>`
+    : '';
+
+  // DOB & Age are optional — only show if DOB present
+  const dobBlock = p.DOB ? `
+    <div class="di"><div class="dk">Date of Birth</div><div class="dv">${p.DOB}</div></div>
+    <div class="di"><div class="dk">Age</div><div class="dv">${age} years</div></div>` : '';
+
+  const subParts = [];
+  if (age !== '—') subParts.push(`${age} yrs`);
+  if (p.Location) subParts.push(p.Location);
+
+  return `
+<div class="card ${isG?'gc':'bc'}" id="card-${i}">
+  <div class="cstrip"></div>
+  <div class="chead" onclick="toggleCard(${i})">
+    <div class="ava ${c}">${ico}<span class="adot"></span></div>
+    <div class="cmeta">
+      <div class="rrow">
+        <span class="rbadge ${c}">${p.RefNo}</span>
+        <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
+        <span class="tpill ${c}">${p.Type}</span>
+      </div>
+      <div class="ctitle">${p.Occupation || eduLines[0] || '—'}</div>
+      <div class="csub">${subParts.join(' · ')}</div>
+    </div>
+    <div class="chv" id="chv-${i}">⌄</div>
+  </div>
+  <div class="cbody" id="body-${i}">
+    <div class="dgrid">
+      ${dobBlock}
+      <div class="di"><div class="dk">Height</div><div class="dv">${p.Height||'—'}</div></div>
+      <div class="di"><div class="dk">Status</div><div class="dv">${p.Status||'—'}</div></div>
+      <div class="di full"><div class="dk">Siblings</div><div class="dv">${p.Siblings||'—'}</div></div>
+      <div class="di full"><div class="dk">Education</div><div class="dv">${eduLines.map(e=>`• ${e}`).join('<br>')||'—'}</div></div>
+      <div class="di full"><div class="dk">Occupation</div><div class="dv">${p.Occupation||'—'}</div></div>
+      <div class="di full"><div class="dk">Location</div><div class="dv">${p.Location||'—'}</div></div>
+      ${fi('Complexion', p.Complexion)}
+      ${fi('Dress Code', p.DressCode)}
+      ${fi('Family Status', p.FamilyStatus)}
+    </div>
+    ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
+    <a class="wabtn" href="${waLink}" target="_blank">📱 &nbsp;Contact via WhatsApp · ${CONTACT_WA}</a>
+  </div>
+</div>`;
+}
+
+// ─── INTERACTIONS ─────────────────────────
+function toggleCard(i) {
+  const body = document.getElementById(`body-${i}`);
+  const chv  = document.getElementById(`chv-${i}`);
+  if (!body) return;
+  if (openCard !== null && openCard !== i) {
+    const ob = document.getElementById(`body-${openCard}`);
+    const oc = document.getElementById(`chv-${openCard}`);
+    if (ob) { ob.classList.remove('open'); oc.classList.remove('open'); }
+  }
+  body.classList.toggle('open');
+  chv.classList.toggle('open');
+  openCard = body.classList.contains('open') ? i : null;
+}
+
+function copyRef(e, ref, btn) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(ref).catch(() => {
+    const t = document.createElement('textarea');
+    t.value = ref; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+  });
+  btn.textContent = '✅'; btn.classList.add('ok');
+  setTimeout(() => { btn.textContent = '📋'; btn.classList.remove('ok'); }, 1500);
+  showToast(`✓ ${ref} copied`);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function getAge(dob) {
+  if (!dob) return '—';
+  const p = dob.split('/');
+  if (p.length < 3) return '—';
+  const b = new Date(+p[2], +p[1]-1, +p[0]);
+  if (isNaN(b)) return '—';
+  const n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < b.getMonth() || (n.getMonth()===b.getMonth() && n.getDate()<b.getDate())) a--;
+  return a;
+}
+
+loadData();
+</script>
+</body>
+</html>
