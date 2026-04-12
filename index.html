@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akurana Nikkah Service</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #F6F4F0;
@@ -30,7 +30,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
@@ -55,10 +55,10 @@ header {
   font-size: 18px; flex-shrink: 0;
 }
 .hdr h1 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: 18px; font-weight: 600; color: #fff; line-height: 1.1;
 }
-.hdr p { font-size: 10.5px; color: rgba(255,255,255,0.55); font-weight: 300; margin-top: 1px; }
+.hdr p { font-size: 10.5px; color: rgba(255,255,255,0.55); font-weight: 400; margin-top: 1px; font-family: 'Inter', sans-serif; }
 
 /* HERO */
 .hero {
@@ -77,61 +77,137 @@ header {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 20px; padding: 5px 14px;
-  font-size: 11px; font-weight: 500; letter-spacing: 0.07em;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 18px;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.75);
+  font-family: 'Inter', sans-serif;
 }
 .hero-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 21px; font-weight: 700;
-  line-height: 1.25; margin-bottom: 6px;
-  letter-spacing: -0.2px;
+  font-family: 'Lora', serif;
+  font-size: 22px; font-weight: 600;
+  line-height: 1.3; margin-bottom: 6px;
+  letter-spacing: 0px;
   color: #fff;
 }
 .hero-heart {
   display: inline-block;
-  font-size: 17px; vertical-align: middle;
+  font-size: 18px; vertical-align: middle;
   margin-left: 3px;
 }
 .hero-sub {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px; font-weight: 400;
-  color: rgba(255,255,255,0.5);
-  letter-spacing: 0.02em;
-  margin-bottom: 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px; font-weight: 400;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
 .verse {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-style: italic; font-size: 15px;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.55; display: block; margin-bottom: 4px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6; display: block; margin-bottom: 4px;
 }
 .vref {
-  font-size: 11px; color: rgba(255,255,255,0.4);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  display: block; margin-bottom: 18px;
+  font-size: 11px; color: rgba(255,255,255,0.38);
+  font-family: 'Inter', sans-serif;
+  display: block; margin-bottom: 20px; letter-spacing: 0.02em;
 }
 .hdesc {
-  font-size: 13px; color: rgba(255,255,255,0.6);
-  font-weight: 300; line-height: 1.65;
+  font-size: 13px; color: rgba(255,255,255,0.55);
+  font-weight: 400; line-height: 1.7;
   max-width: 280px; margin: 0 auto 22px;
+  font-family: 'Inter', sans-serif;
 }
 .hbtns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .hbtn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 9px 16px; border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.22);
-  background: rgba(255,255,255,0.1);
-  color: #fff; text-decoration: none;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9); text-decoration: none;
+  font-family: 'Inter', sans-serif;
   font-size: 12px; font-weight: 500;
   transition: background 0.18s;
+  letter-spacing: 0.01em;
 }
-.hbtn:hover { background: rgba(255,255,255,0.18); }
+.hbtn:hover { background: rgba(255,255,255,0.16); }
 
 /* MAIN */
 main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
+
+/* SUCCESS BANNER */
+.success-banner {
+  background: var(--g1);
+  border-radius: 16px;
+  padding: 0;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(46,125,84,0.3);
+  box-shadow: 0 4px 24px rgba(27,94,59,0.18);
+}
+.success-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(76,175,120,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.sbanner-top {
+  padding: 18px 20px 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.success-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.success-text { flex: 1; min-width: 0; }
+.success-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+  font-family: 'Inter', sans-serif;
+}
+.success-count {
+  font-family: 'Lora', serif;
+  font-size: 42px; font-weight: 600;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -1px;
+}
+.success-desc {
+  font-size: 12.5px; font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+  font-family: 'Inter', sans-serif;
+}
+.sbanner-foot {
+  padding: 10px 20px 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.1);
+  display: flex; align-items: center; gap: 8px;
+}
+.sbanner-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4CAF78; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(76,175,120,0.2);
+}
+.sbanner-foot-text {
+  font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.45);
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-family: 'Lora', serif;
+}
+
 
 /* CONTROLS */
 .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
@@ -142,7 +218,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
 .sb {
   flex: 1; padding: 10px 8px; border: none; border-radius: 8px;
   background: transparent; cursor: pointer;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px; font-weight: 500; color: var(--ink3);
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center; gap: 5px;
@@ -163,7 +239,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
   width: 100%; padding: 11px 16px 11px 42px;
   border: 1.5px solid var(--border); border-radius: var(--rs);
   background: var(--surface);
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink);
+  font-family: 'Inter', sans-serif; font-size: 14px; color: var(--ink);
   outline: none; transition: border-color 0.2s, box-shadow 0.2s;
 }
 .srow input::placeholder { color: var(--ink3); }
@@ -237,7 +313,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
 .tpill.g { background: var(--g1); color: #fff; }
 .tpill.b { background: var(--rose); color: #fff; }
 .ctitle { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
-.csub { font-size: 12px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.csub { font-size: 12px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .chv { color: var(--ink3); font-size: 18px; transition: transform 0.25s; flex-shrink: 0; }
 .chv.open { transform: rotate(180deg); }
 
@@ -258,14 +334,14 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
 }
 .ebox::before {
   content: '"';
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: 48px; color: var(--g-soft);
   position: absolute; top: -6px; left: 8px; line-height: 1;
 }
 .etext {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic; font-size: 15px;
-  color: var(--ink2); line-height: 1.65;
+  font-family: 'Lora', serif;
+  font-style: italic; font-size: 14.5px;
+  color: var(--ink2); line-height: 1.7;
 }
 
 .wabtn {
@@ -273,10 +349,10 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
   gap: 8px; width: 100%; padding: 13px;
   background: #25D366; color: #fff;
   border: none; border-radius: 10px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px; font-weight: 600;
   cursor: pointer; text-decoration: none;
-  transition: background 0.2s, transform 0.1s; letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.1s; letter-spacing: 0.02em;
 }
 .wabtn:hover { background: #1ebe5d; }
 .wabtn:active { transform: scale(0.98); }
@@ -284,7 +360,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
 /* EMPTY */
 .empty { text-align: center; padding: 56px 20px; color: var(--ink3); }
 .empty .ei { font-size: 40px; margin-bottom: 12px; }
-.empty p { font-size: 14px; line-height: 1.7; }
+.empty p { font-size: 14px; line-height: 1.7; font-family: 'Inter', sans-serif; }
 
 /* TOAST */
 .toast {
@@ -293,6 +369,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
   background: var(--ink); color: #fff;
   padding: 10px 22px; border-radius: 24px;
   font-size: 13px; font-weight: 500;
+  font-family: 'Inter', sans-serif;
   transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
   z-index: 999; white-space: nowrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -300,8 +377,8 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 90px; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 /* FOOTER */
-footer { background: var(--g1); text-align: center; padding: 24px 16px; font-size: 12px; line-height: 2; }
-footer strong { color: #fff; font-size: 14px; display: block; }
+footer { background: var(--g1); text-align: center; padding: 24px 16px; font-size: 12px; line-height: 2; font-family: 'Inter', sans-serif; }
+footer strong { color: #fff; font-size: 14px; display: block; font-family: 'Lora', serif; font-weight: 600; letter-spacing: 0.01em; }
 footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
 footer a:hover { color: #fff; }
 .fsub { font-size: 10.5px; color: rgba(255,255,255,0.35); display: block; margin-top: 4px; }
@@ -341,6 +418,21 @@ footer a:hover { color: #fff; }
 </div>
 
 <main>
+  <div class="success-banner">
+    <div class="sbanner-top">
+      <div class="success-icon">💍</div>
+      <div class="success-text">
+        <div class="success-label">Alhamdulillah · Successful Proposals</div>
+        <div class="success-count" id="successCount">0</div>
+        <div class="success-desc">Profiles that found their match through our service</div>
+      </div>
+    </div>
+    <div class="sbanner-foot">
+      <div class="sbanner-dot"></div>
+      <div class="sbanner-foot-text">May Allah bless every union — Āmīn</div>
+    </div>
+  </div>
+
   <div class="controls">
     <div class="seg">
       <button class="sb sa" onclick="setFilter('all',this)">All <span class="cpill" id="cnt-all">0</span></button>
@@ -371,9 +463,13 @@ footer a:hover { color: #fff; }
 // ─── CONFIG ──────────────────────────────
 // Paste your published Google Sheet CSV URL here:
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRyoj5F8x7pl5oihREI7bJ7_5o2N6SBjBkNJOpxIkq-3POjm0ux3tm8gybOZYiX9RC5QStT0KoPPTXs/pub?gid=0&single=true&output=csv';
+// NOTE: Update the URL above with your new published CSV link from the new sheet
 
 // Fixed contact WhatsApp number (never changes)
 const CONTACT_WA = '0773226166';
+
+// ─── UPDATE THIS NUMBER manually when a proposal is successful ───
+const SUCCESSFUL_PROPOSALS = 12;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
@@ -434,20 +530,38 @@ async function loadData() {
 }
 
 function parseCSV(csv) {
-  const lines = csv.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,''));
-  return lines.slice(1).map(line => {
-    const vals = []; let cur = '', inQ = false;
-    for (const ch of line) {
-      if (ch==='"') { inQ=!inQ; }
-      else if (ch===',' && !inQ) { vals.push(cur); cur=''; }
-      else { cur+=ch; }
+  // Robust parser: handles multiline quoted cells (Google Sheets line breaks inside cells)
+  const rows = [];
+  let cur = '', inQ = false, fields = [], i = 0;
+  while (i < csv.length) {
+    const ch = csv[i];
+    if (ch === '"') {
+      if (inQ && csv[i+1] === '"') { cur += '"'; i += 2; continue; } // escaped quote
+      inQ = !inQ;
+    } else if (ch === ',' && !inQ) {
+      fields.push(cur); cur = '';
+    } else if ((ch === '\n') && !inQ) {
+      fields.push(cur); cur = '';
+      rows.push(fields); fields = [];
+    } else if (ch === '\r') {
+      // skip \r
+    } else {
+      cur += ch;
     }
-    vals.push(cur);
+    i++;
+  }
+  if (cur || fields.length) { fields.push(cur); rows.push(fields); }
+
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(row => {
     const obj = {};
-    headers.forEach((h,i) => { obj[h]=(vals[i]||'').trim(); });
+    headers.forEach((h, idx) => {
+      // Replace literal \n inside cell values with our separator
+      obj[h] = (row[idx] || '').trim();
+    });
     return obj;
-  }).filter(p=>p.RefNo);
+  }).filter(p => p.RefNo && p.RefNo.trim());
 }
 
 function init() {
@@ -456,7 +570,21 @@ function init() {
   document.getElementById('cnt-all').textContent = allProfiles.length;
   document.getElementById('cnt-groom').textContent = g;
   document.getElementById('cnt-bride').textContent = b;
+  animateCount('successCount', SUCCESSFUL_PROPOSALS);
   renderProfiles();
+}
+
+function animateCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const duration = 1200;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start;
+    if (start >= target) clearInterval(timer);
+  }, 16);
 }
 
 // ─── FILTER ──────────────────────────────
@@ -495,7 +623,9 @@ function buildCard(p, i) {
   const c = isG ? 'g' : 'b';
   const ico = isG ? '👨' : '👩';
   const age = getAge(p.DOB);
-  const eduLines = (p.Education||'').split('\n').filter(Boolean);
+  // Split education on both \n and literal line breaks, clean each line
+  const eduLines = (p.Education||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const eduFirst = eduLines[0] || '';
   const waNum = CONTACT_WA.replace(/^0/,'94');
   const waMsg = encodeURIComponent(`Assalamu Alaikum, I am interested in profile ${p.RefNo}. Please share more details. JazakAllah Khair.`);
   const waLink = `https://wa.me/${waNum}?text=${waMsg}`;
@@ -525,7 +655,7 @@ function buildCard(p, i) {
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
         <span class="tpill ${c}">${p.Type}</span>
       </div>
-      <div class="ctitle">${p.Occupation || eduLines[0] || '—'}</div>
+      <div class="ctitle">${p.Occupation || eduFirst || '—'}</div>
       <div class="csub">${subParts.join(' · ')}</div>
     </div>
     <div class="chv" id="chv-${i}">⌄</div>
