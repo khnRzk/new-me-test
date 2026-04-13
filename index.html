@@ -260,6 +260,7 @@ main {
   transition: border-color 0.2s, box-shadow 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
+.card.is-new { border-color: #4CAF78; box-shadow: 0 2px 12px rgba(76,175,120,0.15); }
 .card:active { border-color: var(--border2); }
 .cstrip { height: 3px; }
 .gc .cstrip { background: linear-gradient(90deg, var(--g2), var(--g3)); }
@@ -315,6 +316,30 @@ main {
 }
 .tpill.g { background: var(--g1); color: #fff; }
 .tpill.b { background: var(--rose); color: #fff; }
+
+.new-pill {
+  font-size: 9px; font-weight: 700;
+  padding: 3px 7px; border-radius: 20px;
+  background: #4CAF78; color: #fff;
+  letter-spacing: 0.1em;
+  display: inline-flex; align-items: center; gap: 4px;
+  animation: newPulse 2s ease-in-out infinite;
+}
+.new-pill::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #fff; opacity: 0.85;
+  animation: dotBlink 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes newPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,120,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(76,175,120,0); }
+}
+@keyframes dotBlink {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 0.3; }
+}
 
 .csub { font-size: 12.5px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
@@ -525,10 +550,10 @@ const SUCCESSFUL_PROPOSALS = 19;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
-// Optional:  DOB, Age, Complexion, DressCode, FamilyStatus
-// Note: If DOB is provided, Age is calculated automatically. If no DOB, add Age manually.
-// Siblings and Education support multiple lines (press Alt+Enter in Google Sheets for line breaks)
-// Type must be exactly: Groom or Bride
+// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded
+// DOB formats accepted: DD/MM/YYYY or MM/YYYY or YYYY
+// DateAdded format: DD/MM/YYYY — profiles added within 24hrs show a NEW badge
+// Siblings and Education support multiple lines (press Alt+Enter in Google Sheets)
 
 // ─── SAMPLE DATA ─────────────────────────
 const SAMPLE_DATA = [
@@ -711,8 +736,10 @@ function buildCard(p, i) {
   if (displayAge) subParts.push(`${displayAge} yrs`);
   if (p.Location) subParts.push(p.Location);
 
+  const newCard = isNew(p.DateAdded);
+
   return `
-<div class="card ${isG?'gc':'bc'}" id="card-${i}">
+<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}" id="card-${i}">
   <div class="cstrip"></div>
   <div class="chead" onclick="toggleCard(${i})">
     <div class="ava ${c}">${ico}<span class="adot"></span></div>
@@ -721,6 +748,7 @@ function buildCard(p, i) {
         <span class="rbadge ${c}">${p.RefNo}</span>
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
         <span class="tpill ${c}">${p.Type}</span>
+        ${isNew(p.DateAdded) ? `<span class="new-pill">NEW</span>` : ''}
       </div>
       <div class="csub">${subParts.join(' · ')}</div>
     </div>
@@ -732,6 +760,7 @@ function buildCard(p, i) {
     <div class="dgrid">
       ${dobBlock}
       <div class="di"><div class="dk">Height</div><div class="dv">${p.Height||'—'}</div></div>
+      ${fi('Weight', p.Weight)}
       <div class="di"><div class="dk">Status</div><div class="dv">${p.Status||'—'}</div></div>
       <div class="di full"><div class="dk">Siblings</div><div class="dv">${sibHTML}</div></div>
       <div class="di full"><div class="dk">Education</div><div class="dv">${eduLines.map(e=>`• ${e}`).join('<br>')||'—'}</div></div>
@@ -782,14 +811,45 @@ function showToast(msg) {
 
 function getAge(dob) {
   if (!dob) return '—';
-  const p = dob.split('/');
-  if (p.length < 3) return '—';
-  const b = new Date(+p[2], +p[1]-1, +p[0]);
-  if (isNaN(b)) return '—';
-  const n = new Date();
-  let a = n.getFullYear() - b.getFullYear();
-  if (n.getMonth() < b.getMonth() || (n.getMonth()===b.getMonth() && n.getDate()<b.getDate())) a--;
-  return a;
+  const now = new Date();
+  const parts = dob.trim().split('/');
+
+  if (parts.length === 1) {
+    // YYYY only
+    const yr = parseInt(parts[0]);
+    if (isNaN(yr)) return '—';
+    return now.getFullYear() - yr;
+  }
+
+  if (parts.length === 2) {
+    // MM/YYYY
+    const yr = parseInt(parts[1]);
+    const mo = parseInt(parts[0]) - 1;
+    if (isNaN(yr) || isNaN(mo)) return '—';
+    let a = now.getFullYear() - yr;
+    if (now.getMonth() < mo) a--;
+    return a;
+  }
+
+  if (parts.length === 3) {
+    // DD/MM/YYYY
+    const b = new Date(+parts[2], +parts[1]-1, +parts[0]);
+    if (isNaN(b)) return '—';
+    let a = now.getFullYear() - b.getFullYear();
+    if (now.getMonth() < b.getMonth() || (now.getMonth()===b.getMonth() && now.getDate()<b.getDate())) a--;
+    return a;
+  }
+
+  return '—';
+}
+
+function isNew(dateAdded) {
+  if (!dateAdded) return false;
+  const parts = dateAdded.trim().split('/');
+  if (parts.length < 3) return false;
+  const added = new Date(+parts[2], +parts[1]-1, +parts[0]);
+  if (isNaN(added)) return false;
+  return (Date.now() - added.getTime()) < 24 * 60 * 60 * 1000;
 }
 
 loadData();
