@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akurana Nikkah Service</title>
+
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- To get your ID: analytics.google.com → Admin → Data Streams → your stream → Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -308,6 +318,17 @@ main {
 }
 .copybtn:active { background: var(--g-pale); border-color: var(--g2); transform: scale(0.92); }
 .copybtn.ok { background: var(--g-pale); border-color: var(--g2); }
+
+.sharebtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 7px; cursor: pointer; font-size: 13px;
+  transition: all 0.15s; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.sharebtn:active { background: #EEF4FF; border-color: #93B4E8; transform: scale(0.92); }
+.sharebtn.ok { background: #EEF4FF; border-color: #93B4E8; }
 
 .tpill {
   font-size: 10px; font-weight: 600;
@@ -681,7 +702,7 @@ function setFilter(f, el) {
 
 function renderProfiles() {
   const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = allProfiles.filter(p => {
+  let filtered = allProfiles.filter(p => {
     const mf = currentFilter==='all' || p.Type===currentFilter;
     const ms = !q ||
       (p.RefNo||'').toLowerCase().includes(q) ||
@@ -692,12 +713,34 @@ function renderProfiles() {
     return mf && ms;
   });
 
+  // Sort latest ref number first (AKNS-0270 before AKNS-0264)
+  filtered.sort((a, b) => {
+    const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
+    const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
+    return nb - na;
+  });
+
   const el = document.getElementById('profilesList');
   if (!filtered.length) {
     el.innerHTML = `<div class="empty"><div class="ei">🔍</div><p>No profiles found.<br>Try a different filter or search term.</p></div>`;
     return;
   }
   el.innerHTML = filtered.map((p,i) => buildCard(p,i)).join('');
+
+  // Deep link: auto-open card if URL hash matches a RefNo
+  const hash = decodeURIComponent(location.hash.replace('#',''));
+  if (hash) {
+    const idx = filtered.findIndex(p => p.RefNo === hash);
+    if (idx !== -1) {
+      setTimeout(() => {
+        const card = document.getElementById(`card-${idx}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          toggleCard(idx);
+        }
+      }, 300);
+    }
+  }
 }
 
 // ─── BUILD CARD ───────────────────────────
@@ -747,8 +790,9 @@ function buildCard(p, i) {
       <div class="rrow">
         <span class="rbadge ${c}">${p.RefNo}</span>
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
+        <button class="sharebtn" onclick="shareProfile(event,'${p.RefNo}',this)" title="Share profile link">🔗</button>
         <span class="tpill ${c}">${p.Type}</span>
-        ${isNew(p.DateAdded) ? `<span class="new-pill">NEW</span>` : ''}
+        ${newCard ? `<span class="new-pill">NEW</span>` : ''}
       </div>
       <div class="csub">${subParts.join(' · ')}</div>
     </div>
@@ -789,6 +833,12 @@ function toggleCard(i) {
   body.classList.toggle('open');
   chv.classList.toggle('open');
   openCard = body.classList.contains('open') ? i : null;
+  // Track profile view
+  if (body.classList.contains('open') && typeof gtag !== 'undefined') {
+    const card = document.getElementById(`card-${i}`);
+    const ref = card ? card.querySelector('.rbadge')?.textContent : '';
+    gtag('event', 'view_profile', { ref_no: ref });
+  }
 }
 
 function copyRef(e, ref, btn) {
@@ -801,6 +851,26 @@ function copyRef(e, ref, btn) {
   btn.textContent = '✅'; btn.classList.add('ok');
   setTimeout(() => { btn.textContent = '📋'; btn.classList.remove('ok'); }, 1500);
   showToast(`✓ ${ref} copied`);
+}
+
+function shareProfile(e, ref, btn) {
+  e.stopPropagation();
+  const url = `${location.origin}${location.pathname}#${encodeURIComponent(ref)}`;
+  if (navigator.share) {
+    navigator.share({ title: `Akurana Nikkah – ${ref}`, url })
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).catch(() => {
+      const t = document.createElement('textarea');
+      t.value = url; document.body.appendChild(t); t.select();
+      document.execCommand('copy'); document.body.removeChild(t);
+    });
+    btn.textContent = '✅'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = '🔗'; btn.classList.remove('ok'); }, 1500);
+    showToast(`✓ Profile link copied`);
+  }
+  // Track share event in GA4
+  if (typeof gtag !== 'undefined') gtag('event', 'share_profile', { ref_no: ref });
 }
 
 function showToast(msg) {
