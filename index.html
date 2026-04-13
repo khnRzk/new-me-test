@@ -434,7 +434,63 @@ main {
 }
 .wabtn:active { background: #1ebe5d; transform: scale(0.98); }
 
-/* ── EMPTY ── */
+/* ── SKELETON LOADER ── */
+.skeleton-list { display: flex; flex-direction: column; gap: 10px; }
+.skeleton-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.skeleton-strip { height: 3px; background: var(--surface2); }
+.skeleton-body { padding: 13px 14px; display: flex; align-items: center; gap: 12px; }
+.sk {
+  background: linear-gradient(90deg, var(--surface2) 25%, #E8E4DE 50%, var(--surface2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.sk-avatar { width: 46px; height: 46px; border-radius: 50%; }
+.sk-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.sk-line { height: 10px; }
+.sk-line.w80 { width: 80%; }
+.sk-line.w55 { width: 55%; }
+.sk-line.w35 { width: 35%; }
+.sk-chevron { width: 34px; height: 34px; border-radius: 50%; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.profiles-fade-in { animation: fadeInUp 0.35s ease both; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading text */
+.loading-label {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink3);
+  font-family: 'Inter', sans-serif;
+  padding: 10px 0 4px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.loading-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--g2);
+  display: inline-block;
+  animation: ldot 1.2s ease-in-out infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes ldot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1; }
+}
 .empty { text-align: center; padding: 56px 20px; color: var(--ink3); }
 .empty .ei { font-size: 40px; margin-bottom: 12px; }
 .empty p { font-size: 14px; line-height: 1.7; font-family: 'Inter', sans-serif; }
@@ -543,8 +599,28 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
     </div>
   </div>
 
-  <div class="dvd">profiles</div>
-  <div class="list" id="profilesList"></div>
+  <div class="dvd" id="profilesDvd">profiles</div>
+  <div class="loading-label" id="loadingLabel">
+    <span class="loading-dot"></span>
+    <span class="loading-dot"></span>
+    <span class="loading-dot"></span>
+    <span>Fetching profiles…</span>
+  </div>
+  <div class="skeleton-list" id="skeletonList">
+    ${[1,2,3,4].map(()=>`
+    <div class="skeleton-card">
+      <div class="skeleton-strip"></div>
+      <div class="skeleton-body">
+        <div class="sk sk-avatar"></div>
+        <div class="sk-lines">
+          <div class="sk sk-line w80"></div>
+          <div class="sk sk-line w55"></div>
+        </div>
+        <div class="sk sk-chevron"></div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="list" id="profilesList" style="display:none"></div>
 </main>
 
 <footer>
@@ -625,12 +701,29 @@ let openCard = null;
 
 // ─── LOAD ────────────────────────────────
 async function loadData() {
-  if (!SHEET_CSV_URL) { allProfiles = SAMPLE_DATA; init(); return; }
+  if (!SHEET_CSV_URL) {
+    allProfiles = SAMPLE_DATA;
+    hideSkeleton();
+    init();
+    return;
+  }
   try {
     const r = await fetch(SHEET_CSV_URL);
     allProfiles = parseCSV(await r.text());
-  } catch(e) { allProfiles = SAMPLE_DATA; }
+  } catch(e) {
+    allProfiles = SAMPLE_DATA;
+  }
+  hideSkeleton();
   init();
+}
+
+function hideSkeleton() {
+  const sk = document.getElementById('skeletonList');
+  const ll = document.getElementById('loadingLabel');
+  const pl = document.getElementById('profilesList');
+  if (sk) sk.style.display = 'none';
+  if (ll) ll.style.display = 'none';
+  if (pl) { pl.style.display = ''; pl.classList.add('profiles-fade-in'); }
 }
 
 function parseCSV(csv) {
