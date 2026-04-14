@@ -607,18 +607,10 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
     <span>Fetching profiles…</span>
   </div>
   <div class="skeleton-list" id="skeletonList">
-    ${[1,2,3,4].map(()=>`
-    <div class="skeleton-card">
-      <div class="skeleton-strip"></div>
-      <div class="skeleton-body">
-        <div class="sk sk-avatar"></div>
-        <div class="sk-lines">
-          <div class="sk sk-line w80"></div>
-          <div class="sk sk-line w55"></div>
-        </div>
-        <div class="sk sk-chevron"></div>
-      </div>
-    </div>`).join('')}
+    <div class="skeleton-card"><div class="skeleton-strip"></div><div class="skeleton-body"><div class="sk sk-avatar"></div><div class="sk-lines"><div class="sk sk-line w80"></div><div class="sk sk-line w55"></div></div><div class="sk sk-chevron"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-strip"></div><div class="skeleton-body"><div class="sk sk-avatar"></div><div class="sk-lines"><div class="sk sk-line w80"></div><div class="sk sk-line w35"></div></div><div class="sk sk-chevron"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-strip"></div><div class="skeleton-body"><div class="sk sk-avatar"></div><div class="sk-lines"><div class="sk sk-line w55"></div><div class="sk sk-line w80"></div></div><div class="sk sk-chevron"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-strip"></div><div class="skeleton-body"><div class="sk sk-avatar"></div><div class="sk-lines"><div class="sk sk-line w80"></div><div class="sk sk-line w55"></div></div><div class="sk sk-chevron"></div></div></div>
   </div>
   <div class="list" id="profilesList" style="display:none"></div>
 </main>
