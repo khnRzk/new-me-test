@@ -803,8 +803,10 @@ function parseCSV(csv) {
   return rows.slice(1).map(row => {
     const obj = {};
     headers.forEach((h, idx) => {
-      // Replace literal \n inside cell values with our separator
-      obj[h] = (row[idx] || '').trim();
+      const val = (row[idx] || '').trim();
+      obj[h] = val;
+      // Also store under normalised key (lowercase, no spaces) for resilient lookups
+      obj[h.toLowerCase().replace(/\s+/g, '')] = val;
     });
     return obj;
   }).filter(p => p.RefNo && p.RefNo.trim());
@@ -917,9 +919,9 @@ function buildCard(p, i) {
   const ageRow  = displayAge  ? `<div class="di"><div class="dk">Age</div><div class="dv">${displayAge} years</div></div>` : '';
   const dobBlock = dobRow + ageRow;
 
-  // Proposal status — default "open" if not set
-  const rawStatus = (p.ProposalStatus||'').trim().toLowerCase();
-  const isOngoing = rawStatus === 'ongoing' || rawStatus === 'in progress';
+  // Proposal status — normalised key covers any casing/spacing in sheet header
+  const rawStatus = (p.proposalstatus || p.ProposalStatus || '').trim().toLowerCase();
+  const isOngoing = rawStatus === 'ongoing' || rawStatus === 'in progress' || rawStatus === 'inprogress' || rawStatus === 'closed';
   const statusLabel = isOngoing ? 'Proposal in Progress' : 'Accepting Proposals';
   const statusCls   = isOngoing ? 'ps-ongoing' : 'ps-open';
 
