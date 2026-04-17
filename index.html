@@ -338,6 +338,55 @@ main {
 .tpill.g { background: var(--g1); color: #fff; }
 .tpill.b { background: var(--rose); color: #fff; }
 
+/* ── PROPOSAL STATUS ── */
+.rrow2 { display: flex; align-items: center; margin-bottom: 4px; }
+.status-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+.sp-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.ps-open {
+  background: #E8F5EE; color: #1B5E3B;
+}
+.ps-open .sp-dot {
+  background: #2E7D54;
+  box-shadow: 0 0 0 2px rgba(46,125,84,0.2);
+  animation: livePulse 2s ease-in-out infinite;
+}
+.ps-ongoing {
+  background: #FFF4E5; color: #8A5700;
+}
+.ps-ongoing .sp-dot {
+  background: #E09900;
+}
+.card.is-ongoing { opacity: 0.75; }
+.card.is-ongoing .cstrip { background: #DDD5C8; }
+
+.ongoing-notice {
+  font-size: 12px; font-weight: 500;
+  color: #8A5700;
+  background: #FFF4E5;
+  border: 1px solid #F5D98A;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.wabtn-dim {
+  background: #B0B0B0 !important;
+  cursor: not-allowed;
+}
+.wabtn-dim:active { transform: none !important; }
+
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(46,125,84,0.2); }
+  50%       { box-shadow: 0 0 0 4px rgba(46,125,84,0.08); }
+}
+
 .new-pill {
   font-size: 9px; font-weight: 700;
   padding: 3px 7px; border-radius: 20px;
@@ -645,7 +694,9 @@ const SUCCESSFUL_PROPOSALS = 19;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
-// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded
+// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus
+// ProposalStatus: leave blank or write "open" = Accepting Proposals (default)
+//                 write "ongoing" or "in progress" = Proposal in Progress (pauses enquiries)
 // DOB formats accepted: DD/MM/YYYY or MM/YYYY or YYYY
 // DateAdded format: DD/MM/YYYY — profiles added within 24hrs show a NEW badge
 // Siblings and Education support multiple lines (press Alt+Enter in Google Sheets)
@@ -866,6 +917,12 @@ function buildCard(p, i) {
   const ageRow  = displayAge  ? `<div class="di"><div class="dk">Age</div><div class="dv">${displayAge} years</div></div>` : '';
   const dobBlock = dobRow + ageRow;
 
+  // Proposal status — default "open" if not set
+  const rawStatus = (p.ProposalStatus||'').trim().toLowerCase();
+  const isOngoing = rawStatus === 'ongoing' || rawStatus === 'in progress';
+  const statusLabel = isOngoing ? 'Proposal in Progress' : 'Accepting Proposals';
+  const statusCls   = isOngoing ? 'ps-ongoing' : 'ps-open';
+
   const subParts = [];
   if (displayAge) subParts.push(`${displayAge} yrs`);
   if (p.Location) subParts.push(p.Location);
@@ -873,7 +930,7 @@ function buildCard(p, i) {
   const newCard = isNew(p.DateAdded);
 
   return `
-<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}" id="card-${i}">
+<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}${isOngoing?' is-ongoing':''}" id="card-${i}">
   <div class="cstrip"></div>
   <div class="chead" onclick="toggleCard(${i})">
     <div class="ava ${c}">${ico}<span class="adot"></span></div>
@@ -884,6 +941,11 @@ function buildCard(p, i) {
         <button class="sharebtn" onclick="shareProfile(event,'${p.RefNo}',this)" title="Share profile link">🔗</button>
         <span class="tpill ${c}">${p.Type}</span>
         ${newCard ? `<span class="new-pill">NEW</span>` : ''}
+      </div>
+      <div class="rrow2">
+        <span class="status-pill ${statusCls}">
+          <span class="sp-dot"></span>${statusLabel}
+        </span>
       </div>
       <div class="csub">${subParts.join(' · ')}</div>
     </div>
@@ -906,11 +968,12 @@ function buildCard(p, i) {
       ${fi('Family Status', p.FamilyStatus)}
     </div>
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
-    <a class="wabtn" href="${waLink}" target="_blank">
+    ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
+    <a class="wabtn${isOngoing?' wabtn-dim':''}" href="${isOngoing?'javascript:void(0)':waLink}" ${isOngoing?'':'target="_blank"'} ${isOngoing?'onclick="showToast(\'This profile is currently in progress\')"':''}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.12 1.528 5.855L0 24l6.335-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.88 9.88 0 01-5.034-1.373l-.361-.214-3.757.891.951-3.667-.235-.374A9.836 9.836 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118c5.466 0 9.882 4.415 9.882 9.882 0 5.466-4.416 9.882-9.882 9.882z"/></svg>
       <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
-        <span style="font-size:14px;font-weight:700;line-height:1.2;">Tap to Open in WhatsApp</span>
-        <span style="font-size:10.5px;font-weight:400;opacity:0.8;letter-spacing:0;">Message pre-filled with Ref No ${p.RefNo}</span>
+        <span style="font-size:14px;font-weight:700;line-height:1.2;">${isOngoing ? 'Currently in Progress' : 'Tap to Open in WhatsApp'}</span>
+        <span style="font-size:10.5px;font-weight:400;opacity:0.8;letter-spacing:0;">${isOngoing ? 'Enquiries are paused for now' : 'Message pre-filled with Ref No '+p.RefNo}</span>
       </span>
     </a>
   </div>
