@@ -278,6 +278,8 @@ main {
   font-family: 'Lora', serif; font-style: italic;
 }
 
+/* ── CONTROLS ── */
+.controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .seg {
   display: flex; background: var(--surface2);
   border-radius: var(--rs); padding: 3px; gap: 3px;
@@ -505,8 +507,6 @@ main {
   50%       { opacity: 0.3; }
 }
 
-.csub { font-size: 12.5px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-
 .chv {
   flex-shrink: 0;
   width: 34px; height: 34px; border-radius: 50%;
@@ -655,13 +655,17 @@ main {
 /* ── FOOTER ── */
 footer {
   background: var(--g1); text-align: center;
-  padding: 22px 16px; font-size: 12px; line-height: 2;
+  padding: 24px 16px; font-size: 12px; line-height: 2;
   font-family: 'Inter', sans-serif;
-  padding-bottom: calc(22px + env(safe-area-inset-bottom));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
 footer strong { color: #fff; font-size: 14px; display: block; font-family: 'Lora', serif; font-weight: 600; }
-footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
-.fsub { font-size: 10px; color: rgba(255,255,255,0.35); display: block; margin-top: 4px; }
+footer a { color: rgba(255,255,255,0.75); text-decoration: none; }
+footer a:hover { color: #fff; }
+.fsub { font-size: 10.5px; color: rgba(255,255,255,0.32); display: block; margin-top: 4px; }
+
+/* ── ACCESSIBILITY ── */
+:focus-visible { outline: 2px solid var(--g3); outline-offset: 2px; border-radius: 4px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 380px) {
@@ -676,9 +680,7 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
 }
 
 @media (max-width: 320px) {
-  .above-fold { padding: 0 10px 0; }
-  .controls-bar { padding: 8px 10px 6px; }
-  .profiles-scroll { padding: 10px 10px; }
+  main { padding: 12px 10px 100px; }
   .hbtn { padding: 9px 10px; font-size: 11px; }
   .success-count { font-size: 34px; }
 }
@@ -688,9 +690,17 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
   .chead { padding: 15px 16px; }
 }
 
-/* Very tall screens — allow above-fold to be compact */
 @media (min-height: 800px) {
   .hero { padding: 32px 20px 28px; }
+}
+
+/* ── DESKTOP hover polish ── */
+@media (hover: hover) {
+  .card:hover { border-color: var(--border2); box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .hbtn:hover { background: rgba(255,255,255,0.18); }
+  .copybtn:hover { background: var(--g-pale); border-color: var(--g3); }
+  .sharebtn:hover { background: #EEF4FF; border-color: #93B4E8; }
+  .wabtn:hover { background: #1ebe5d; }
 }
 </style>
 </head>
@@ -715,8 +725,8 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
   <span class="vref">— Qur'an 78:8</span>
   <p class="hdesc">Browse profiles, copy the Ref No, and reach out via WhatsApp for full details.</p>
   <div class="hbtns">
-    <a class="hbtn" href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank">📱 Join WhatsApp Group</a>
-    <a class="hbtn" href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank">📢 Follow Channel</a>
+    <a class="hbtn" href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank" rel="noopener noreferrer">📱 Join WhatsApp Group</a>
+    <a class="hbtn" href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank" rel="noopener noreferrer">📢 Follow Channel</a>
   </div>
 </div>
 
@@ -1029,10 +1039,6 @@ function buildCard(p, i) {
     ? `<span class="ci-status ${maritalCls}"><span class="ci-status-dot"></span>${maritalRaw}</span>`
     : '';
 
-  const subParts = [];
-  if (displayAge) subParts.push(`${displayAge} yrs`);
-  if (p.Location) subParts.push(p.Location);
-
   const newCard = isNew(p.DateAdded);
 
   return `
@@ -1076,13 +1082,22 @@ function buildCard(p, i) {
     </div>
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
     ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
-    <a class="wabtn${isOngoing?' wabtn-dim':''}" href="${isOngoing?'javascript:void(0)':waLink}" ${isOngoing?'':'target="_blank"'} ${isOngoing?'onclick="showToast(\'This profile is currently in progress\')"':''}>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.12 1.528 5.855L0 24l6.335-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.88 9.88 0 01-5.034-1.373l-.361-.214-3.757.891.951-3.667-.235-.374A9.836 9.836 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118c5.466 0 9.882 4.415 9.882 9.882 0 5.466-4.416 9.882-9.882 9.882z"/></svg>
-      <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
-        <span style="font-size:14px;font-weight:700;line-height:1.2;">${isOngoing ? 'Currently in Progress' : 'Tap to Open in WhatsApp'}</span>
-        <span style="font-size:10.5px;font-weight:400;opacity:0.8;letter-spacing:0;">${isOngoing ? 'Enquiries are paused for now' : 'Message pre-filled with Ref No '+p.RefNo}</span>
-      </span>
-    </a>
+    ${isOngoing
+      ? `<button class="wabtn wabtn-dim" onclick="showToast('This profile is currently in progress')" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.12 1.528 5.855L0 24l6.335-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.88 9.88 0 01-5.034-1.373l-.361-.214-3.757.891.951-3.667-.235-.374A9.836 9.836 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118c5.466 0 9.882 4.415 9.882 9.882 0 5.466-4.416 9.882-9.882 9.882z"/></svg>
+          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+            <span style="font-size:14px;font-weight:700;line-height:1.2;">Currently in Progress</span>
+            <span style="font-size:10.5px;font-weight:400;opacity:0.8;letter-spacing:0;">Enquiries are paused for now</span>
+          </span>
+        </button>`
+      : `<a class="wabtn" href="${waLink}" target="_blank" rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.12 1.528 5.855L0 24l6.335-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.88 9.88 0 01-5.034-1.373l-.361-.214-3.757.891.951-3.667-.235-.374A9.836 9.836 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118c5.466 0 9.882 4.415 9.882 9.882 0 5.466-4.416 9.882-9.882 9.882z"/></svg>
+          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+            <span style="font-size:14px;font-weight:700;line-height:1.2;">Tap to Open in WhatsApp</span>
+            <span style="font-size:10.5px;font-weight:400;opacity:0.8;letter-spacing:0;">Message pre-filled with Ref No ${p.RefNo}</span>
+          </span>
+        </a>`
+    }
   </div>
 </div>`;
 }
