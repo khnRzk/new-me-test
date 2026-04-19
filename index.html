@@ -211,8 +211,6 @@ main {
   font-family: 'Lora', serif; font-style: italic;
 }
 
-/* ── CONTROLS ── */
-.controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .seg {
   display: flex; background: var(--surface2);
   border-radius: var(--rs); padding: 3px; gap: 3px;
@@ -339,53 +337,82 @@ main {
 .tpill.b { background: var(--rose); color: #fff; }
 
 /* ── PROPOSAL STATUS ── */
-.rrow2 { display: flex; align-items: center; margin-bottom: 4px; }
-.status-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 600;
-  padding: 3px 8px; border-radius: 20px;
-  letter-spacing: 0.04em;
-}
-.sp-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-}
 .ps-open {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px;
   background: #E8F5EE; color: #1B5E3B;
+  letter-spacing: 0.03em;
 }
 .ps-open .sp-dot {
-  background: #2E7D54;
-  box-shadow: 0 0 0 2px rgba(46,125,84,0.2);
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #2E7D54; flex-shrink: 0;
   animation: livePulse 2s ease-in-out infinite;
 }
 .ps-ongoing {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px;
   background: #FFF4E5; color: #8A5700;
+  letter-spacing: 0.03em;
 }
 .ps-ongoing .sp-dot {
-  background: #E09900;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #E09900; flex-shrink: 0;
 }
-.card.is-ongoing { opacity: 0.75; }
+.card.is-ongoing { opacity: 0.78; }
 .card.is-ongoing .cstrip { background: #DDD5C8; }
 
 .ongoing-notice {
   font-size: 12px; font-weight: 500;
-  color: #8A5700;
-  background: #FFF4E5;
+  color: #8A5700; background: #FFF4E5;
   border: 1px solid #F5D98A;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  border-radius: 8px; padding: 10px 12px;
+  margin-bottom: 12px; line-height: 1.5;
 }
-.wabtn-dim {
-  background: #B0B0B0 !important;
-  cursor: not-allowed;
-}
+.wabtn-dim { background: #B0B0B0 !important; cursor: not-allowed; }
 .wabtn-dim:active { transform: none !important; }
 
 @keyframes livePulse {
   0%, 100% { box-shadow: 0 0 0 2px rgba(46,125,84,0.2); }
-  50%       { box-shadow: 0 0 0 4px rgba(46,125,84,0.08); }
+  50%       { box-shadow: 0 0 0 4px rgba(46,125,84,0.06); }
 }
+
+/* ── CARD INFO LINE ── */
+.cinfo-line {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; row-gap: 4px;
+  margin-top: 3px;
+}
+.ci-text {
+  font-size: 12px; color: var(--ink3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+.ci-sep {
+  font-size: 11px; color: var(--border2);
+  margin: 0 5px; flex-shrink: 0;
+}
+.ci-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 600;
+  padding: 2px 8px 2px 6px; border-radius: 20px;
+  flex-shrink: 0; white-space: nowrap;
+}
+.ci-status-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+/* Marital status colour variants */
+.cs-unmarried  { background: #EAF5EE; color: #1B5E3B; }
+.cs-unmarried .ci-status-dot  { background: #2E7D54; }
+.cs-single     { background: #EAF5EE; color: #1B5E3B; }
+.cs-single .ci-status-dot     { background: #2E7D54; }
+.cs-divorced   { background: #FFF4E5; color: #7A4800; }
+.cs-divorced .ci-status-dot   { background: #E09900; }
+.cs-widowed    { background: #F3EEF9; color: #5E3A8A; }
+.cs-widowed .ci-status-dot    { background: #9B6FC5; }
+.cs-default    { background: var(--surface2); color: var(--ink3); }
+.cs-default .ci-status-dot    { background: var(--ink3); }
 
 .new-pill {
   font-size: 9px; font-weight: 700;
@@ -847,17 +874,17 @@ function setFilter(f, el) {
 function renderProfiles() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let filtered = allProfiles.filter(p => {
-    const mf = currentFilter==='all' || p.Type===currentFilter;
+    const mf = currentFilter === 'all' || p.Type === currentFilter;
     const ms = !q ||
       (p.RefNo||'').toLowerCase().includes(q) ||
       (p.Location||'').toLowerCase().includes(q) ||
       (p.Education||'').toLowerCase().includes(q) ||
       (p.Occupation||'').toLowerCase().includes(q) ||
-      (p.FamilyStatus||'').toLowerCase().includes(q);
+      (p.FamilyStatus||'').toLowerCase().includes(q) ||
+      (p.Status||'').toLowerCase().includes(q);
     return mf && ms;
   });
 
-  // Sort latest ref number first (AKNS-0270 before AKNS-0264)
   filtered.sort((a, b) => {
     const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
     const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
@@ -871,19 +898,18 @@ function renderProfiles() {
   }
   el.innerHTML = filtered.map((p,i) => buildCard(p,i)).join('');
 
-  // Deep link: auto-open card if URL hash matches a RefNo
   const hash = decodeURIComponent(location.hash.replace('#',''));
   if (hash) {
-    const idx = filtered.findIndex(p => p.RefNo === hash);
-    if (idx !== -1) {
-      setTimeout(() => {
-        const card = document.getElementById(`card-${idx}`);
-        if (card) {
+    const allCards = el.querySelectorAll('.card');
+    allCards.forEach((card, idx) => {
+      const badge = card.querySelector('.rbadge');
+      if (badge && badge.textContent.trim() === hash) {
+        setTimeout(() => {
           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
           toggleCard(idx);
-        }
-      }, 300);
-    }
+        }, 300);
+      }
+    });
   }
 }
 
@@ -919,11 +945,22 @@ function buildCard(p, i) {
   const ageRow  = displayAge  ? `<div class="di"><div class="dk">Age</div><div class="dv">${displayAge} years</div></div>` : '';
   const dobBlock = dobRow + ageRow;
 
-  // Proposal status — normalised key covers any casing/spacing in sheet header
-  const rawStatus = (p.proposalstatus || p.ProposalStatus || '').trim().toLowerCase();
-  const isOngoing = rawStatus === 'ongoing' || rawStatus === 'in progress' || rawStatus === 'inprogress' || rawStatus === 'closed';
+  // Proposal status (open/ongoing) — separate from marital Status column
+  const rawPS = (p.proposalstatus || p.ProposalStatus || '').trim().toLowerCase();
+  const isOngoing = rawPS === 'ongoing' || rawPS === 'in progress' || rawPS === 'inprogress' || rawPS === 'closed';
   const statusLabel = isOngoing ? 'Proposal in Progress' : 'Accepting Proposals';
   const statusCls   = isOngoing ? 'ps-ongoing' : 'ps-open';
+
+  // Marital status tag — colour coded, shown inline in card header
+  const maritalRaw = (p.Status || '').trim();
+  const maritalKey = maritalRaw.toLowerCase();
+  const maritalCls = maritalKey === 'unmarried' || maritalKey === 'single' ? 'cs-unmarried'
+    : maritalKey === 'divorced' ? 'cs-divorced'
+    : maritalKey === 'widowed'  ? 'cs-widowed'
+    : maritalRaw ? 'cs-default' : '';
+  const maritalStatusTag = maritalRaw
+    ? `<span class="ci-status ${maritalCls}"><span class="ci-status-dot"></span>${maritalRaw}</span>`
+    : '';
 
   const subParts = [];
   if (displayAge) subParts.push(`${displayAge} yrs`);
@@ -944,12 +981,13 @@ function buildCard(p, i) {
         <span class="tpill ${c}">${p.Type}</span>
         ${newCard ? `<span class="new-pill">NEW</span>` : ''}
       </div>
-      <div class="rrow2">
-        <span class="status-pill ${statusCls}">
-          <span class="sp-dot"></span>${statusLabel}
-        </span>
+      <div class="cinfo-line">
+        ${displayAge ? `<span class="ci-text">${displayAge} yrs</span>` : ''}
+        ${displayAge && p.Location ? `<span class="ci-sep">·</span>` : ''}
+        ${p.Location ? `<span class="ci-text">${p.Location}</span>` : ''}
+        ${(displayAge || p.Location) && maritalStatusTag ? `<span class="ci-sep">·</span>` : ''}
+        ${maritalStatusTag}
       </div>
-      <div class="csub">${subParts.join(' · ')}</div>
     </div>
     <div class="chv" id="chv-${i}">
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
