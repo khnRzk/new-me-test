@@ -861,7 +861,9 @@ async function loadData() {
     return;
   }
   try {
-    const r = await fetch(SHEET_CSV_URL);
+    // Cache-bust: append timestamp so every refresh fetches latest sheet data
+    const bustUrl = `${SHEET_CSV_URL}&_=${Date.now()}`;
+    const r = await fetch(bustUrl, { cache: 'no-store' });
     allProfiles = parseCSV(await r.text());
   } catch(e) {
     allProfiles = SAMPLE_DATA;
