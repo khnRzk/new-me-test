@@ -702,6 +702,136 @@ footer a:hover { color: #fff; }
   .sharebtn:hover { background: #EEF4FF; border-color: #93B4E8; }
   .wabtn:hover { background: #1ebe5d; }
 }
+/* ── SUBMIT FAB ── */
+.fab {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  right: 20px;
+  z-index: 300;
+  display: flex; align-items: center; gap: 9px;
+  background: var(--g1);
+  color: #fff;
+  border: none; border-radius: 28px;
+  padding: 13px 20px 13px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(27,94,59,0.4), 0 1px 4px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.fab:active { transform: scale(0.95); }
+.fab-icon {
+  width: 22px; height: 22px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+@media (hover: hover) {
+  .fab:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(27,94,59,0.45); }
+}
+
+/* ── BOTTOM SHEET OVERLAY ── */
+.sheet-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 400;
+  display: none; align-items: flex-end;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.sheet-overlay.open { display: flex; }
+
+.sheet {
+  background: var(--surface);
+  border-radius: 22px 22px 0 0;
+  width: 100%; max-width: 660px;
+  margin: 0 auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 92vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.sheet-overlay.open .sheet { transform: translateY(0); }
+
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 14px auto 0;
+}
+
+.sheet-head {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sheet-title {
+  font-family: 'Lora', serif;
+  font-size: 18px; font-weight: 600;
+  color: var(--ink); line-height: 1.2;
+}
+.sheet-sub {
+  font-size: 12px; color: var(--ink3);
+  margin-top: 3px; font-family: 'Inter', sans-serif;
+}
+.sheet-close {
+  width: 32px; height: 32px;
+  border: none; background: var(--surface2);
+  border-radius: 50%; cursor: pointer;
+  font-size: 16px; display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--ink2);
+}
+.sheet-close:active { background: var(--border); }
+
+.sheet-body { padding: 18px 20px 24px; }
+
+/* Info banner */
+.sheet-info {
+  background: var(--g-pale);
+  border: 1px solid var(--g-soft);
+  border-radius: 12px;
+  padding: 13px 14px;
+  margin-bottom: 20px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.sheet-info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.sheet-info-text {
+  font-size: 12.5px; color: var(--g1);
+  line-height: 1.6; font-family: 'Inter', sans-serif;
+}
+.sheet-info-text strong { font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* Submit WA button */
+.sheet-wa-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; padding: 15px 16px;
+  background: #25D366; color: #fff;
+  border: none; border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; text-decoration: none;
+  letter-spacing: 0.01em; min-height: 56px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s;
+}
+.sheet-wa-btn:active { background: #1ebe5d; transform: scale(0.98); }
+@media (hover: hover) { .sheet-wa-btn:hover { background: #1ebe5d; } }
+
+.sheet-note {
+  text-align: center;
+  font-size: 11px; color: var(--ink3);
+  margin-top: 12px; line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+}
 </style>
 </head>
 <body>
@@ -781,6 +911,43 @@ footer a:hover { color: #fff; }
   <a href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20">📢 Channel</a>
   <span class="fsub">All profiles are shared with consent · Akurana Nikkah Service</span>
 </footer>
+
+<!-- ── SUBMIT PROFILE FAB ── -->
+<button class="fab" onclick="openSheet()" aria-label="Submit your profile">
+  <span class="fab-icon">✦</span>
+  Submit Your Profile
+</button>
+
+<!-- ── SUBMIT PROFILE BOTTOM SHEET ── -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="handleOverlayClick(event)">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-title">Submit Your Profile 💍</div>
+        <div class="sheet-sub">We'll list your profile within 24 hours</div>
+      </div>
+      <button class="sheet-close" onclick="closeSheet()" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-body">
+
+      <div class="sheet-info">
+        <div class="sheet-info-icon">🕌</div>
+        <div class="sheet-info-text">
+          <strong>Free &amp; Simple</strong>
+          Send us your details in any format you prefer via WhatsApp. Our team will review, format, and publish your profile — completely free of charge, InshāAllah.
+        </div>
+      </div>
+
+      <a class="sheet-wa-btn" id="sheetWaBtn" href="#" target="_blank" rel="noopener noreferrer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.12 1.528 5.855L0 24l6.335-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.88 9.88 0 01-5.034-1.373l-.361-.214-3.757.891.951-3.667-.235-.374A9.836 9.836 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118c5.466 0 9.882 4.415 9.882 9.882 0 5.466-4.416 9.882-9.882 9.882z"/></svg>
+        Send Your Details on WhatsApp
+      </a>
+      <p class="sheet-note">Your details will only be published after review.<br>All submissions are kept confidential.</p>
+
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -1205,6 +1372,34 @@ function isNew(dateAdded) {
   if (isNaN(added)) return false;
   return (Date.now() - added.getTime()) < 24 * 60 * 60 * 1000;
 }
+
+// ─── SUBMIT PROFILE SHEET ─────────────────
+function openSheet() {
+  const overlay = document.getElementById('sheetOverlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+  const waNum = CONTACT_WA.replace(/^0/, '94');
+  const msg = encodeURIComponent('Assalamu Alaikum, I would like to submit my profile for listing on Akurana Nikkah Service.');
+  document.getElementById('sheetWaBtn').href = `https://wa.me/${waNum}?text=${msg}`;
+  if (typeof gtag !== 'undefined') gtag('event', 'open_submit_sheet');
+}
+
+function closeSheet() {
+  const overlay = document.getElementById('sheetOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { overlay.style.display = 'none'; }, 360);
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('sheetOverlay')) closeSheet();
+}
+
+// Close sheet on back button (Android)
+window.addEventListener('popstate', () => {
+  if (document.getElementById('sheetOverlay').classList.contains('open')) closeSheet();
+});
 
 loadData();
 </script>
