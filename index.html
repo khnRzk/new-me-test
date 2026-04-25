@@ -103,6 +103,9 @@
   --amber-pale: #FAF4E1;
   --amber-text: #7A5E00;
   --amber-soft: #F5D98A;
+  --purple: #5B3FA0;
+  --purple-pale: #F0EBF9;
+  --purple-soft: #C9B3E8;
   --ink: #1A1A1A;
   --ink2: #444;
   --ink3: #888;
@@ -378,7 +381,16 @@ main {
   .lb:hover { background: var(--surface); color: var(--ink2); }
   .lb.lc:hover { background: var(--teal-pale); }
   .lb.lo:hover { background: var(--amber-pale); }
+  .lb.su:hover { background: var(--g-pale); }
+  .lb.sp:hover { background: var(--purple-pale); }
 }
+
+/* ── MARITAL STATUS FILTER ── */
+.lb.su { background: var(--g-pale); color: var(--g1); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.lb.sp { background: var(--purple-pale); color: var(--purple); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.su .loc-chip { background: var(--g-soft); color: var(--g1); }
+.sp .loc-chip { background: var(--purple-soft); color: var(--purple); }
+.loc-label .sdot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple); flex-shrink: 0; }
 
 .srow { position: relative; }
 .srow input {
@@ -957,7 +969,7 @@ footer a:hover { color: #fff; }
       <button class="sb"    onclick="setFilter('Bride',this)">👩 Brides <span class="cpill" id="cnt-bride">0</span></button>
     </div>
     <div class="loc-filter-wrap">
-      <div class="loc-label">Location</div>
+      <div class="loc-label"><span class="ldot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0;"></span>Location</div>
       <div class="loc-seg">
         <button class="lb la" id="loc-all"  onclick="setLocFilter('all',this)">🌍 All <span class="loc-chip" id="lcnt-all">0</span></button>
         <button class="lb"    id="loc-cp"   onclick="setLocFilter('central',this)">📍 Central Province <span class="loc-chip" id="lcnt-cp">0</span></button>
@@ -966,6 +978,15 @@ footer a:hover { color: #fff; }
       <div class="loc-banner" id="locBanner">
         <div class="loc-banner-dot"></div>
         <span id="locBannerText"></span>
+      </div>
+    </div>
+
+    <div class="loc-filter-wrap">
+      <div class="loc-label"><span class="sdot"></span>Marital Status</div>
+      <div class="loc-seg">
+        <button class="lb la" id="ms-all"      onclick="setStatusFilter('all',this)">👥 All <span class="loc-chip" id="scnt-all">0</span></button>
+        <button class="lb"    id="ms-unmarried" onclick="setStatusFilter('unmarried',this)">✨ Unmarried <span class="loc-chip" id="scnt-unmarried">0</span></button>
+        <button class="lb"    id="ms-prev"      onclick="setStatusFilter('prev',this)">🤍 Previously Married <span class="loc-chip" id="scnt-prev">0</span></button>
       </div>
     </div>
 
@@ -1105,6 +1126,7 @@ const SAMPLE_DATA = [
 let allProfiles = [];
 let currentFilter = 'all';
 let currentLocFilter = 'all';
+let currentStatusFilter = 'all';
 let openCard = null;
 
 // ─── LOAD ────────────────────────────────
@@ -1174,20 +1196,41 @@ function parseCSV(csv) {
 }
 
 function init() {
-  const g = allProfiles.filter(p=>p.Type==='Groom').length;
-  const b = allProfiles.filter(p=>p.Type==='Bride').length;
-  document.getElementById('cnt-all').textContent = allProfiles.length;
-  document.getElementById('cnt-groom').textContent = g;
-  document.getElementById('cnt-bride').textContent = b;
-
-  const cpCount = allProfiles.filter(p=>isCentralProvince(p.Location)).length;
-  const otherCount = allProfiles.length - cpCount;
-  document.getElementById('lcnt-all').textContent = allProfiles.length;
-  document.getElementById('lcnt-cp').textContent = cpCount;
-  document.getElementById('lcnt-other').textContent = otherCount;
-
   animateCount('successCount', SUCCESSFUL_PROPOSALS);
+  updateCounts();
   renderProfiles();
+}
+
+function updateCounts() {
+  // Each filter row counts against the OTHER two active filters (not itself)
+  const byLocStatus    = allProfiles.filter(p => matchLoc(p) && matchStatus(p));
+  const byGenderStatus = allProfiles.filter(p => matchGender(p) && matchStatus(p));
+  const byGenderLoc    = allProfiles.filter(p => matchGender(p) && matchLoc(p));
+
+  // Gender pills — scoped to loc + status
+  document.getElementById('cnt-all').textContent   = byLocStatus.length;
+  document.getElementById('cnt-groom').textContent = byLocStatus.filter(p => p.Type === 'Groom').length;
+  document.getElementById('cnt-bride').textContent = byLocStatus.filter(p => p.Type === 'Bride').length;
+
+  // Location pills — scoped to gender + status
+  document.getElementById('lcnt-all').textContent   = byGenderStatus.length;
+  document.getElementById('lcnt-cp').textContent    = byGenderStatus.filter(p => isCentralProvince(p.Location)).length;
+  document.getElementById('lcnt-other').textContent = byGenderStatus.filter(p => !isCentralProvince(p.Location)).length;
+
+  // Status pills — scoped to gender + loc
+  document.getElementById('scnt-all').textContent       = byGenderLoc.length;
+  document.getElementById('scnt-unmarried').textContent = byGenderLoc.filter(p => isUnmarried(p.Status)).length;
+  document.getElementById('scnt-prev').textContent      = byGenderLoc.filter(p => isPrevMarried(p.Status)).length;
+}
+
+function matchGender(p) { return currentFilter === 'all' || p.Type === currentFilter; }
+function matchLoc(p) {
+  if (currentLocFilter === 'all') return true;
+  return currentLocFilter === 'central' ? isCentralProvince(p.Location) : !isCentralProvince(p.Location);
+}
+function matchStatus(p) {
+  if (currentStatusFilter === 'all') return true;
+  return currentStatusFilter === 'unmarried' ? isUnmarried(p.Status) : isPrevMarried(p.Status);
 }
 
 function animateCount(id, target) {
@@ -1219,9 +1262,30 @@ function isCentralProvince(location) {
   return CENTRAL_KEYWORDS.some(k => loc.includes(k));
 }
 
+// ─── MARITAL STATUS HELPERS ───────────────
+function isUnmarried(status) {
+  const s = (status || '').trim().toLowerCase();
+  return s === 'unmarried' || s === 'single';
+}
+
+function isPrevMarried(status) {
+  const s = (status || '').trim().toLowerCase();
+  return s === 'divorced' || s === 'widowed' ||
+         s === 'registration only' || s === 'cancelled';
+}
+
+function setStatusFilter(f, el) {
+  currentStatusFilter = f;
+  document.querySelectorAll('#ms-all,#ms-unmarried,#ms-prev').forEach(b => { b.className = 'lb'; });
+  el.classList.add(f === 'all' ? 'la' : f === 'unmarried' ? 'su' : 'sp');
+  openCard = null;
+  updateCounts();
+  renderProfiles();
+}
+
 function setLocFilter(f, el) {
   currentLocFilter = f;
-  document.querySelectorAll('.lb').forEach(b => { b.className = 'lb'; });
+  document.querySelectorAll('#loc-all,#loc-cp,#loc-other').forEach(b => { b.className = 'lb'; });
   el.classList.add(f === 'all' ? 'la' : f === 'central' ? 'lc' : 'lo');
   const banner = document.getElementById('locBanner');
   const bannerText = document.getElementById('locBannerText');
@@ -1235,6 +1299,7 @@ function setLocFilter(f, el) {
     banner.className = 'loc-banner';
   }
   openCard = null;
+  updateCounts();
   renderProfiles();
 }
 
@@ -1244,18 +1309,13 @@ function setFilter(f, el) {
   document.querySelectorAll('.sb').forEach(b => { b.className='sb'; });
   el.classList.add(f==='all'?'sa':f==='Groom'?'sg':'sb2');
   openCard = null;
+  updateCounts();
   renderProfiles();
 }
 
 function renderProfiles() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let filtered = allProfiles.filter(p => {
-    const mf = currentFilter === 'all' || p.Type === currentFilter;
-    const ml = currentLocFilter === 'all'
-      ? true
-      : currentLocFilter === 'central'
-        ? isCentralProvince(p.Location)
-        : !isCentralProvince(p.Location);
     const ms = !q ||
       (p.RefNo||'').toLowerCase().includes(q) ||
       (p.Location||'').toLowerCase().includes(q) ||
@@ -1263,7 +1323,7 @@ function renderProfiles() {
       (p.Occupation||'').toLowerCase().includes(q) ||
       (p.FamilyStatus||'').toLowerCase().includes(q) ||
       (p.Status||'').toLowerCase().includes(q);
-    return mf && ml && ms;
+    return matchGender(p) && matchLoc(p) && matchStatus(p) && ms;
   });
 
   filtered.sort((a, b) => {
