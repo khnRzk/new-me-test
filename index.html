@@ -566,6 +566,8 @@ main {
 .cs-divorced .ci-status-dot   { background: #E09900; }
 .cs-widowed    { background: #F3EEF9; color: #5E3A8A; }
 .cs-widowed .ci-status-dot    { background: #9B6FC5; }
+.cs-regcancelled { background: #FDE8E8; color: #8A1A1A; }
+.cs-regcancelled .ci-status-dot { background: #C42A2A; }
 .cs-default    { background: var(--surface2); color: var(--ink3); }
 .cs-default .ci-status-dot    { background: var(--ink3); }
 
@@ -1270,8 +1272,7 @@ function isUnmarried(status) {
 
 function isPrevMarried(status) {
   const s = (status || '').trim().toLowerCase();
-  return s === 'divorced' || s === 'widowed' ||
-         s === 'registration only' || s === 'cancelled';
+  return s === 'divorced' || s === 'widowed' || s === 'registration cancelled';
 }
 
 function setStatusFilter(f, el) {
@@ -1396,8 +1397,9 @@ function buildCard(p, i) {
   const maritalRaw = (p.Status || '').trim();
   const maritalKey = maritalRaw.toLowerCase();
   const maritalCls = maritalKey === 'unmarried' || maritalKey === 'single' ? 'cs-unmarried'
-    : maritalKey === 'divorced' ? 'cs-divorced'
-    : maritalKey === 'widowed'  ? 'cs-widowed'
+    : maritalKey === 'divorced'               ? 'cs-divorced'
+    : maritalKey === 'widowed'                ? 'cs-widowed'
+    : maritalKey === 'registration cancelled' ? 'cs-regcancelled'
     : maritalRaw ? 'cs-default' : '';
   const maritalStatusTag = maritalRaw
     ? `<span class="ci-status ${maritalCls}"><span class="ci-status-dot"></span>${maritalRaw}</span>`
