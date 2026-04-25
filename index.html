@@ -288,10 +288,11 @@ main {
 }
 
 /* ── CONTROLS ── */
-.controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.controls { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
 .seg {
   display: flex; background: var(--surface2);
   border-radius: var(--rs); padding: 3px; gap: 3px;
+  margin-bottom: 10px;
 }
 .sb {
   flex: 1; padding: 11px 6px; border: none; border-radius: 8px;
@@ -315,82 +316,54 @@ main {
 .sg .cpill { background: var(--g-soft); color: var(--g1); }
 .sb2 .cpill { background: var(--rose-soft); color: var(--rose); }
 
-/* ── LOCATION FILTER ── */
-.loc-filter-wrap { display: flex; flex-direction: column; gap: 6px; }
-.loc-label {
-  font-size: 9.5px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--ink3); display: flex; align-items: center; gap: 5px;
+/* ── PILL BAR ── */
+.pill-bar {
+  display: flex; align-items: center;
+  overflow-x: auto; overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 0 10px;
+  margin: 0 -12px;
+  padding-left: 12px;
+  cursor: grab;
 }
-.loc-label::before {
-  content: ''; display: block;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--teal); flex-shrink: 0;
+.pill-bar.dragging { cursor: grabbing; user-select: none; }
+.pill-bar::-webkit-scrollbar { display: none; }
+.pill-bar::after {
+  content: ''; flex-shrink: 0; width: 12px;
 }
-.loc-seg {
-  display: flex; background: var(--surface2);
-  border-radius: var(--rs); padding: 3px; gap: 3px;
+.pill-divider {
+  width: 1px; background: var(--border2);
+  flex-shrink: 0; height: 16px; margin: 0 8px;
 }
-.lb {
-  flex: 1; padding: 9px 4px; border: none; border-radius: 8px;
-  background: transparent; cursor: pointer;
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 20px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface);
+  color: var(--ink3);
   font-family: 'Inter', sans-serif;
-  font-size: 11px; font-weight: 500; color: var(--ink3);
-  transition: all 0.2s;
-  display: flex; align-items: center; justify-content: center; gap: 3px;
-  white-space: nowrap; min-height: 40px;
+  font-size: 12px; font-weight: 500;
+  white-space: nowrap; cursor: pointer; flex-shrink: 0;
+  transition: all 0.18s;
   -webkit-tap-highlight-color: transparent;
+  min-height: 36px;
 }
-.lb.la {
-  background: var(--surface); color: var(--ink2);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+.pill:active { transform: scale(0.95); }
+.pill.on-loc  { background: var(--teal-pale);  border-color: var(--teal);   color: var(--teal);   font-weight: 600; }
+.pill.on-stat { background: var(--purple-pale); border-color: var(--purple); color: var(--purple); font-weight: 600; }
+.pill-count {
+  font-size: 9.5px; font-weight: 700;
+  padding: 1px 6px; border-radius: 10px;
+  background: var(--surface2); color: var(--ink3); flex-shrink: 0;
 }
-.lb.lc {
-  background: var(--teal-pale); color: var(--teal);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-}
-.lb.lo {
-  background: var(--amber-pale); color: var(--amber-text);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-}
-.loc-chip {
-  font-size: 9px; padding: 1px 5px; border-radius: 8px;
-  font-weight: 700; flex-shrink: 0;
-}
-.la .loc-chip { background: var(--border); color: var(--ink3); }
-.lc .loc-chip { background: var(--teal-soft); color: var(--teal); }
-.lo .loc-chip { background: var(--amber-soft); color: var(--amber-text); }
-.loc-banner {
-  display: none; align-items: center; gap: 8px;
-  background: var(--teal-pale); border: 1px solid var(--teal-soft);
-  border-radius: var(--rs); padding: 9px 12px;
-  font-size: 11.5px; color: var(--teal); font-weight: 500;
-  font-family: 'Inter', sans-serif; line-height: 1.4;
-}
-.loc-banner.show { display: flex; }
-.loc-banner-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--teal); flex-shrink: 0;
-}
-.loc-banner.other {
-  background: var(--amber-pale); border-color: var(--amber-soft);
-  color: var(--amber-text);
-}
-.loc-banner.other .loc-banner-dot { background: var(--amber-text); }
+.pill.on-loc  .pill-count { background: var(--teal-soft);   color: var(--teal);   }
+.pill.on-stat .pill-count { background: var(--purple-soft); color: var(--purple); }
 @media (hover: hover) {
-  .lb:hover { background: var(--surface); color: var(--ink2); }
-  .lb.lc:hover { background: var(--teal-pale); }
-  .lb.lo:hover { background: var(--amber-pale); }
-  .lb.su:hover { background: var(--g-pale); }
-  .lb.sp:hover { background: var(--purple-pale); }
+  .pill:hover { border-color: var(--border2); background: var(--surface2); color: var(--ink2); }
+  .pill.on-loc:hover  { background: var(--teal-pale);   border-color: var(--teal);   }
+  .pill.on-stat:hover { background: var(--purple-pale); border-color: var(--purple); }
 }
-
-/* ── MARITAL STATUS FILTER ── */
-.lb.su { background: var(--g-pale); color: var(--g1); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
-.lb.sp { background: var(--purple-pale); color: var(--purple); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
-.su .loc-chip { background: var(--g-soft); color: var(--g1); }
-.sp .loc-chip { background: var(--purple-soft); color: var(--purple); }
-.loc-label .sdot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple); flex-shrink: 0; }
 
 .srow { position: relative; }
 .srow input {
@@ -970,26 +943,15 @@ footer a:hover { color: #fff; }
       <button class="sb"    onclick="setFilter('Groom',this)">👨 Grooms <span class="cpill" id="cnt-groom">0</span></button>
       <button class="sb"    onclick="setFilter('Bride',this)">👩 Brides <span class="cpill" id="cnt-bride">0</span></button>
     </div>
-    <div class="loc-filter-wrap">
-      <div class="loc-label"><span class="ldot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0;"></span>Location</div>
-      <div class="loc-seg">
-        <button class="lb la" id="loc-all"  onclick="setLocFilter('all',this)">🌍 All <span class="loc-chip" id="lcnt-all">0</span></button>
-        <button class="lb"    id="loc-cp"   onclick="setLocFilter('central',this)">📍 Central Province <span class="loc-chip" id="lcnt-cp">0</span></button>
-        <button class="lb"    id="loc-other" onclick="setLocFilter('other',this)">✈️ Other Provinces <span class="loc-chip" id="lcnt-other">0</span></button>
-      </div>
-      <div class="loc-banner" id="locBanner">
-        <div class="loc-banner-dot"></div>
-        <span id="locBannerText"></span>
-      </div>
-    </div>
 
-    <div class="loc-filter-wrap">
-      <div class="loc-label"><span class="sdot"></span>Marital Status</div>
-      <div class="loc-seg">
-        <button class="lb la" id="ms-all"      onclick="setStatusFilter('all',this)">👥 All <span class="loc-chip" id="scnt-all">0</span></button>
-        <button class="lb"    id="ms-unmarried" onclick="setStatusFilter('unmarried',this)">✨ Unmarried <span class="loc-chip" id="scnt-unmarried">0</span></button>
-        <button class="lb"    id="ms-prev"      onclick="setStatusFilter('prev',this)">🤍 Previously Married <span class="loc-chip" id="scnt-prev">0</span></button>
-      </div>
+    <div class="pill-bar">
+      <button class="pill on-loc" id="pill-loc-all"    onclick="setLocFilter('all',this)">🌍 All Provinces <span class="pill-count" id="lcnt-all">0</span></button>
+      <button class="pill"        id="pill-loc-cp"     onclick="setLocFilter('central',this)">📍 Central Province <span class="pill-count" id="lcnt-cp">0</span></button>
+      <button class="pill"        id="pill-loc-other"  onclick="setLocFilter('other',this)">✈️ Other Provinces <span class="pill-count" id="lcnt-other">0</span></button>
+      <div class="pill-divider"></div>
+      <button class="pill on-stat" id="pill-ms-all"       onclick="setStatusFilter('all',this)">👥 All Status <span class="pill-count" id="scnt-all">0</span></button>
+      <button class="pill"         id="pill-ms-unmarried"  onclick="setStatusFilter('unmarried',this)">✨ Unmarried <span class="pill-count" id="scnt-unmarried">0</span></button>
+      <button class="pill"         id="pill-ms-prev"       onclick="setStatusFilter('prev',this)">🤍 Prev. Married <span class="pill-count" id="scnt-prev">0</span></button>
     </div>
 
     <div class="srow">
@@ -1277,8 +1239,10 @@ function isPrevMarried(status) {
 
 function setStatusFilter(f, el) {
   currentStatusFilter = f;
-  document.querySelectorAll('#ms-all,#ms-unmarried,#ms-prev').forEach(b => { b.className = 'lb'; });
-  el.classList.add(f === 'all' ? 'la' : f === 'unmarried' ? 'su' : 'sp');
+  document.querySelectorAll('#pill-ms-all,#pill-ms-unmarried,#pill-ms-prev').forEach(b => {
+    b.classList.remove('on-stat');
+  });
+  el.classList.add('on-stat');
   openCard = null;
   updateCounts();
   renderProfiles();
@@ -1286,19 +1250,10 @@ function setStatusFilter(f, el) {
 
 function setLocFilter(f, el) {
   currentLocFilter = f;
-  document.querySelectorAll('#loc-all,#loc-cp,#loc-other').forEach(b => { b.className = 'lb'; });
-  el.classList.add(f === 'all' ? 'la' : f === 'central' ? 'lc' : 'lo');
-  const banner = document.getElementById('locBanner');
-  const bannerText = document.getElementById('locBannerText');
-  if (f === 'central') {
-    banner.className = 'loc-banner show';
-    bannerText.textContent = 'Showing Central Province — Kandy, Matale & Nuwara Eliya districts';
-  } else if (f === 'other') {
-    banner.className = 'loc-banner show other';
-    bannerText.textContent = 'Showing profiles outside Central Province';
-  } else {
-    banner.className = 'loc-banner';
-  }
+  document.querySelectorAll('#pill-loc-all,#pill-loc-cp,#pill-loc-other').forEach(b => {
+    b.classList.remove('on-loc');
+  });
+  el.classList.add('on-loc');
   openCard = null;
   updateCounts();
   renderProfiles();
@@ -1597,6 +1552,34 @@ function handleOverlayClick(e) {
 window.addEventListener('popstate', () => {
   if (document.getElementById('sheetOverlay').classList.contains('open')) closeSheet();
 });
+
+// ─── PILL BAR DRAG SCROLL (desktop) ─────
+(function() {
+  const bar = document.querySelector('.pill-bar');
+  if (!bar) return;
+  let isDown = false, startX, scrollLeft, moved = false;
+  bar.addEventListener('mousedown', e => {
+    isDown = true; moved = false;
+    bar.classList.add('dragging');
+    startX = e.pageX - bar.offsetLeft;
+    scrollLeft = bar.scrollLeft;
+  });
+  document.addEventListener('mouseup', () => {
+    isDown = false;
+    bar.classList.remove('dragging');
+  });
+  document.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - bar.offsetLeft;
+    const walk = x - startX;
+    if (Math.abs(walk) > 4) moved = true;
+    bar.scrollLeft = scrollLeft - walk;
+  });
+  bar.addEventListener('click', e => {
+    if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
+  }, true);
+})();
 
 loadData();
 </script>
