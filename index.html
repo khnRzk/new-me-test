@@ -18,28 +18,22 @@
 <meta property="og:title" content="Akurana Nikkah Service | Muslim Matrimony Sri Lanka">
 <meta property="og:description" content="Trusted Islamic matrimony service based in Central Province, Sri Lanka. Browse verified Groom and Bride profiles — Connecting Hearts the Halal Way.">
 <meta property="og:image" content="https://akurananikkah.com/og-image.jpg">
-<meta property="og:image:secure_url" content="https://akurananikkah.com/og-image.jpg">
-<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Akurana Nikkah Service — Connecting Hearts the Halal Way. A trusted Islamic matrimony service in Sri Lanka.">
 <meta property="og:locale" content="en_LK">
 <meta property="og:site_name" content="Akurana Nikkah Service">
 
 <!-- ═══ TWITTER CARD ═══ -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Akurana Nikkah Service | Muslim Matrimony Sri Lanka">
-<meta name="twitter:description" content="Trusted Islamic matrimony service based in Central Province, Sri Lanka. Browse verified profiles. Connecting Hearts the Halal Way.">
+<meta name="twitter:description" content="Trusted Islamic matrimony service based in Central Province, Sri Lanka. Browse verified profiles.">
 <meta name="twitter:image" content="https://akurananikkah.com/og-image.jpg">
-<meta name="twitter:image:alt" content="Akurana Nikkah Service — Connecting Hearts the Halal Way. A trusted Islamic matrimony service in Sri Lanka.">
 
 <!-- ═══ FAVICONS ═══ -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/icon-512.png" color="#1B5E3B">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#1B5E3B">
 <meta name="msapplication-TileColor" content="#1B5E3B">
@@ -50,42 +44,26 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Akurana Nikkah Service",
-  "alternateName": "ANS",
-  "description": "Trusted Islamic matrimony service based in Central Province, Sri Lanka. Connecting Muslim hearts the halal way. Browse verified Groom and Bride profiles — free to view.",
+  "description": "Trusted Islamic matrimony service based in Central Province, Sri Lanka. Connecting Muslim hearts the halal way.",
   "url": "https://akurananikkah.com",
-  "logo": {
-    "@type": "ImageObject",
-    "url": "https://akurananikkah.com/icon-512.png",
-    "width": 512,
-    "height": 512
-  },
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://akurananikkah.com/og-image.jpg",
-    "width": 1200,
-    "height": 630
-  },
-  "telephone": "+94773226166",
+  "logo": "https://akurananikkah.com/icon-512.png",
+  "image": "https://akurananikkah.com/og-image.jpg",
   "areaServed": {
     "@type": "State",
     "name": "Central Province, Sri Lanka"
   },
   "serviceType": "Muslim Matrimony Service",
-  "keywords": "nikkah, muslim matrimony, islamic marriage, akurana, kandy, sri lanka, halal match",
   "foundingLocation": {
     "@type": "Place",
     "name": "Akurana, Kandy, Sri Lanka"
   },
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+94773226166",
     "contactType": "Customer Support",
-    "contactOption": "TollFree",
     "availableLanguage": ["English", "Tamil", "Sinhala"]
   },
   "sameAs": [
-    "https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y",
-    "https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20"
+    "https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y"
   ]
 }
 </script>
@@ -119,6 +97,12 @@
   --rose-soft: #F0C9C6;
   --gold: #9A7B2F;
   --gold-pale: #FAF4E1;
+  --teal: #0B7B8A;
+  --teal-pale: #E1F5F7;
+  --teal-soft: #8ECDD3;
+  --amber-pale: #FAF4E1;
+  --amber-text: #7A5E00;
+  --amber-soft: #F5D98A;
   --ink: #1A1A1A;
   --ink2: #444;
   --ink3: #888;
@@ -327,6 +311,74 @@ main {
 .sa .cpill { background: rgba(255,255,255,0.2); }
 .sg .cpill { background: var(--g-soft); color: var(--g1); }
 .sb2 .cpill { background: var(--rose-soft); color: var(--rose); }
+
+/* ── LOCATION FILTER ── */
+.loc-filter-wrap { display: flex; flex-direction: column; gap: 6px; }
+.loc-label {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink3); display: flex; align-items: center; gap: 5px;
+}
+.loc-label::before {
+  content: ''; display: block;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal); flex-shrink: 0;
+}
+.loc-seg {
+  display: flex; background: var(--surface2);
+  border-radius: var(--rs); padding: 3px; gap: 3px;
+}
+.lb {
+  flex: 1; padding: 9px 4px; border: none; border-radius: 8px;
+  background: transparent; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; color: var(--ink3);
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+  white-space: nowrap; min-height: 40px;
+  -webkit-tap-highlight-color: transparent;
+}
+.lb.la {
+  background: var(--surface); color: var(--ink2);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+}
+.lb.lc {
+  background: var(--teal-pale); color: var(--teal);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.lb.lo {
+  background: var(--amber-pale); color: var(--amber-text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.loc-chip {
+  font-size: 9px; padding: 1px 5px; border-radius: 8px;
+  font-weight: 700; flex-shrink: 0;
+}
+.la .loc-chip { background: var(--border); color: var(--ink3); }
+.lc .loc-chip { background: var(--teal-soft); color: var(--teal); }
+.lo .loc-chip { background: var(--amber-soft); color: var(--amber-text); }
+.loc-banner {
+  display: none; align-items: center; gap: 8px;
+  background: var(--teal-pale); border: 1px solid var(--teal-soft);
+  border-radius: var(--rs); padding: 9px 12px;
+  font-size: 11.5px; color: var(--teal); font-weight: 500;
+  font-family: 'Inter', sans-serif; line-height: 1.4;
+}
+.loc-banner.show { display: flex; }
+.loc-banner-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal); flex-shrink: 0;
+}
+.loc-banner.other {
+  background: var(--amber-pale); border-color: var(--amber-soft);
+  color: var(--amber-text);
+}
+.loc-banner.other .loc-banner-dot { background: var(--amber-text); }
+@media (hover: hover) {
+  .lb:hover { background: var(--surface); color: var(--ink2); }
+  .lb.lc:hover { background: var(--teal-pale); }
+  .lb.lo:hover { background: var(--amber-pale); }
+}
 
 .srow { position: relative; }
 .srow input {
@@ -904,6 +956,19 @@ footer a:hover { color: #fff; }
       <button class="sb"    onclick="setFilter('Groom',this)">👨 Grooms <span class="cpill" id="cnt-groom">0</span></button>
       <button class="sb"    onclick="setFilter('Bride',this)">👩 Brides <span class="cpill" id="cnt-bride">0</span></button>
     </div>
+    <div class="loc-filter-wrap">
+      <div class="loc-label">Location</div>
+      <div class="loc-seg">
+        <button class="lb la" id="loc-all"  onclick="setLocFilter('all',this)">🌍 All <span class="loc-chip" id="lcnt-all">0</span></button>
+        <button class="lb"    id="loc-cp"   onclick="setLocFilter('central',this)">📍 Central Province <span class="loc-chip" id="lcnt-cp">0</span></button>
+        <button class="lb"    id="loc-other" onclick="setLocFilter('other',this)">✈️ Other Provinces <span class="loc-chip" id="lcnt-other">0</span></button>
+      </div>
+      <div class="loc-banner" id="locBanner">
+        <div class="loc-banner-dot"></div>
+        <span id="locBannerText"></span>
+      </div>
+    </div>
+
     <div class="srow">
       <span class="sico">🔍</span>
       <input type="text" id="searchInput" placeholder="Search by ref no, location, education…" oninput="renderProfiles()">
@@ -1039,6 +1104,7 @@ const SAMPLE_DATA = [
 // ─── STATE ───────────────────────────────
 let allProfiles = [];
 let currentFilter = 'all';
+let currentLocFilter = 'all';
 let openCard = null;
 
 // ─── LOAD ────────────────────────────────
@@ -1113,6 +1179,13 @@ function init() {
   document.getElementById('cnt-all').textContent = allProfiles.length;
   document.getElementById('cnt-groom').textContent = g;
   document.getElementById('cnt-bride').textContent = b;
+
+  const cpCount = allProfiles.filter(p=>isCentralProvince(p.Location)).length;
+  const otherCount = allProfiles.length - cpCount;
+  document.getElementById('lcnt-all').textContent = allProfiles.length;
+  document.getElementById('lcnt-cp').textContent = cpCount;
+  document.getElementById('lcnt-other').textContent = otherCount;
+
   animateCount('successCount', SUCCESSFUL_PROPOSALS);
   renderProfiles();
 }
@@ -1130,6 +1203,41 @@ function animateCount(id, target) {
   }, 16);
 }
 
+// ─── LOCATION HELPERS ────────────────────
+// Central Province districts: Kandy, Matale, Nuwara Eliya
+const CENTRAL_KEYWORDS = [
+  'kandy','akurana','gampola','peradeniya','katugastota','kundasale',
+  'teldeniya','wattegama','hasalaka','madawala','matale','dambulla',
+  'sigiriya','rattota','ukuwela','galewela','nuwara eliya','nuwara-eliya',
+  'nuwaraeliya','hatton','nawalapitiya','dickoya','talawakele','ragala',
+  'central province'
+];
+
+function isCentralProvince(location) {
+  if (!location) return false;
+  const loc = location.toLowerCase();
+  return CENTRAL_KEYWORDS.some(k => loc.includes(k));
+}
+
+function setLocFilter(f, el) {
+  currentLocFilter = f;
+  document.querySelectorAll('.lb').forEach(b => { b.className = 'lb'; });
+  el.classList.add(f === 'all' ? 'la' : f === 'central' ? 'lc' : 'lo');
+  const banner = document.getElementById('locBanner');
+  const bannerText = document.getElementById('locBannerText');
+  if (f === 'central') {
+    banner.className = 'loc-banner show';
+    bannerText.textContent = 'Showing Central Province — Kandy, Matale & Nuwara Eliya districts';
+  } else if (f === 'other') {
+    banner.className = 'loc-banner show other';
+    bannerText.textContent = 'Showing profiles outside Central Province';
+  } else {
+    banner.className = 'loc-banner';
+  }
+  openCard = null;
+  renderProfiles();
+}
+
 // ─── FILTER ──────────────────────────────
 function setFilter(f, el) {
   currentFilter = f;
@@ -1143,6 +1251,11 @@ function renderProfiles() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let filtered = allProfiles.filter(p => {
     const mf = currentFilter === 'all' || p.Type === currentFilter;
+    const ml = currentLocFilter === 'all'
+      ? true
+      : currentLocFilter === 'central'
+        ? isCentralProvince(p.Location)
+        : !isCentralProvince(p.Location);
     const ms = !q ||
       (p.RefNo||'').toLowerCase().includes(q) ||
       (p.Location||'').toLowerCase().includes(q) ||
@@ -1150,7 +1263,7 @@ function renderProfiles() {
       (p.Occupation||'').toLowerCase().includes(q) ||
       (p.FamilyStatus||'').toLowerCase().includes(q) ||
       (p.Status||'').toLowerCase().includes(q);
-    return mf && ms;
+    return mf && ml && ms;
   });
 
   filtered.sort((a, b) => {
