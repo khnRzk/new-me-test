@@ -97,15 +97,6 @@
   --rose-soft: #F0C9C6;
   --gold: #9A7B2F;
   --gold-pale: #FAF4E1;
-  --teal: #0B7B8A;
-  --teal-pale: #E1F5F7;
-  --teal-soft: #8ECDD3;
-  --amber-pale: #FAF4E1;
-  --amber-text: #7A5E00;
-  --amber-soft: #F5D98A;
-  --purple: #5B3FA0;
-  --purple-pale: #F0EBF9;
-  --purple-soft: #C9B3E8;
   --ink: #1A1A1A;
   --ink2: #444;
   --ink3: #888;
@@ -142,14 +133,13 @@ header {
 }
 .hdr {
   max-width: 660px; margin: 0 auto;
-  padding: 12px 16px;
+  padding: 8px 16px;
   display: flex; align-items: center; gap: 10px;
 }
-.hdr-ring {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.25);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
+.hdr-logo {
+  height: 44px; width: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
 }
 .hdr h1 {
   font-family: 'Lora', serif;
@@ -288,11 +278,10 @@ main {
 }
 
 /* ── CONTROLS ── */
-.controls { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+.controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .seg {
   display: flex; background: var(--surface2);
   border-radius: var(--rs); padding: 3px; gap: 3px;
-  margin-bottom: 10px;
 }
 .sb {
   flex: 1; padding: 11px 6px; border: none; border-radius: 8px;
@@ -315,55 +304,6 @@ main {
 .sa .cpill { background: rgba(255,255,255,0.2); }
 .sg .cpill { background: var(--g-soft); color: var(--g1); }
 .sb2 .cpill { background: var(--rose-soft); color: var(--rose); }
-
-/* ── PILL BAR ── */
-.pill-bar {
-  display: flex; align-items: center;
-  overflow-x: auto; overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 0 0 10px;
-  margin: 0 -12px;
-  padding-left: 12px;
-  cursor: grab;
-}
-.pill-bar.dragging { cursor: grabbing; user-select: none; }
-.pill-bar::-webkit-scrollbar { display: none; }
-.pill-bar::after {
-  content: ''; flex-shrink: 0; width: 12px;
-}
-.pill-divider {
-  width: 1px; background: var(--border2);
-  flex-shrink: 0; height: 16px; margin: 0 8px;
-}
-.pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 7px 13px; border-radius: 20px;
-  border: 1.5px solid var(--border2);
-  background: var(--surface);
-  color: var(--ink3);
-  font-family: 'Inter', sans-serif;
-  font-size: 12px; font-weight: 500;
-  white-space: nowrap; cursor: pointer; flex-shrink: 0;
-  transition: all 0.18s;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 36px;
-}
-.pill:active { transform: scale(0.95); }
-.pill.on-loc  { background: var(--teal-pale);  border-color: var(--teal);   color: var(--teal);   font-weight: 600; }
-.pill.on-stat { background: var(--purple-pale); border-color: var(--purple); color: var(--purple); font-weight: 600; }
-.pill-count {
-  font-size: 9.5px; font-weight: 700;
-  padding: 1px 6px; border-radius: 10px;
-  background: var(--surface2); color: var(--ink3); flex-shrink: 0;
-}
-.pill.on-loc  .pill-count { background: var(--teal-soft);   color: var(--teal);   }
-.pill.on-stat .pill-count { background: var(--purple-soft); color: var(--purple); }
-@media (hover: hover) {
-  .pill:hover { border-color: var(--border2); background: var(--surface2); color: var(--ink2); }
-  .pill.on-loc:hover  { background: var(--teal-pale);   border-color: var(--teal);   }
-  .pill.on-stat:hover { background: var(--purple-pale); border-color: var(--purple); }
-}
 
 .srow { position: relative; }
 .srow input {
@@ -539,8 +479,6 @@ main {
 .cs-divorced .ci-status-dot   { background: #E09900; }
 .cs-widowed    { background: #F3EEF9; color: #5E3A8A; }
 .cs-widowed .ci-status-dot    { background: #9B6FC5; }
-.cs-regcancelled { background: #FDE8E8; color: #8A1A1A; }
-.cs-regcancelled .ci-status-dot { background: #C42A2A; }
 .cs-default    { background: var(--surface2); color: var(--ink3); }
 .cs-default .ci-status-dot    { background: var(--ink3); }
 
@@ -899,7 +837,7 @@ footer a:hover { color: #fff; }
 
 <header>
   <div class="hdr">
-    <div class="hdr-ring">🕌</div>
+    <img src="/logo.png" alt="Akurana Nikkah Service" class="hdr-logo">
     <div>
       <h1>Akurana Nikkah Service</h1>
       <p>Connecting hearts the Halal way</p>
@@ -943,17 +881,6 @@ footer a:hover { color: #fff; }
       <button class="sb"    onclick="setFilter('Groom',this)">👨 Grooms <span class="cpill" id="cnt-groom">0</span></button>
       <button class="sb"    onclick="setFilter('Bride',this)">👩 Brides <span class="cpill" id="cnt-bride">0</span></button>
     </div>
-
-    <div class="pill-bar">
-      <button class="pill on-loc" id="pill-loc-all"    onclick="setLocFilter('all',this)">🌍 All Provinces <span class="pill-count" id="lcnt-all">0</span></button>
-      <button class="pill"        id="pill-loc-cp"     onclick="setLocFilter('central',this)">📍 Central Province <span class="pill-count" id="lcnt-cp">0</span></button>
-      <button class="pill"        id="pill-loc-other"  onclick="setLocFilter('other',this)">✈️ Other Provinces <span class="pill-count" id="lcnt-other">0</span></button>
-      <div class="pill-divider"></div>
-      <button class="pill on-stat" id="pill-ms-all"       onclick="setStatusFilter('all',this)">👥 All Status <span class="pill-count" id="scnt-all">0</span></button>
-      <button class="pill"         id="pill-ms-unmarried"  onclick="setStatusFilter('unmarried',this)">✨ Unmarried <span class="pill-count" id="scnt-unmarried">0</span></button>
-      <button class="pill"         id="pill-ms-prev"       onclick="setStatusFilter('prev',this)">🤍 Prev. Married <span class="pill-count" id="scnt-prev">0</span></button>
-    </div>
-
     <div class="srow">
       <span class="sico">🔍</span>
       <input type="text" id="searchInput" placeholder="Search by ref no, location, education…" oninput="renderProfiles()">
@@ -1089,8 +1016,6 @@ const SAMPLE_DATA = [
 // ─── STATE ───────────────────────────────
 let allProfiles = [];
 let currentFilter = 'all';
-let currentLocFilter = 'all';
-let currentStatusFilter = 'all';
 let openCard = null;
 
 // ─── LOAD ────────────────────────────────
@@ -1160,41 +1085,13 @@ function parseCSV(csv) {
 }
 
 function init() {
+  const g = allProfiles.filter(p=>p.Type==='Groom').length;
+  const b = allProfiles.filter(p=>p.Type==='Bride').length;
+  document.getElementById('cnt-all').textContent = allProfiles.length;
+  document.getElementById('cnt-groom').textContent = g;
+  document.getElementById('cnt-bride').textContent = b;
   animateCount('successCount', SUCCESSFUL_PROPOSALS);
-  updateCounts();
   renderProfiles();
-}
-
-function updateCounts() {
-  // Each filter row counts against the OTHER two active filters (not itself)
-  const byLocStatus    = allProfiles.filter(p => matchLoc(p) && matchStatus(p));
-  const byGenderStatus = allProfiles.filter(p => matchGender(p) && matchStatus(p));
-  const byGenderLoc    = allProfiles.filter(p => matchGender(p) && matchLoc(p));
-
-  // Gender pills — scoped to loc + status
-  document.getElementById('cnt-all').textContent   = byLocStatus.length;
-  document.getElementById('cnt-groom').textContent = byLocStatus.filter(p => p.Type === 'Groom').length;
-  document.getElementById('cnt-bride').textContent = byLocStatus.filter(p => p.Type === 'Bride').length;
-
-  // Location pills — scoped to gender + status
-  document.getElementById('lcnt-all').textContent   = byGenderStatus.length;
-  document.getElementById('lcnt-cp').textContent    = byGenderStatus.filter(p => isCentralProvince(p.Location)).length;
-  document.getElementById('lcnt-other').textContent = byGenderStatus.filter(p => !isCentralProvince(p.Location)).length;
-
-  // Status pills — scoped to gender + loc
-  document.getElementById('scnt-all').textContent       = byGenderLoc.length;
-  document.getElementById('scnt-unmarried').textContent = byGenderLoc.filter(p => isUnmarried(p.Status)).length;
-  document.getElementById('scnt-prev').textContent      = byGenderLoc.filter(p => isPrevMarried(p.Status)).length;
-}
-
-function matchGender(p) { return currentFilter === 'all' || p.Type === currentFilter; }
-function matchLoc(p) {
-  if (currentLocFilter === 'all') return true;
-  return currentLocFilter === 'central' ? isCentralProvince(p.Location) : !isCentralProvince(p.Location);
-}
-function matchStatus(p) {
-  if (currentStatusFilter === 'all') return true;
-  return currentStatusFilter === 'unmarried' ? isUnmarried(p.Status) : isPrevMarried(p.Status);
 }
 
 function animateCount(id, target) {
@@ -1210,68 +1107,19 @@ function animateCount(id, target) {
   }, 16);
 }
 
-// ─── LOCATION HELPERS ────────────────────
-// Central Province districts: Kandy, Matale, Nuwara Eliya
-const CENTRAL_KEYWORDS = [
-  'kandy','akurana','gampola','peradeniya','katugastota','kundasale',
-  'teldeniya','wattegama','hasalaka','madawala','matale','dambulla',
-  'sigiriya','rattota','ukuwela','galewela','nuwara eliya','nuwara-eliya',
-  'nuwaraeliya','hatton','nawalapitiya','dickoya','talawakele','ragala',
-  'central province'
-];
-
-function isCentralProvince(location) {
-  if (!location) return false;
-  const loc = location.toLowerCase();
-  return CENTRAL_KEYWORDS.some(k => loc.includes(k));
-}
-
-// ─── MARITAL STATUS HELPERS ───────────────
-function isUnmarried(status) {
-  const s = (status || '').trim().toLowerCase();
-  return s === 'unmarried' || s === 'single';
-}
-
-function isPrevMarried(status) {
-  const s = (status || '').trim().toLowerCase();
-  return s === 'divorced' || s === 'widowed' || s === 'registration cancelled';
-}
-
-function setStatusFilter(f, el) {
-  currentStatusFilter = f;
-  document.querySelectorAll('#pill-ms-all,#pill-ms-unmarried,#pill-ms-prev').forEach(b => {
-    b.classList.remove('on-stat');
-  });
-  el.classList.add('on-stat');
-  openCard = null;
-  updateCounts();
-  renderProfiles();
-}
-
-function setLocFilter(f, el) {
-  currentLocFilter = f;
-  document.querySelectorAll('#pill-loc-all,#pill-loc-cp,#pill-loc-other').forEach(b => {
-    b.classList.remove('on-loc');
-  });
-  el.classList.add('on-loc');
-  openCard = null;
-  updateCounts();
-  renderProfiles();
-}
-
 // ─── FILTER ──────────────────────────────
 function setFilter(f, el) {
   currentFilter = f;
   document.querySelectorAll('.sb').forEach(b => { b.className='sb'; });
   el.classList.add(f==='all'?'sa':f==='Groom'?'sg':'sb2');
   openCard = null;
-  updateCounts();
   renderProfiles();
 }
 
 function renderProfiles() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let filtered = allProfiles.filter(p => {
+    const mf = currentFilter === 'all' || p.Type === currentFilter;
     const ms = !q ||
       (p.RefNo||'').toLowerCase().includes(q) ||
       (p.Location||'').toLowerCase().includes(q) ||
@@ -1279,7 +1127,7 @@ function renderProfiles() {
       (p.Occupation||'').toLowerCase().includes(q) ||
       (p.FamilyStatus||'').toLowerCase().includes(q) ||
       (p.Status||'').toLowerCase().includes(q);
-    return matchGender(p) && matchLoc(p) && matchStatus(p) && ms;
+    return mf && ms;
   });
 
   filtered.sort((a, b) => {
@@ -1352,9 +1200,8 @@ function buildCard(p, i) {
   const maritalRaw = (p.Status || '').trim();
   const maritalKey = maritalRaw.toLowerCase();
   const maritalCls = maritalKey === 'unmarried' || maritalKey === 'single' ? 'cs-unmarried'
-    : maritalKey === 'divorced'               ? 'cs-divorced'
-    : maritalKey === 'widowed'                ? 'cs-widowed'
-    : maritalKey === 'registration cancelled' ? 'cs-regcancelled'
+    : maritalKey === 'divorced' ? 'cs-divorced'
+    : maritalKey === 'widowed'  ? 'cs-widowed'
     : maritalRaw ? 'cs-default' : '';
   const maritalStatusTag = maritalRaw
     ? `<span class="ci-status ${maritalCls}"><span class="ci-status-dot"></span>${maritalRaw}</span>`
@@ -1552,34 +1399,6 @@ function handleOverlayClick(e) {
 window.addEventListener('popstate', () => {
   if (document.getElementById('sheetOverlay').classList.contains('open')) closeSheet();
 });
-
-// ─── PILL BAR DRAG SCROLL (desktop) ─────
-(function() {
-  const bar = document.querySelector('.pill-bar');
-  if (!bar) return;
-  let isDown = false, startX, scrollLeft, moved = false;
-  bar.addEventListener('mousedown', e => {
-    isDown = true; moved = false;
-    bar.classList.add('dragging');
-    startX = e.pageX - bar.offsetLeft;
-    scrollLeft = bar.scrollLeft;
-  });
-  document.addEventListener('mouseup', () => {
-    isDown = false;
-    bar.classList.remove('dragging');
-  });
-  document.addEventListener('mousemove', e => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - bar.offsetLeft;
-    const walk = x - startX;
-    if (Math.abs(walk) > 4) moved = true;
-    bar.scrollLeft = scrollLeft - walk;
-  });
-  bar.addEventListener('click', e => {
-    if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
-  }, true);
-})();
 
 loadData();
 </script>
