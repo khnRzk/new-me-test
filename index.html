@@ -716,6 +716,41 @@ main {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* ── BACK TO TOP ── */
+.btt {
+  position: fixed;
+  bottom: calc(90px + env(safe-area-inset-bottom));
+  right: 20px;
+  z-index: 299;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--border2);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px) scale(0.85);
+  transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.2s;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--g1);
+}
+.btt.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.btt:active { transform: scale(0.92); }
+.btt svg {
+  width: 18px; height: 18px;
+  stroke: var(--g1); stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round; fill: none;
+}
+@media (hover: hover) {
+  .btt:hover { box-shadow: 0 4px 18px rgba(27,94,59,0.2); border-color: var(--g3); }
+}
+
 /* ── FOOTER ── */
 footer {
   background: var(--g1); text-align: center;
@@ -1023,6 +1058,10 @@ footer a:hover { color: #fff; }
   </div>
 </div>
 
+<button class="btt" id="bttBtn" onclick="scrollToTop()" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1284,14 +1323,14 @@ function renderProfiles() {
     return matchGender(p) && matchLoc(p) && matchStatus(p) && ms;
   });
 
- filtered.sort((a, b) => {
-  const newA = isNew(a.DateAdded) ? 1 : 0;
-  const newB = isNew(b.DateAdded) ? 1 : 0;
-  if (newB !== newA) return newB - newA; // NEW profiles first
-  const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
-  const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
-  return nb - na; // then descending ref order
-});
+  filtered.sort((a, b) => {
+    const newA = isNew(a.DateAdded) ? 1 : 0;
+    const newB = isNew(b.DateAdded) ? 1 : 0;
+    if (newB !== newA) return newB - newA; // NEW profiles first
+    const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
+    const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
+    return nb - na; // then descending ref order
+  });
 
   const el = document.getElementById('profilesList');
   if (!filtered.length) {
@@ -1313,6 +1352,8 @@ function renderProfiles() {
       }
     });
   }
+
+  setupAutoCollapse();
 }
 
 // ─── BUILD CARD ───────────────────────────
@@ -1368,7 +1409,7 @@ function buildCard(p, i) {
   const newCard = isNew(p.DateAdded);
 
   return `
-<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}${isOngoing?' is-ongoing':''}" id="card-${i}">
+<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}${isOngoing?' is-ongoing':''}" id="card-${i}" data-card-idx="${i}">
   <div class="cstrip"></div>
   <div class="chead" onclick="toggleCard(${i})">
     <div class="ava ${c}">${ico}<span class="adot"></span></div>
@@ -1585,6 +1626,65 @@ window.addEventListener('popstate', () => {
     if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
   }, true);
 })();
+
+// ─── BACK TO TOP ─────────────────────────
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+(function() {
+  const btn = document.getElementById('bttBtn');
+  if (!btn) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+// ─── AUTO-COLLAPSE OFF-SCREEN CARDS ──────
+let collapseObserver = null;
+
+function setupAutoCollapse() {
+  // Disconnect previous observer if any
+  if (collapseObserver) collapseObserver.disconnect();
+
+  // We only collapse a card when it's well out of view (threshold 0 = any pixel gone)
+  // rootMargin: give 60px top buffer (header height) so card doesn't collapse while still readable
+  collapseObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) return; // card is visible — do nothing
+      const cardEl = entry.target;
+      const idx = parseInt(cardEl.dataset.cardIdx);
+      if (isNaN(idx)) return;
+      // Only collapse if this card is the open one and it's fully off screen
+      if (openCard === idx) {
+        const body = document.getElementById(`body-${idx}`);
+        const chv  = document.getElementById(`chv-${idx}`);
+        if (body && body.classList.contains('open')) {
+          body.classList.remove('open');
+          chv.classList.remove('open');
+          openCard = null;
+        }
+      }
+    });
+  }, {
+    root: null,
+    // -68px top = header height so it triggers after card scrolls past header
+    rootMargin: '-68px 0px -30% 0px',
+    threshold: 0
+  });
+
+  // Observe every card
+  document.querySelectorAll('#profilesList .card').forEach(card => {
+    collapseObserver.observe(card);
+  });
+}
 
 loadData();
 </script>
