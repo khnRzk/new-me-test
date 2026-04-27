@@ -1284,11 +1284,14 @@ function renderProfiles() {
     return matchGender(p) && matchLoc(p) && matchStatus(p) && ms;
   });
 
-  filtered.sort((a, b) => {
-    const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
-    const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
-    return nb - na;
-  });
+ filtered.sort((a, b) => {
+  const newA = isNew(a.DateAdded) ? 1 : 0;
+  const newB = isNew(b.DateAdded) ? 1 : 0;
+  if (newB !== newA) return newB - newA; // NEW profiles first
+  const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
+  const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
+  return nb - na; // then descending ref order
+});
 
   const el = document.getElementById('profilesList');
   if (!filtered.length) {
