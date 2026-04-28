@@ -265,56 +265,23 @@ main {
   background: var(--g1);
   border-radius: var(--r);
   margin-bottom: 14px;
-  position: relative; overflow: hidden;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
   border: 1px solid rgba(46,125,84,0.3);
-  box-shadow: 0 4px 20px rgba(27,94,59,0.15);
 }
-.success-banner::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(76,175,120,0.12) 0%, transparent 60%);
-  pointer-events: none;
-}
-.sbanner-top {
-  padding: 16px 16px 14px;
-  display: flex; align-items: center; gap: 14px;
-}
-.success-icon {
-  width: 52px; height: 52px; border-radius: 12px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
+.success-ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.25);
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px; flex-shrink: 0;
+  font-size: 16px; flex-shrink: 0;
 }
-.success-text { flex: 1; min-width: 0; }
-.success-label {
-  font-size: 9.5px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.5); margin-bottom: 3px; font-family: 'Inter', sans-serif;
+.success-msg {
+  font-size: 13px; color: rgba(255,255,255,0.9);
+  line-height: 1.55; font-family: 'Inter', sans-serif;
 }
-.success-count {
-  font-family: 'Lora', serif; font-size: 40px; font-weight: 600;
-  color: #fff; line-height: 1; margin-bottom: 3px; letter-spacing: -1px;
-}
-.success-desc {
-  font-size: 12px; font-weight: 400;
-  color: rgba(255,255,255,0.6); line-height: 1.4; font-family: 'Inter', sans-serif;
-}
-.sbanner-foot {
-  padding: 9px 16px 11px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,0,0,0.1);
-  display: flex; align-items: center; gap: 8px;
-}
-.sbanner-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #4CAF78; flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(76,175,120,0.2);
-}
-.sbanner-foot-text {
-  font-size: 11px; font-weight: 500;
-  color: rgba(255,255,255,0.45);
-  font-family: 'Lora', serif; font-style: italic;
+.success-msg em {
+  font-style: italic; color: rgba(255,255,255,0.55);
+  font-size: 12px; display: block; margin-top: 3px;
 }
 
 /* ── CONTROLS ── */
@@ -995,17 +962,10 @@ footer a:hover { color: #fff; }
 
 <main>
   <div class="success-banner">
-    <div class="sbanner-top">
-      <div class="success-icon">💍</div>
-      <div class="success-text">
-        <div class="success-label">Alhamdulillah · Successful Proposals</div>
-        <div class="success-count">💍</div>
-        <div class="success-desc">Profiles that found their match through our service — may Allah bless every union</div>
-      </div>
-    </div>
-    <div class="sbanner-foot">
-      <div class="sbanner-dot"></div>
-      <div class="sbanner-foot-text">May Allah bless every union — Āmīn</div>
+  <div class="success-ring">💍</div>
+    <div class="success-msg">
+      Alhamdulillah — couples have found their match through this service.
+      <em>May Allah bless every union — Āmīn</em>
     </div>
   </div>
 
