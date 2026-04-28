@@ -260,29 +260,23 @@ main {
   padding-bottom: calc(100px + env(safe-area-inset-bottom));
 }
 
-/* ── SUCCESS BANNER ── */
-.success-banner {
-  background: var(--g1);
-  border-radius: var(--r);
-  margin-bottom: 14px;
-  padding: 14px 18px;
-  display: flex; align-items: center; gap: 12px;
-  border: 1px solid rgba(46,125,84,0.3);
+/* ── HEADER NAV LINKS ── */
+.hdr-nav {
+  margin-left: auto; display: flex; align-items: center; gap: 4px; flex-shrink: 0;
 }
-.success-ring {
-  width: 38px; height: 38px; border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.25);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
+.hdr-nav a {
+  display: inline-flex; align-items: center;
+  padding: 7px 13px; border-radius: 7px;
+  color: rgba(255,255,255,0.7); text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px; font-weight: 500;
+  transition: background 0.18s, color 0.18s;
+  white-space: nowrap; min-height: 36px;
+  letter-spacing: 0.01em;
+  -webkit-tap-highlight-color: transparent;
 }
-.success-msg {
-  font-size: 13px; color: rgba(255,255,255,0.9);
-  line-height: 1.55; font-family: 'Inter', sans-serif;
-}
-.success-msg em {
-  font-style: italic; color: rgba(255,255,255,0.55);
-  font-size: 12px; display: block; margin-top: 3px;
-}
+.hdr-nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.hdr-nav a:active { background: rgba(255,255,255,0.15); }
 
 /* ── CONTROLS ── */
 .controls { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
@@ -779,7 +773,6 @@ footer a:hover { color: #fff; }
 @media (max-width: 320px) {
   main { padding: 12px 10px 100px; }
   .hbtn { padding: 9px 10px; font-size: 11px; }
-  .success-count { font-size: 34px; }
 }
 
 @media (min-width: 540px) {
@@ -942,7 +935,11 @@ footer a:hover { color: #fff; }
     <div> 
       <p style="font-family:'Lora',serif;font-size:16px;font-weight:600;color:#fff;line-height:1.1;margin:0;">Akurana Nikkah Service</p>
       <p style="font-size:10px;color:rgba(255,255,255,0.55);font-weight:400;margin-top:1px;font-family:'Inter',sans-serif;">Connecting hearts the Halal way</p> 
-    </div> 
+    </div>
+    <nav class="hdr-nav">
+      <a href="/faq.html">FAQ</a>
+      <a href="/about.html">About</a>
+    </nav>
   </div> 
 </header>
 
@@ -961,14 +958,6 @@ footer a:hover { color: #fff; }
 </div>
 
 <main>
-  <div class="success-banner">
-  <div class="success-ring">💍</div>
-    <div class="success-msg">
-      Alhamdulillah — couples have found their match through this service.
-      <em>May Allah bless every union — Āmīn</em>
-    </div>
-  </div>
-
   <div class="controls">
     <div class="seg">
       <button class="sb sa" onclick="setFilter('all',this)">All <span class="cpill" id="cnt-all">0</span></button>
@@ -1014,10 +1003,6 @@ footer a:hover { color: #fff; }
     <a href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank" rel="noopener noreferrer">📱 WhatsApp Group</a>
     <span class="fdot">·</span>
     <a href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank" rel="noopener noreferrer">📢 Channel</a>
-    <span class="fdot">·</span>
-    <a href="/about.html">ℹ️ About Us</a>
-    <span class="fdot">·</span>
-    <a href="/faq.html">❓ FAQ</a>
   </div>
   <span class="fsub">All profiles are shared with consent · Akurana Nikkah Service</span>
 </footer>
