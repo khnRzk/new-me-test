@@ -260,6 +260,24 @@ main {
   padding-bottom: calc(100px + env(safe-area-inset-bottom));
 }
 
+  .avail-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px; margin-bottom: 14px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.avail-btn:active { background: var(--surface2); }
+@media (hover:hover) {
+  .avail-btn:hover { border-color: var(--g2); box-shadow: 0 2px 12px rgba(27,94,59,0.1); }
+}
+.avail-btn-icon { font-size: 20px; flex-shrink: 0; }
+.avail-btn-text { flex: 1; }
+.avail-btn-label { display: block; font-size: 13.5px; font-weight: 600; color: var(--g1); margin-bottom: 2px; }
+.avail-btn-sub   { display: block; font-size: 11.5px; color: var(--ink3); }
+.avail-btn-arrow { font-size: 16px; color: var(--g3); flex-shrink: 0; }
+
 /* ── HEADER NAV LINKS ── */
 .hdr-nav {
   margin-left: auto; display: flex; align-items: center; gap: 4px; flex-shrink: 0;
@@ -986,6 +1004,14 @@ footer a:hover { color: #fff; }
   </div>
 
   <div class="dvd" id="profilesDvd">profiles</div>
+  <a href="/check.html" class="avail-btn">
+    <span class="avail-btn-icon">🔍</span>
+    <span class="avail-btn-text">
+      <span class="avail-btn-label">Check if a profile is available</span>
+      <span class="avail-btn-sub">Saw a ref no. in WhatsApp? Verify here first</span>
+    </span>
+    <span class="avail-btn-arrow">→</span>
+  </a>
   <div class="loading-label" id="loadingLabel">
     <span class="loading-dot"></span>
     <span class="loading-dot"></span>
