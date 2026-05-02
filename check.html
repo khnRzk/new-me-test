@@ -385,10 +385,11 @@ function parseCSV(csv) {
 }
 
 // Sheet 2 has one column: RefNo (header row, then one ref per row)
+// Normalises "AKNS - 0019" and "AKNS-0019" and "akns-0019" all to "AKNS-0019"
 function parseSheet2(csv) {
   return csv.split(/\r?\n/)
-    .map(l => l.replace(/"/g,'').trim().toUpperCase())
-    .filter(r => r.startsWith('AKNS-'));
+    .map(l => l.replace(/"/g,'').trim().toUpperCase().replace(/\s*-\s*/g, '-'))
+    .filter(r => r.startsWith('AKNS-') && r !== 'REFNO');
 }
 
 function renderListed() {
@@ -421,6 +422,8 @@ function fillCheck(ref) {
 function doCheck() {
   let raw = document.getElementById('refInput').value.trim().toUpperCase();
   if (!raw) return;
+  // Normalise spaces around dash: "AKNS - 0271" → "AKNS-0271"
+  raw = raw.replace(/\s*-\s*/g, '-');
   // Friendly: "271" → "AKNS-0271"
   if (/^\d{1,4}$/.test(raw))       raw = 'AKNS-' + raw.padStart(4,'0');
   else if (/^AKNS\d+$/.test(raw))  raw = 'AKNS-' + raw.slice(4).padStart(4,'0');
