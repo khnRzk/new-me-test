@@ -135,9 +135,9 @@ main {
   text-transform: uppercase; color: var(--ink3);
   margin-bottom: 12px;
 }
-.input-row { display: flex; gap: 8px; }
+.input-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .ref-input {
-  flex: 1; height: 54px; padding: 0 16px;
+  flex: 1; min-width: 0; height: 54px; padding: 0 16px;
   border: 1.5px solid var(--border);
   border-radius: var(--rs);
   background: var(--bg);
@@ -147,6 +147,8 @@ main {
   text-transform: uppercase; outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   -webkit-appearance: none;
+  /* never collapse below a usable width */
+  min-width: 140px;
 }
 .ref-input::placeholder {
   text-transform: none; font-weight: 400;
@@ -159,6 +161,7 @@ main {
 }
 .check-btn {
   height: 54px; padding: 0 22px;
+  flex-shrink: 0;
   background: var(--g1); color: #fff;
   border: none; border-radius: var(--rs);
   font-family: 'Inter', sans-serif;
@@ -170,6 +173,12 @@ main {
 }
 .check-btn:active { background: var(--g2); transform: scale(0.97); }
 @media (hover:hover) { .check-btn:hover { background: var(--g2); } }
+/* On very small screens stack input + button vertically */
+@media (max-width: 359px) {
+  .input-row { flex-direction: column; }
+  .ref-input { min-width: 0; width: 100%; }
+  .check-btn { width: 100%; height: 50px; }
+}
 
 /* ── RESULT CARDS ── */
 .result {
@@ -278,6 +287,51 @@ main {
 .r-unknown .r-status { font-size: 13px; font-weight: 600; color: var(--ink3); margin-bottom: 3px; }
 .r-unknown .r-note   { font-size: 12px; color: var(--ink3); line-height: 1.55; }
 
+/* INVALID INPUT */
+.r-invalid {
+  background: var(--surface);
+  border: 1.5px solid var(--rose-soft);
+  border-top: 3px solid var(--rose);
+}
+.r-invalid .inv-inner { padding: 18px 16px 20px; }
+.inv-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.inv-icon-wrap {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--rose-pale);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 16px;
+}
+.inv-title {
+  font-size: 14px; font-weight: 700; color: var(--rose);
+  letter-spacing: 0.01em;
+}
+.inv-msg {
+  font-size: 13px; color: var(--ink2); line-height: 1.6;
+  margin-bottom: 14px;
+}
+.inv-examples-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 8px;
+}
+.inv-examples {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.inv-ex {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 8px;
+  border: 1.5px dashed var(--border2);
+  background: var(--surface2);
+  font-size: 13px; font-weight: 600; color: var(--ink2);
+  letter-spacing: 0.04em; cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.inv-ex:active { background: var(--g-pale); border-color: var(--g2); border-style: solid; color: var(--g1); }
+@media (hover:hover) { .inv-ex:hover { background: var(--g-pale); border-color: var(--g2); border-style: solid; color: var(--g1); } }
+.inv-ex-label { font-size: 9px; font-weight: 400; color: var(--ink3); display: block; }
+
 /* ── LISTED SECTION ── */
 .listed-section {
   background: var(--surface);
@@ -337,7 +391,21 @@ footer a { color: rgba(255,255,255,0.65); text-decoration: none; }
 footer a:hover { color: #fff; }
 .fsub { font-size: 10.5px; color: rgba(255,255,255,0.32); display: block; margin-top: 4px; }
 :focus-visible { outline: 2px solid var(--g3); outline-offset: 2px; border-radius: 4px; }
-@media (max-width: 380px) { .ref-input { font-size: 15px; } .check-btn { padding: 0 16px; font-size: 13px; } }
+@media (max-width: 390px) {
+  main { padding-left: 10px; padding-right: 10px; }
+  .checker { padding: 16px 12px 18px; }
+  .ref-input { font-size: 15px; letter-spacing: 0.02em; padding: 0 12px; }
+  .check-btn { padding: 0 16px; font-size: 13px; }
+  .r-refno { font-size: 22px; }
+  .ri { padding: 16px 14px 14px !important; }
+  .r-wa { font-size: 12.5px; padding: 11px 12px; }
+}
+@media (max-width: 340px) {
+  .input-row { flex-direction: column; }
+  .ref-input { width: 100%; }
+  .check-btn { width: 100%; height: 50px; }
+  .hdr-back { padding: 6px 10px; font-size: 11px; }
+}
 </style>
 </head>
 <body>
@@ -412,21 +480,35 @@ const SHEET2_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRyoj5F8x7pl
 const CONTACT_WA = '0773226166';
 // ─────────────────────────────────────────────────────────────────────────────
 
-let knownRefs = new Set(); // all refs in Sheet 1 (currently listed profiles)
-let takenRefs = new Set(); // refs in Sheet 2 (proposals received)
+let knownRefs = new Set();
+let takenRefs = new Set();
+let dataLoaded = false;
+
+async function csvFetch(url) {
+  const bust = url + '&_=' + Date.now();
+  try {
+    const r = await fetch(bust, { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.text();
+  } catch(e) {
+    const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(bust);
+    const r2 = await fetch(proxy);
+    if (!r2.ok) throw new Error('Proxy error');
+    return await r2.text();
+  }
+}
 
 async function loadData() {
   try {
-    const [r1, r2] = await Promise.all([
-      fetch(`${SHEET1_CSV}&_=${Date.now()}`, { cache: 'no-store' }),
-      fetch(`${SHEET2_CSV}&_=${Date.now()}`, { cache: 'no-store' })
-    ]);
-    parseCSV(await r1.text()).forEach(p => {
-      if (p.RefNo) knownRefs.add(normalise(p.RefNo));
-    });
-    parseSheet2(await r2.text()).forEach(r => takenRefs.add(r));
+    const [csv1, csv2] = await Promise.all([csvFetch(SHEET1_CSV), csvFetch(SHEET2_CSV)]);
+    parseCSV(csv1).forEach(p => { if (p.RefNo) knownRefs.add(normalise(p.RefNo)); });
+    parseSheet2(csv2).forEach(r => takenRefs.add(r));
+    dataLoaded = true;
   } catch(e) {
     console.error('Load error:', e);
+    document.getElementById('listedArea').innerHTML = '<div class="empty-note">⚠️ Could not load data. Please check your connection and refresh.</div>';
+    document.getElementById('listedCount').textContent = '–';
+    return;
   }
   renderListed();
 }
@@ -488,7 +570,19 @@ function renderListed() {
 function onType() {
   const v = document.getElementById('refInput');
   v.value = v.value.toUpperCase();
+  // Clear result and error styling when user types
+  v.style.borderColor = '';
+  v.style.boxShadow = '';
   if (!v.value.trim()) document.getElementById('resultArea').innerHTML = '';
+}
+
+function tryExample(val) {
+  const input = document.getElementById('refInput');
+  input.value = val;
+  input.style.borderColor = '';
+  input.style.boxShadow = '';
+  doCheck();
+  input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function fillCheck(ref) {
@@ -497,36 +591,63 @@ function fillCheck(ref) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ── INPUT VALIDATION ─────────────────────────────────────────────────────────
+function validateInput(raw) {
+  if (!raw) return { ok: false, msg: 'Please enter a ref number.' };
+
+  // Allow digits only: "271" or "0271"
+  if (/^\d{1,4}$/.test(raw)) return { ok: true, cleaned: 'AKNS-' + raw.padStart(4, '0') };
+
+  // Allow "AKNS0271" without dash
+  if (/^AKNS\d{1,4}$/.test(raw)) return { ok: true, cleaned: 'AKNS-' + raw.slice(4).padStart(4, '0') };
+
+  // Allow full "AKNS-0271"
+  if (/^AKNS-\d{4}$/.test(raw)) return { ok: true, cleaned: raw };
+
+  // Anything else is invalid
+  return { ok: false, msg: 'Please enter a valid ref number like AKNS-0271 or just the number 271.' };
+}
+
 // ── CHECK LOGIC ───────────────────────────────────────────────────────────────
 function doCheck() {
-  let raw = normalise(document.getElementById('refInput').value);
-  if (!raw) return;
+  const raw = normalise(document.getElementById('refInput').value);
+  const area = document.getElementById('resultArea');
+  const input = document.getElementById('refInput');
 
-  // Auto-complete: "271" or "0271" → "AKNS-0271"
-  if (/^\d{1,4}$/.test(raw))      raw = 'AKNS-' + raw.padStart(4, '0');
-  else if (/^AKNS\d+$/.test(raw)) raw = 'AKNS-' + raw.slice(4).padStart(4, '0');
-
-  if (typeof gtag !== 'undefined') gtag('event', 'check_availability', { ref_no: raw });
-
-  const area  = document.getElementById('resultArea');
-  const waNum = CONTACT_WA.replace(/^0/, '94');
-
-  // 1. Check Sheet 2 first — if it's proposed, it's not available regardless of Sheet 1
-  if (takenRefs.has(raw)) {
-    const msg = encodeURIComponent(`Assalamu Alaikum, I wanted to enquire about profile ${raw}. JazakAllah Khair.`);
-    area.innerHTML = buildTaken(raw, waNum, msg);
+  // Validate input first
+  const v = validateInput(raw);
+  if (!v.ok) {
+    area.innerHTML = buildInvalid(v.msg);
+    input.style.borderColor = 'var(--rose)';
+    input.style.boxShadow = '0 0 0 3px rgba(181,83,74,0.12)';
     return;
   }
 
-  // 2. If Sheet 1 loaded and ref not found there either → not found
-  if (knownRefs.size > 0 && !knownRefs.has(raw)) {
-    area.innerHTML = buildUnknown(raw);
+  // Clear any error styling
+  input.style.borderColor = '';
+  input.style.boxShadow = '';
+
+  const ref = v.cleaned;
+  if (typeof gtag !== 'undefined') gtag('event', 'check_availability', { ref_no: ref });
+
+  const waNum = CONTACT_WA.replace(/^0/, '94');
+
+  // 1. Check Sheet 2 first — if proposed, not available regardless of Sheet 1
+  if (takenRefs.has(ref)) {
+    const msg = encodeURIComponent('Assalamu Alaikum, I wanted to enquire about profile ' + ref + '. JazakAllah Khair.');
+    area.innerHTML = buildTaken(ref, waNum, msg);
+    return;
+  }
+
+  // 2. If Sheet 1 loaded and not found → not found
+  if (knownRefs.size > 0 && !knownRefs.has(ref)) {
+    area.innerHTML = buildUnknown(ref);
     return;
   }
 
   // 3. Available
-  const msg = encodeURIComponent(`Assalamu Alaikum, I am interested in profile ${raw}. Please share more details. JazakAllah Khair.`);
-  area.innerHTML = buildOpen(raw, waNum, msg);
+  const msg = encodeURIComponent('Assalamu Alaikum, I am interested in profile ' + ref + '. Please share more details. JazakAllah Khair.');
+  area.innerHTML = buildOpen(ref, waNum, msg);
 }
 
 // ── RESULT BUILDERS ───────────────────────────────────────────────────────────
@@ -568,6 +689,34 @@ function buildTaken(ref, waNum, msg) {
           <span class="r-wa-sub">We'll let you know if it becomes available</span>
         </span>
       </a>
+    </div>
+  </div>`;
+}
+
+function buildInvalid(msg) {
+  return `
+  <div class="result r-invalid">
+    <div class="inv-inner">
+      <div class="inv-header">
+        <div class="inv-icon-wrap">⚠️</div>
+        <div class="inv-title">Invalid ref number</div>
+      </div>
+      <div class="inv-msg">${msg}</div>
+      <div class="inv-examples-label">Try one of these formats</div>
+      <div class="inv-examples">
+        <div class="inv-ex" onclick="tryExample('AKNS-0271')">
+          AKNS-0271
+          <span class="inv-ex-label">Full ref</span>
+        </div>
+        <div class="inv-ex" onclick="tryExample('271')">
+          271
+          <span class="inv-ex-label">Number only</span>
+        </div>
+        <div class="inv-ex" onclick="tryExample('AKNS0271')">
+          AKNS0271
+          <span class="inv-ex-label">No dash</span>
+        </div>
+      </div>
     </div>
   </div>`;
 }
