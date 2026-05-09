@@ -159,16 +159,6 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-/* ── DEGREE CHIPS ── */
-.deg-chip {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 10.5px; font-weight: 700;
-  padding: 3px 9px; border-radius: 20px;
-  letter-spacing: 0.03em; white-space: nowrap;
-}
-.deg-pg  { background: #E1F5EE; color: #0F6E56; border: 1px solid #5DCAA5; }
-.deg-ug  { background: #E6F1FB; color: #185FA5; border: 1px solid #85B7EB; }
-.deg-dip { background: #FAEEDA; color: #854F0B; border: 1px solid #EF9F27; }
   
 /* ── HEADER ── */
 header {
@@ -1436,7 +1426,6 @@ function buildCard(p, i) {
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
         <button class="sharebtn" onclick="shareProfile(event,'${p.RefNo}',this)" title="Share profile link">🔗</button>
         <span class="tpill ${c}">${p.Type}</span>
-        ${getDegreeChip(p.Education)}
         ${newCard ? `<span class="new-pill">NEW</span>` : ''}
       </div>
       <div class="cinfo-line">
@@ -1743,36 +1732,6 @@ function getDegreeChip(education) {
 
   const short = best.label(best.line);
   return `<span class="deg-chip deg-${best.tier}">🎓 ${short}</span>`;
-}
-
-function extractUGLabel(line) {
-  if (/bsc|b\.?sc/i.test(line)) return 'BSc';
-  if (/ba\b|b\.?a\b/i.test(line)) return 'BA';
-  if (/beng|b\.?eng/i.test(line)) return 'BEng';
-  if (/llb/i.test(line)) return 'LLB';
-  if (/bcom/i.test(line)) return 'BCom';
-  if (/bba/i.test(line)) return 'BBA';
-  if (/b\.?ed/i.test(line)) return 'BEd';
-  if (/b\.?it|bit\b/i.test(line)) return 'BIT';
-  if (/b\.?tech/i.test(line)) return 'BTech';
-  if (/hons/i.test(line)) return 'Hons Degree';
-  return 'Degree';
-}
-
-function extractPGLabel(line) {
-  if (/mbbs/i.test(line)) return 'MBBS';
-  if (/md\b/i.test(line)) return 'MD';
-  if (/phd/i.test(line)) return 'PhD';
-  if (/mba/i.test(line)) return 'MBA';
-  if (/llm/i.test(line)) return 'LLM';
-  if (/m\.?sc/i.test(line)) return 'MSc';
-  if (/\bm\.?a\.?(\s|$|,|\))/i.test(line)) return 'MA';  // ← fixed
-  if (/m\.?eng/i.test(line)) return 'MEng';
-  if (/mphil/i.test(line)) return 'MPhil';
-  if (/mpa/i.test(line)) return 'MPA';
-  if (/pg\s?dip|postgrad/i.test(line)) return 'PG Dip';
-  if (/master/i.test(line)) return 'Masters';
-  return 'Postgrad';
 }
 loadData();
 </script>
