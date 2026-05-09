@@ -1710,12 +1710,12 @@ function getDegreeChip(education) {
     .map(l => l.replace(/^[\u2022\-\*\s]+/, '').trim())
     .filter(Boolean);
 
-  const pgRe  = /mbbs|md\b|phd|m\.?sc|m\.?a\b|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa/i;
+ const pgRe = /mbbs|md\b|phd|m\.?sc|\bm\.?a\.?(\s|$|,|\))|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa/i;
   const ugRe  = /bsc|b\.?sc|ba\b|b\.?a\b|beng|b\.?eng|llb|bcom|bba|b\.?ed|hons|reading\s+b|b\.?it|bit\b|b\.?tech/i;
   const hndRe = /higher national diploma|hnd|hnc/i;
   const dipRe = /diploma/i;
   const cerRe = /certificate|nvq|professional\s+cert/i;
-  const pgRe = /mbbs|md\b|phd|m\.?sc|\bm\.?a\.?(\s|$|,|\))|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa/i;
+ 
 
   // Score each tier: higher = better
   const TIERS = [
