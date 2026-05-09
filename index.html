@@ -159,7 +159,17 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-
+/* ── DEGREE CHIPS ── */
+.deg-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px;
+  letter-spacing: 0.03em; white-space: nowrap;
+}
+.deg-pg  { background: #E1F5EE; color: #0F6E56; border: 1px solid #5DCAA5; }
+.deg-ug  { background: #E6F1FB; color: #185FA5; border: 1px solid #85B7EB; }
+.deg-dip { background: #FAEEDA; color: #854F0B; border: 1px solid #EF9F27; }
+  
 /* ── HEADER ── */
 header {
   background: var(--g1);
@@ -1426,6 +1436,7 @@ function buildCard(p, i) {
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
         <button class="sharebtn" onclick="shareProfile(event,'${p.RefNo}',this)" title="Share profile link">🔗</button>
         <span class="tpill ${c}">${p.Type}</span>
+        ${getDegreeChip(p.Education)}
         ${newCard ? `<span class="new-pill">NEW</span>` : ''}
       </div>
       <div class="cinfo-line">
@@ -1692,7 +1703,23 @@ function setupAutoCollapse() {
     collapseObserver.observe(card);
   });
 }
+function shortenDeg(education) {
+  let d = education.split(/\r?\n/)[0].trim();
+  d = d.replace(/\s*\(.*?\)\s*/g, '').trim();
+  return d.length > 22 ? d.slice(0, 20) + '…' : d;
+}
 
+function getDegreeChip(education) {
+  if (!education) return '';
+  const first = education.split(/\r?\n/)[0].toLowerCase();
+  if (/mbbs|md\b|phd|msc|ma\b|mba|llm|mphil|pg\s?dip|postgrad|master/.test(first))
+    return `<span class="deg-chip deg-pg">🎓 ${shortenDeg(education)}</span>`;
+  if (/bsc|ba\b|beng|llb|bcom|bba|b\.?ed|hons|degree/.test(first))
+    return `<span class="deg-chip deg-ug">🎓 ${shortenDeg(education)}</span>`;
+  if (/diploma|hnd|hnc|certificate|nvq/.test(first))
+    return `<span class="deg-chip deg-dip">🎓 ${shortenDeg(education)}</span>`;
+  return '';
+}
 loadData();
 </script>
 </body>
