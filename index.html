@@ -1703,44 +1703,75 @@ function setupAutoCollapse() {
     collapseObserver.observe(card);
   });
 }
-function shortenDeg(label) {
-  label = label.replace(/\s*\(.*?\)\s*/g, '').trim();
-  return label.length > 24 ? label.slice(0, 22) + '…' : label;
-}
-
 function getDegreeChip(education) {
   if (!education) return '';
 
-  // Split into lines, strip bullet characters and leading/trailing spaces
   const lines = education.split(/\r?\n/)
     .map(l => l.replace(/^[\u2022\-\*\s]+/, '').trim())
     .filter(Boolean);
 
-  // Regex tiers — tested against every line, best match wins
-  const pgRe  = /mbbs|md\b|phd|m\.?sc|m\.?a\b|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa|mis/i;
-  const ugRe  = /bsc|b\.?sc|ba\b|b\.?a\b|beng|b\.?eng|llb|bcom|bba|b\.?ed|hons|degree|reading\s+b|b\.?it|bit\b|b\.?tech/i;
-  const dipRe = /diploma|hnd|hnc|certificate|nvq|professional\s+cert/i;
+  const pgRe  = /mbbs|md\b|phd|m\.?sc|m\.?a\b|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa/i;
+  const ugRe  = /bsc|b\.?sc|ba\b|b\.?a\b|beng|b\.?eng|llb|bcom|bba|b\.?ed|hons|reading\s+b|b\.?it|bit\b|b\.?tech/i;
+  const hndRe = /higher national diploma|hnd|hnc/i;
+  const dipRe = /diploma/i;
+  const cerRe = /certificate|nvq|professional\s+cert/i;
 
-  let bestTier = null; // 'pg' > 'ug' > 'dip'
-  let bestLabel = '';
+  // Score each tier: higher = better
+  const TIERS = [
+    { re: pgRe,  tier: 'pg',  score: 5, label: (l) => extractPGLabel(l) },
+    { re: ugRe,  tier: 'ug',  score: 4, label: (l) => extractUGLabel(l) },
+    { re: hndRe, tier: 'dip', score: 3, label: ()  => 'HND'             },
+    { re: dipRe, tier: 'dip', score: 2, label: ()  => 'Diploma'         },
+    { re: cerRe, tier: 'dip', score: 1, label: ()  => 'Certificate'     },
+  ];
+
+  let best = null;
 
   for (const line of lines) {
-    if (pgRe.test(line)) {
-      bestTier = 'pg'; bestLabel = line; break; // can't do better
-    }
-    if (ugRe.test(line) && bestTier !== 'pg') {
-      bestTier = 'ug'; bestLabel = line;
-    }
-    if (dipRe.test(line) && !bestTier) {
-      bestTier = 'dip'; bestLabel = line;
+    for (const t of TIERS) {
+      if (t.re.test(line)) {
+        if (!best || t.score > best.score) {
+          best = { ...t, line };
+        }
+        break; // one tier per line is enough
+      }
     }
   }
 
-  if (!bestTier) return '';
+  if (!best) return '';
 
-  const cls   = `deg-${bestTier}`;
-  const short = shortenDeg(bestLabel);
-  return `<span class="deg-chip ${cls}">🎓 ${short}</span>`;
+  const short = best.label(best.line);
+  return `<span class="deg-chip deg-${best.tier}">🎓 ${short}</span>`;
+}
+
+function extractUGLabel(line) {
+  if (/bsc|b\.?sc/i.test(line)) return 'BSc';
+  if (/ba\b|b\.?a\b/i.test(line)) return 'BA';
+  if (/beng|b\.?eng/i.test(line)) return 'BEng';
+  if (/llb/i.test(line)) return 'LLB';
+  if (/bcom/i.test(line)) return 'BCom';
+  if (/bba/i.test(line)) return 'BBA';
+  if (/b\.?ed/i.test(line)) return 'BEd';
+  if (/b\.?it|bit\b/i.test(line)) return 'BIT';
+  if (/b\.?tech/i.test(line)) return 'BTech';
+  if (/hons/i.test(line)) return 'Hons Degree';
+  return 'Degree';
+}
+
+function extractPGLabel(line) {
+  if (/mbbs/i.test(line)) return 'MBBS';
+  if (/md\b/i.test(line)) return 'MD';
+  if (/phd/i.test(line)) return 'PhD';
+  if (/mba/i.test(line)) return 'MBA';
+  if (/llm/i.test(line)) return 'LLM';
+  if (/m\.?sc/i.test(line)) return 'MSc';
+  if (/m\.?a\b/i.test(line)) return 'MA';
+  if (/m\.?eng/i.test(line)) return 'MEng';
+  if (/mphil/i.test(line)) return 'MPhil';
+  if (/mpa/i.test(line)) return 'MPA';
+  if (/pg\s?dip|postgrad/i.test(line)) return 'PG Dip';
+  if (/master/i.test(line)) return 'Masters';
+  return 'Postgrad';
 }
 loadData();
 </script>
