@@ -1715,6 +1715,7 @@ function getDegreeChip(education) {
   const hndRe = /higher national diploma|hnd|hnc/i;
   const dipRe = /diploma/i;
   const cerRe = /certificate|nvq|professional\s+cert/i;
+  const pgRe = /mbbs|md\b|phd|m\.?sc|\bm\.?a\.?(\s|$|,|\))|mba|llm|mphil|pg\s?dip|postgrad|master|m\.?eng|mpa/i;
 
   // Score each tier: higher = better
   const TIERS = [
@@ -1765,7 +1766,7 @@ function extractPGLabel(line) {
   if (/mba/i.test(line)) return 'MBA';
   if (/llm/i.test(line)) return 'LLM';
   if (/m\.?sc/i.test(line)) return 'MSc';
-  if (/m\.?a\b/i.test(line)) return 'MA';
+  if (/\bm\.?a\.?(\s|$|,|\))/i.test(line)) return 'MA';  // ← fixed
   if (/m\.?eng/i.test(line)) return 'MEng';
   if (/mphil/i.test(line)) return 'MPhil';
   if (/mpa/i.test(line)) return 'MPA';
