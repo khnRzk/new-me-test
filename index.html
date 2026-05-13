@@ -396,6 +396,138 @@ main {
 }
 .dvd::before,.dvd::after { content:''; flex:1; height:1px; background: var(--border); }
 
+/* ── BIO CARD BANNER ── */
+.bio-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.bio-banner-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  text-decoration: none;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.bio-banner-card:active { transform: scale(0.98); }
+@media (hover: hover) {
+  .bio-banner-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+  .bio-banner-card.primary:hover { border-color: var(--g2); }
+  .bio-banner-card.secondary:hover { border-color: var(--teal); }
+}
+.bio-banner-card-strip {
+  height: 3px;
+}
+.bio-banner-card.primary .bio-banner-card-strip {
+  background: linear-gradient(90deg, var(--g1), var(--g3));
+}
+.bio-banner-card.secondary .bio-banner-card-strip {
+  background: linear-gradient(90deg, var(--teal), var(--teal-soft));
+}
+.bio-banner-card-body {
+  padding: 13px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.bio-banner-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.bio-banner-card.primary .bio-banner-icon { background: var(--g-pale); }
+.bio-banner-card.secondary .bio-banner-icon { background: var(--teal-pale); }
+.bio-banner-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--ink); line-height: 1.25;
+}
+.bio-banner-sub {
+  font-size: 11px; color: var(--ink3);
+  line-height: 1.5;
+}
+.bio-banner-cta {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 8px;
+  font-size: 11.5px; font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+.bio-banner-card.primary .bio-banner-cta {
+  background: var(--g-pale); color: var(--g1);
+}
+.bio-banner-card.secondary .bio-banner-cta {
+  background: var(--teal-pale); color: var(--teal);
+}
+
+/* ── TOOL STRIP (below profiles divider) ── */
+.tool-strip {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 14px;
+  border-radius: var(--r);
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  background: var(--surface);
+}
+.tool-strip-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 60px;
+  text-align: left;
+}
+.tool-strip-item:active { background: var(--surface2); }
+@media (hover: hover) {
+  .tool-strip-item:hover { background: var(--surface2); }
+}
+.tool-strip-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin: 8px 0;
+}
+.tool-strip-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.tool-strip-label {
+  font-size: 12.5px; font-weight: 600; color: var(--ink);
+  display: block; margin-bottom: 2px; line-height: 1.2;
+}
+.tool-strip-sub {
+  font-size: 10.5px; color: var(--ink3);
+  line-height: 1.4;
+}
+.tool-strip-arrow {
+  margin-left: auto; font-size: 14px;
+  color: var(--ink3); flex-shrink: 0;
+}
+
 /* ── CARDS ── */
 .list { display: flex; flex-direction: column; gap: 10px; }
 .card {
@@ -977,6 +1109,12 @@ footer a:hover { color: #fff; }
       Facebook Page
     </a>
   </div>
+  <div style="margin-top:12px;">
+    <a href="/bio-generator.html" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.3);border-radius:10px;padding:10px 18px;color:#fff;text-decoration:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.01em;transition:background 0.18s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+      🪪 Create Your Bio Card — Free
+      <span style="font-size:11px;opacity:0.7;font-weight:400;">Fill &amp; Download Instantly</span>
+    </a>
+  </div>
 </div>
 
 <main>
@@ -1004,14 +1142,28 @@ footer a:hover { color: #fff; }
   </div>
 
   <div class="dvd" id="profilesDvd">profiles</div>
-  <a href="/check.html" class="avail-btn">
-    <span class="avail-btn-icon">🔍</span>
-    <span class="avail-btn-text">
-      <span class="avail-btn-label">Check if a profile is available</span>
-      <span class="avail-btn-sub">Saw a ref no. in WhatsApp? Verify here first</span>
-    </span>
-    <span class="avail-btn-arrow">→</span>
-  </a>
+
+  <!-- ── BIO CARD GENERATOR BANNER ── -->
+  <div class="bio-banner">
+    <a href="/bio-generator.html" class="bio-banner-card primary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🪪</div>
+        <div class="bio-banner-title">Create Your Bio Card</div>
+        <div class="bio-banner-sub">Fill your details — get a beautiful downloadable profile card instantly</div>
+        <span class="bio-banner-cta">Generate Free →</span>
+      </div>
+    </a>
+    <a href="/check.html" class="bio-banner-card secondary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🔍</div>
+        <div class="bio-banner-title">Check Profile Status</div>
+        <div class="bio-banner-sub">Saw a ref no. in WhatsApp? Verify it's still available here</div>
+        <span class="bio-banner-cta">Check Now →</span>
+      </div>
+    </a>
+  </div>
   <div class="loading-label" id="loadingLabel">
     <span class="loading-dot"></span>
     <span class="loading-dot"></span>
@@ -1067,6 +1219,22 @@ footer a:hover { color: #fff; }
           <strong>Free &amp; Simple</strong>
           Send us your details in any format you prefer via WhatsApp. Our team will review, format, and publish your profile — completely free of charge, InshāAllah.
         </div>
+      </div>
+
+      <!-- Bio card generator link inside sheet -->
+      <a href="/bio-generator.html" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--g-soft);background:var(--g-pale);text-decoration:none;margin-bottom:14px;-webkit-tap-highlight-color:transparent;">
+        <span style="font-size:22px;flex-shrink:0;">🪪</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:13.5px;font-weight:700;color:var(--g1);margin-bottom:2px;">Generate a Bio Card First</span>
+          <span style="display:block;font-size:11.5px;color:var(--g2);line-height:1.45;">Fill your details online → download a professional card → share with us</span>
+        </span>
+        <span style="font-size:16px;color:var(--g3);flex-shrink:0;">→</span>
+      </a>
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:10.5px;color:var(--ink3);font-weight:500;">or send directly</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
       </div>
 
       <a class="sheet-wa-btn" id="sheetWaBtn" href="#" target="_blank" rel="noopener noreferrer">
