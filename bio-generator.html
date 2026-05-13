@@ -363,7 +363,7 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
     </div>
     <div class="act-row">
       <button class="act-btn dl" onclick="dlCard()" type="button">⬇ Download PNG</button>
-      <a class="act-btn wa" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">📱 Share on WhatsApp</a>
+      <a class="act-btn wa" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
       <button class="act-btn edit" onclick="doEdit()" type="button">✏️ Edit Details</button>
     </div>
     <div class="note">
@@ -539,8 +539,25 @@ function doGenerate() {
   setStep(3);
 
   const num = CONTACT_WA.replace(/^0/, '94');
-  const msg = encodeURIComponent('Assalamu Alaikum, I generated my bio card using the Akurana Nikkah Service Bio Generator. I would like to list my profile officially. JazakAllah Khair.');
-  document.getElementById('waBtn').href = 'https://wa.me/' + num + '?text=' + msg;
+  // Build shareable pre-filled URL — encodes key fields into hash params
+  const shareParams = new URLSearchParams();
+  if (d.name)     shareParams.set('name',    d.name);
+  if (d.type)     shareParams.set('type',    d.type);
+  if (gv('dob'))  shareParams.set('dob',     gv('dob'));
+  if (d.marital)  shareParams.set('marital', d.marital);
+  if (d.location) shareParams.set('loc',     d.location);
+  if (d.age)      shareParams.set('age',     d.age);
+  if (d.height)   shareParams.set('height',  d.height);
+  if (d.occ)      shareParams.set('occ',     d.occ);
+  if (d.bio)      shareParams.set('bio',     d.bio);
+  if (d.expects)  shareParams.set('exp',     d.expects);
+  const shareUrl = window.location.origin + '/bio-generator.html#' + shareParams.toString();
+  const waMsg = encodeURIComponent(
+    'Assalamu Alaikum, I created my matrimonial bio card using Akurana Nikkah Service.\n\n' +
+    '🔗 View / download my bio card:\n' + shareUrl + '\n\n' +
+    'I would like to list my profile officially. JazakAllah Khair.'
+  );
+  document.getElementById('waBtn').href = 'https://wa.me/' + num + '?text=' + waMsg;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -927,11 +944,9 @@ function paint(ctx, d, W, PAD, draw, CH) {
       ctx.fillStyle = INK3; ctx.font = '400 14px Inter,sans-serif';
       ctx.fillText('Contact: ' + d.cperson, PAD + 22, y + 82);
     }
-    // WA badge right
-    ctx.fillStyle = '#25D366';
-    rr(W - PAD - 88, y + CBH/2 - 18, 80, 36, 18); ctx.fill();
-    ctx.fillStyle = '#ffffff'; ctx.font = '700 14px Inter,sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('WhatsApp', W - PAD - 48, y + CBH/2 + 5);
+    // Plain WhatsApp text label right side
+    ctx.fillStyle = MUTED; ctx.font = '400 13px Inter,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('WhatsApp', W - PAD - 22, y + CBH/2 + 5);
     ctx.textAlign = 'left';
   }
   y += CBH + 28;
@@ -962,6 +977,33 @@ function paint(ctx, d, W, PAD, draw, CH) {
 
   return y;
 }
+
+// ─── PREFILL FROM SHARED LINK ────────
+(function() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return;
+  try {
+    const p = new URLSearchParams(hash);
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+    if (p.get('type')) pickType(p.get('type'));
+    set('fullname', p.get('name'));
+    set('dob',      p.get('dob'));
+    set('marital',  p.get('marital'));
+    set('location', p.get('loc'));
+    set('height',   p.get('height'));
+    set('occ',      p.get('occ'));
+    set('bioInput', p.get('bio'));
+    set('expects',  p.get('exp'));
+    if (p.get('bio')) onBioInput();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Show hint banner
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:var(--g-pale);border:1px solid var(--g-soft);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--g1);margin-bottom:14px;line-height:1.5;';
+    banner.innerHTML = '<strong style="display:block;margin-bottom:2px;">📋 Details pre-filled from shared link</strong>Review your info, add anything missing, then generate your card.';
+    const fw = document.getElementById('formWrap');
+    fw.insertBefore(banner, fw.firstChild);
+  } catch(e) { /* ignore malformed hash */ }
+})();
 </script>
 </body>
 </html>
