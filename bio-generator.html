@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio Card Generator | Akurana Nikkah Service</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#F6F4F0; --surface:#fff; --surface2:#F0EDE8;
+  --g1:#1B5E3B; --g2:#2E7D54; --g3:#4CAF78;
+  --g-pale:#EAF5EE; --g-soft:#C8E6D4;
+  --rose:#B5534A; --rose-pale:#FAEDEC; --rose-soft:#F0C9C6;
+  --ink:#1A1A1A; --ink2:#444; --ink3:#888;
+  --border:#E2DDD6; --border2:#CBC5BB;
+  --r:14px; --rs:10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+/* ── HEADER ── */
+header { background: var(--g1); padding: 12px 16px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 rgba(255,255,255,0.08); }
+.hdr-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); transition: background 0.15s; flex-shrink: 0; }
+.hdr-back:hover { background: rgba(255,255,255,0.1); }
+.hdr-title { font-family: 'Lora', serif; font-size: 16px; font-weight: 600; color: #fff; }
+.hdr-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+
+/* ── HERO ── */
+.hero { background: linear-gradient(135deg, #1B5E3B 0%, #0D3B24 100%); padding: 26px 20px 22px; text-align: center; color: #fff; }
+.hero h2 { font-family: 'Lora', serif; font-size: clamp(17px, 4vw, 22px); font-weight: 600; margin-bottom: 7px; }
+.hero p { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.65; max-width: 340px; margin: 0 auto; }
+
+/* ── STEPS ── */
+.steps { display: flex; align-items: center; margin-bottom: 22px; }
+.step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative; }
+.step:not(:last-child)::after { content: ''; position: absolute; top: 14px; left: calc(50% + 14px); width: calc(100% - 28px); height: 1px; background: var(--border2); }
+.step.done:not(:last-child)::after { background: var(--g3); }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid var(--border2); background: var(--surface); color: var(--ink3); transition: all 0.3s; z-index: 1; }
+.step.active .step-dot { border-color: var(--g1); background: var(--g1); color: #fff; }
+.step.done .step-dot { border-color: var(--g3); background: var(--g3); color: #fff; }
+.step-label { font-size: 9.5px; font-weight: 500; color: var(--ink3); text-align: center; }
+.step.active .step-label, .step.done .step-label { color: var(--g1); }
+
+/* ── MAIN ── */
+main { max-width: 680px; margin: 0 auto; padding: 20px 14px 80px; }
+
+/* ── SECTION CARDS ── */
+.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); margin-bottom: 14px; overflow: hidden; }
+.card-hdr { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.card-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--g-pale); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.card-sub { font-size: 11.5px; color: var(--ink3); margin-top: 2px; }
+.card-body { padding: 16px; }
+
+/* ── FORM GRID ── */
+.fg  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.full { grid-column: 1 / -1; }
+.frow { display: flex; flex-direction: column; gap: 5px; }
+label { font-size: 11.5px; font-weight: 600; color: var(--ink2); letter-spacing: 0.02em; }
+.req { color: var(--rose); margin-left: 2px; }
+input, select, textarea {
+  width: 100%; padding: 11px 13px;
+  border: 1.5px solid var(--border); border-radius: var(--rs);
+  background: var(--surface); font-family: 'Inter', sans-serif;
+  font-size: 14px; color: var(--ink); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
+}
+input::placeholder, textarea::placeholder { color: var(--ink3); font-size: 13.5px; }
+input:focus, select:focus, textarea:focus { border-color: var(--g2); box-shadow: 0 0 0 3px rgba(46,125,84,0.1); }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer;
+}
+textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.hint { font-size: 10.5px; color: var(--ink3); margin-top: 3px; }
+
+/* ── CHAR COUNTER ── */
+.bio-field-wrap { position: relative; }
+.char-count { position: absolute; bottom: 10px; right: 12px; font-size: 10px; color: var(--ink3); pointer-events: none; }
+.char-count.warn { color: var(--rose); }
+#bioInput { padding-bottom: 28px; min-height: 130px; }
+
+/* ── TYPE TOGGLE ── */
+.type-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.type-opt { border: 2px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; position: relative; user-select: none; }
+.type-opt input { display: none; }
+.type-opt-ico { font-size: 24px; flex-shrink: 0; }
+.type-opt-label { font-size: 13px; font-weight: 600; color: var(--ink2); }
+.type-opt-sub { font-size: 11px; color: var(--ink3); }
+.type-check { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; color: #fff; }
+.type-opt.sel-g { border-color: var(--g1); background: var(--g-pale); }
+.type-opt.sel-g .type-opt-label { color: var(--g1); }
+.type-opt.sel-b { border-color: var(--rose); background: var(--rose-pale); }
+.type-opt.sel-b .type-opt-label { color: var(--rose); }
+.type-opt.sel-g .type-check { display: flex; background: var(--g1); }
+.type-opt.sel-b .type-check { display: flex; background: var(--rose); }
+
+/* ── EDUCATION ENTRIES ── */
+.edu-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.edu-entry { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start; }
+.edu-body { flex: 1; min-width: 0; }
+.edu-q { font-size: 13px; font-weight: 600; color: var(--ink); }
+.edu-s { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.edu-del { width: 26px; height: 26px; border-radius: 6px; background: var(--rose-pale); border: 1px solid var(--rose-soft); color: var(--rose); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+.edu-del:hover { background: var(--rose-soft); }
+.add-edu-btn { display: flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: var(--rs); border: 1.5px dashed var(--border2); background: transparent; color: var(--g1); font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; justify-content: center; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+.add-edu-btn:hover { background: var(--g-pale); border-color: var(--g2); }
+.edu-modal { background: var(--g-pale); border: 1.5px solid var(--g-soft); border-radius: var(--rs); padding: 14px; display: none; flex-direction: column; gap: 10px; margin-top: 8px; }
+.edu-modal.open { display: flex; }
+.edu-modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.edu-btns { display: flex; gap: 8px; }
+.mbtn { flex: 1; padding: 9px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; border: none; transition: background 0.15s; }
+.mbtn.ok  { background: var(--g1); color: #fff; }
+.mbtn.ok:hover  { background: var(--g2); }
+.mbtn.cx  { background: var(--surface2); color: var(--ink2); }
+.mbtn.cx:hover  { background: var(--border); }
+
+/* ── LIVE PREVIEW ── */
+.preview-toggle { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--r); margin-bottom: 14px; cursor: pointer; user-select: none; }
+.preview-toggle-label { font-size: 13px; font-weight: 600; color: var(--g1); display: flex; align-items: center; gap: 8px; }
+.preview-toggle-arrow { font-size: 14px; color: var(--ink3); transition: transform 0.2s; }
+.preview-toggle.open .preview-toggle-arrow { transform: rotate(180deg); }
+.preview-box { display: none; margin-bottom: 14px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.preview-box.open { display: block; }
+.preview-label { padding: 10px 14px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; }
+#previewCanvas { width: 100%; display: block; }
+
+/* ── GENERATE BUTTON ── */
+.gen-btn { width: 100%; padding: 15px; border-radius: 12px; background: var(--g1); color: #fff; border: none; font-family: 'Lora', serif; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s, transform 0.15s; margin-top: 4px; min-height: 56px; letter-spacing: 0.01em; }
+.gen-btn:hover { background: var(--g2); }
+.gen-btn:active { transform: scale(0.98); }
+.gen-btn.bride { background: var(--rose); }
+.gen-btn.bride:hover { background: #9e443c; }
+
+/* ── RESULT ── */
+.result { display: none; }
+.result.show { display: block; }
+.result-preview { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 16px; }
+.result-label { padding: 10px 14px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+#outputCanvas { width: 100%; display: block; }
+.act-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.act-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; transition: all 0.15s; border: none; min-height: 52px; }
+.act-btn.dl   { background: var(--g1); color: #fff; }
+.act-btn.dl:hover { background: var(--g2); }
+.act-btn.wa   { background: #25D366; color: #fff; }
+.act-btn.wa:hover { background: #1ebe5d; }
+.act-btn.edit { background: var(--surface2); color: var(--ink2); border: 1.5px solid var(--border2); grid-column: 1/-1; }
+.act-btn.edit:hover { background: var(--border); }
+.note { background: var(--g-pale); border: 1px solid var(--g-soft); border-radius: 10px; padding: 12px 14px; font-size: 11.5px; color: var(--g1); line-height: 1.65; }
+.note strong { font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* ── ERROR ── */
+.err { background: #FDE8E8; border: 1.5px solid #F0C9C6; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #8A1A1A; display: none; margin-top: 12px; line-height: 1.5; }
+.err.show { display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .fg, .fg3 { grid-template-columns: 1fr 1fr; }
+  .fg3 .full { grid-column: 1 / -1; }
+  .act-row { grid-template-columns: 1fr; }
+  .act-btn.edit { grid-column: 1; }
+}
+@media (max-width: 360px) {
+  .fg, .fg3 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="hdr-back">← Back</a>
+  <div>
+    <div class="hdr-title">Bio Card Generator</div>
+    <div class="hdr-sub">Akurana Nikkah Service · Free</div>
+  </div>
+</header>
+
+<div class="hero">
+  <h2>Create Your Matrimonial Bio Card 💍</h2>
+  <p>Fill in your details, write your own bio, and instantly download a beautiful branded card to share with families.</p>
+</div>
+
+<main>
+
+  <!-- Step indicator -->
+  <div class="steps">
+    <div class="step active" id="s1"><div class="step-dot">1</div><div class="step-label">Your Details</div></div>
+    <div class="step" id="s2"><div class="step-dot">2</div><div class="step-label">Preview</div></div>
+    <div class="step" id="s3"><div class="step-dot">3</div><div class="step-label">Download</div></div>
+  </div>
+
+  <!-- ═══ FORM ═══ -->
+  <div id="formWrap">
+
+    <!-- Type -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">👤</div><div><div class="card-title">Profile Type</div><div class="card-sub">Are you a Groom or Bride?</div></div></div>
+      <div class="card-body">
+        <div class="type-row">
+          <label class="type-opt" id="optGroom" onclick="pickType('Groom')">
+            <input type="radio" name="ptype" value="Groom">
+            <span class="type-opt-ico">👨</span>
+            <span><span class="type-opt-label">Groom</span><br><span class="type-opt-sub">Male profile</span></span>
+            <span class="type-check">✓</span>
+          </label>
+          <label class="type-opt" id="optBride" onclick="pickType('Bride')">
+            <input type="radio" name="ptype" value="Bride">
+            <span class="type-opt-ico">👩</span>
+            <span><span class="type-opt-label">Bride</span><br><span class="type-opt-sub">Female profile</span></span>
+            <span class="type-check">✓</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">📋</div><div><div class="card-title">Personal Details</div><div class="card-sub">Basic information about you</div></div></div>
+      <div class="card-body">
+        <div class="fg">
+          <div class="frow full"><label>Full Name <span class="req">*</span></label><input type="text" id="fullname" placeholder="e.g. Mohamed Ameen / Fathima Nusra" oninput="onFieldChange()" required><div class="hint">Appears prominently on the card</div></div>
+          <div class="frow"><label>Date of Birth <span class="req">*</span></label><input type="date" id="dob" oninput="onFieldChange()" required></div>
+          <div class="frow"><label>Marital Status <span class="req">*</span></label>
+            <select id="marital" onchange="onFieldChange()" required>
+              <option value="">— Select —</option>
+              <option>Unmarried</option><option>Divorced</option><option>Widowed</option>
+            </select>
+          </div>
+          <div class="frow"><label>Height</label><input type="text" id="height" placeholder="e.g. 5&apos; 6&quot;" oninput="onFieldChange()"></div>
+          <div class="frow"><label>Weight</label><input type="text" id="weight" placeholder="e.g. 60 kg" oninput="onFieldChange()"></div>
+          <div class="frow"><label>Complexion</label>
+            <select id="complexion" onchange="onFieldChange()">
+              <option value="">— Select —</option>
+              <option>Fair</option><option>Wheatish</option><option>Medium</option><option>Dark</option>
+            </select>
+          </div>
+          <div class="frow"><label>Dress Code</label>
+            <select id="dress" onchange="onFieldChange()">
+              <option value="">— Select —</option>
+              <option>Niqabi</option><option>Hijabi</option><option>Islamic Casual</option><option>Casual</option>
+              <option>Bearded (Islamic)</option><option>Bearded (Casual)</option><option>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="frow full"><label>Location <span class="req">*</span></label><input type="text" id="location" placeholder="e.g. Gampola, Kandy" oninput="onFieldChange()" required></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">📞</div><div><div class="card-title">Contact Details</div><div class="card-sub">Printed on the card for family enquiries</div></div></div>
+      <div class="card-body">
+        <div class="fg">
+          <div class="frow"><label>WhatsApp Number <span class="req">*</span></label><input type="tel" id="wanum" placeholder="e.g. 0771234567" oninput="onFieldChange()" required><div class="hint">Families will use this to contact you directly</div></div>
+          <div class="frow"><label>Contact Person</label><input type="text" id="cperson" placeholder="e.g. Father / Brother / Self" oninput="onFieldChange()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">🎓</div><div><div class="card-title">Education</div><div class="card-sub">Add all qualifications — O/L, A/L, degrees, diplomas</div></div></div>
+      <div class="card-body">
+        <div class="edu-list" id="eduList"></div>
+        <button class="add-edu-btn" onclick="openEduModal()" type="button">+ Add Qualification</button>
+        <div class="edu-modal" id="eduModal">
+          <div class="frow"><label>Qualification / Degree <span class="req">*</span></label><input type="text" id="eqQ" placeholder="e.g. BSc (Hons) Computer Engineering"></div>
+          <div class="edu-modal-row">
+            <div class="frow"><label>Institution</label><input type="text" id="eqI" placeholder="e.g. University of Peradeniya"></div>
+            <div class="frow"><label>Year</label><input type="text" id="eqY" placeholder="e.g. 2022"></div>
+          </div>
+          <div class="edu-btns">
+            <button class="mbtn ok" onclick="addEdu()" type="button">Add</button>
+            <button class="mbtn cx" onclick="closeEduModal()" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">💼</div><div><div class="card-title">Career</div><div class="card-sub">Current occupation and work details</div></div></div>
+      <div class="card-body">
+        <div class="fg">
+          <div class="frow"><label>Job Title / Occupation</label><input type="text" id="occ" placeholder="e.g. Medical Officer" oninput="onFieldChange()"></div>
+          <div class="frow"><label>Employer / Sector</label><input type="text" id="emp" placeholder="e.g. Government Hospital" oninput="onFieldChange()"></div>
+          <div class="frow full"><label>Work Location</label><input type="text" id="workloc" placeholder="e.g. Kandy  or  Abroad — UAE" oninput="onFieldChange()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">🏠</div><div><div class="card-title">Family Background</div><div class="card-sub">Family status, parents and siblings</div></div></div>
+      <div class="card-body">
+        <div class="fg">
+          <div class="frow"><label>Family Status</label>
+            <select id="famstat" onchange="onFieldChange()">
+              <option value="">— Select —</option>
+              <option>Upper Class</option><option>Upper Middle Class</option>
+              <option>Middle Class</option><option>Lower Middle Class</option>
+            </select>
+          </div>
+          <div class="frow"><label>Siblings</label><input type="text" id="sibs" placeholder="e.g. 2 Brothers, 1 Sister" oninput="onFieldChange()"></div>
+          <div class="frow"><label>Father's Occupation</label><input type="text" id="fath" placeholder="e.g. Retired Teacher" oninput="onFieldChange()"></div>
+          <div class="frow"><label>Mother's Occupation</label><input type="text" id="moth" placeholder="e.g. Homemaker" oninput="onFieldChange()"></div>
+          <div class="frow full"><label>Additional Family Notes</label><textarea id="famnote" placeholder="e.g. Both parents are living. Elder sister is married…" oninput="onFieldChange()"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio + Expectations -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon">✍️</div><div><div class="card-title">Your Bio &amp; Expectations</div><div class="card-sub">Write in your own words — this appears on the card</div></div></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:14px;">
+
+        <div class="frow">
+          <label>Your Bio <span class="req">*</span></label>
+          <div class="bio-field-wrap">
+            <textarea id="bioInput" maxlength="500" oninput="onBioInput()" placeholder="Write a short introduction about yourself. Mention your personality, values, what kind of person you are, and what you seek in a life partner. Keep it sincere and respectful.&#10;&#10;Example: A 28-year-old IT professional from Gampola seeking a God-fearing partner who values deen and family. Committed to building a home rooted in Islamic values, InshāAllah."></textarea>
+            <span class="char-count" id="charCount">0 / 500</span>
+          </div>
+          <div class="hint">This text appears in the quote box on your card. Aim for 3–5 sentences.</div>
+        </div>
+
+        <div class="frow">
+          <label>What You're Looking For <span class="req">*</span></label>
+          <textarea id="expects" rows="3" placeholder="e.g. Looking for a practising Muslim with good character, from a respectable family. Age 22–28, educated, from Central Province preferred…" oninput="onFieldChange()" required style="min-height:80px;"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Live preview toggle -->
+    <div class="preview-toggle" id="previewToggle" onclick="togglePreview()">
+      <span class="preview-toggle-label">🖼️ Preview Card</span>
+      <span class="preview-toggle-arrow">▾</span>
+    </div>
+    <div class="preview-box" id="previewBox">
+      <div class="preview-label">Live Preview — updates as you fill the form</div>
+      <canvas id="previewCanvas"></canvas>
+    </div>
+
+    <div class="err" id="errBox"></div>
+
+    <button class="gen-btn" id="genBtn" onclick="doGenerate()" type="button">
+      ✦ Generate &amp; Download Card
+    </button>
+
+  </div><!-- /formWrap -->
+
+  <!-- ═══ RESULT ═══ -->
+  <div class="result" id="resultWrap">
+    <div class="result-preview">
+      <div class="result-label">🖼️ Your Branded Card — Ready to Download</div>
+      <canvas id="outputCanvas"></canvas>
+    </div>
+    <div class="act-row">
+      <button class="act-btn dl" onclick="dlCard()" type="button">⬇ Download PNG</button>
+      <a class="act-btn wa" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">📱 Share on WhatsApp</a>
+      <button class="act-btn edit" onclick="doEdit()" type="button">✏️ Edit Details</button>
+    </div>
+    <div class="note">
+      <strong>Want to list officially on Akurana Nikkah Service?</strong>
+      Share this card with us on WhatsApp and we'll review and publish your profile — completely free, InshāAllah.
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─── CONFIG ──────────────────────────
+const CONTACT_WA  = '0773226166';
+const BRAND_NAME  = 'AKURANA NIKKAH SERVICE';
+const BRAND_URL   = 'akurananikkah.com';
+
+// ─── STATE ───────────────────────────
+let pType = '';
+let edus  = [];
+let previewOpen = false;
+let previewDebounce = null;
+
+// ─── HELPERS ─────────────────────────
+function gv(id) { return (document.getElementById(id).value || '').trim(); }
+
+function calcAge(dob) {
+  if (!dob) return null;
+  const b = new Date(dob), n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a--;
+  return a > 0 ? a : null;
+}
+
+function fmtDOB(dob) {
+  if (!dob) return '';
+  try { return new Date(dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }); }
+  catch(e) { return dob; }
+}
+
+function setStep(n) {
+  ['s1','s2','s3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'step' + (i+1 < n ? ' done' : i+1 === n ? ' active' : '');
+  });
+}
+
+// ─── TYPE SELECT ─────────────────────
+function pickType(t) {
+  pType = t;
+  document.getElementById('optGroom').className = 'type-opt' + (t === 'Groom' ? ' sel-g' : '');
+  document.getElementById('optBride').className = 'type-opt' + (t === 'Bride' ? ' sel-b' : '');
+  document.getElementById('genBtn').className   = 'gen-btn'  + (t === 'Bride' ? ' bride' : '');
+  onFieldChange();
+}
+
+// ─── EDUCATION ───────────────────────
+function openEduModal()  { document.getElementById('eduModal').classList.add('open'); document.getElementById('eqQ').focus(); }
+function closeEduModal() {
+  document.getElementById('eduModal').classList.remove('open');
+  ['eqQ','eqI','eqY'].forEach(id => document.getElementById(id).value = '');
+}
+function addEdu() {
+  const q = document.getElementById('eqQ').value.trim();
+  if (!q) { document.getElementById('eqQ').focus(); return; }
+  edus.push({ q, i: document.getElementById('eqI').value.trim(), y: document.getElementById('eqY').value.trim() });
+  renderEduList();
+  closeEduModal();
+  onFieldChange();
+}
+function removeEdu(idx) { edus.splice(idx, 1); renderEduList(); onFieldChange(); }
+function renderEduList() {
+  document.getElementById('eduList').innerHTML = edus.map((e, i) => `
+    <div class="edu-entry">
+      <div class="edu-body">
+        <div class="edu-q">${e.q}</div>
+        <div class="edu-s">${[e.i, e.y].filter(Boolean).join(' · ') || 'No institution / year'}</div>
+      </div>
+      <button class="edu-del" onclick="removeEdu(${i})" type="button">✕</button>
+    </div>`).join('');
+}
+
+// ─── BIO CHAR COUNT ──────────────────
+function onBioInput() {
+  const v = document.getElementById('bioInput').value;
+  const cc = document.getElementById('charCount');
+  cc.textContent = v.length + ' / 500';
+  cc.className = 'char-count' + (v.length > 440 ? ' warn' : '');
+  onFieldChange();
+}
+
+// ─── LIVE PREVIEW ────────────────────
+function togglePreview() {
+  previewOpen = !previewOpen;
+  document.getElementById('previewToggle').classList.toggle('open', previewOpen);
+  document.getElementById('previewBox').classList.toggle('open', previewOpen);
+  if (previewOpen) refreshPreview();
+}
+
+function onFieldChange() {
+  if (!previewOpen) return;
+  clearTimeout(previewDebounce);
+  previewDebounce = setTimeout(refreshPreview, 300);
+}
+
+function refreshPreview() {
+  if (!previewOpen) return;
+  const d = collectData();
+  if (!d) return;
+  drawCard(document.getElementById('previewCanvas'), d);
+}
+
+// ─── COLLECT FORM DATA ───────────────
+function collectData() {
+  const dob = gv('dob');
+  return {
+    name:    gv('fullname'),
+    type:    pType || 'Groom',
+    age:     calcAge(dob),
+    dob:     fmtDOB(dob),
+    marital: gv('marital'),
+    height:  gv('height'),
+    weight:  gv('weight'),
+    complexion: gv('complexion'),
+    dress:   gv('dress'),
+    location: gv('location'),
+    wanum:   gv('wanum'),
+    cperson: gv('cperson'),
+    edus:    [...edus],
+    occ:     gv('occ'),
+    emp:     gv('emp'),
+    workloc: gv('workloc'),
+    famstat: gv('famstat'),
+    sibs:    gv('sibs'),
+    fath:    gv('fath'),
+    moth:    gv('moth'),
+    famnote: gv('famnote'),
+    bio:     gv('bioInput'),
+    expects: gv('expects'),
+  };
+}
+
+// ─── VALIDATION ──────────────────────
+function validate() {
+  const errs = [];
+  if (!pType)             errs.push('Please select Groom or Bride.');
+  if (!gv('fullname'))    errs.push('Full name is required.');
+  if (!gv('dob'))         errs.push('Date of birth is required.');
+  if (!gv('marital'))  errs.push('Marital status is required.');
+  if (!gv('location')) errs.push('Location is required.');
+  if (!gv('wanum'))    errs.push('WhatsApp number is required.');
+  if (!gv('bioInput')) errs.push('Please write your bio.');
+  if (!gv('expects'))  errs.push('Please fill in what you are looking for.');
+  return errs;
+}
+
+// ─── GENERATE ────────────────────────
+function doGenerate() {
+  const errs = validate();
+  const eb = document.getElementById('errBox');
+  if (errs.length) {
+    eb.textContent = errs[0];
+    eb.classList.add('show');
+    eb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  eb.classList.remove('show');
+
+  const d = collectData();
+  drawCard(document.getElementById('outputCanvas'), d);
+
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('resultWrap').classList.add('show');
+  setStep(3);
+
+  const num = CONTACT_WA.replace(/^0/, '94');
+  const msg = encodeURIComponent('Assalamu Alaikum, I generated my bio card using the Akurana Nikkah Service Bio Generator. I would like to list my profile officially. JazakAllah Khair.');
+  document.getElementById('waBtn').href = 'https://wa.me/' + num + '?text=' + msg;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function doEdit() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('formWrap').style.display = '';
+  setStep(1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function dlCard() {
+  const cv = document.getElementById('outputCanvas');
+  try {
+    // Try direct toDataURL first
+    const url = cv.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.download = 'Akurana-Nikkah-Bio-Card.png';
+    a.href = url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch(e) {
+    // Fallback: open in new tab for manual save
+    cv.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }, 'image/png');
+  }
+}
+
+// ─── CANVAS DRAW ─────────────────────
+function drawCard(canvas, d) {
+  const W = 1080, PAD = 72;
+  // Pass 1 — measure total height on off-screen canvas
+  const tmp = document.createElement('canvas');
+  tmp.width = W; tmp.height = 6000;
+  const h = paint(tmp.getContext('2d'), d, W, PAD, false, 6000);
+  // Pass 2 — render at exact height
+  canvas.width  = W;
+  canvas.height = h;
+  paint(canvas.getContext('2d'), d, W, PAD, true, h);
+}
+
+function paint(ctx, d, W, PAD, draw, CH) {
+  // ── Palette — clean, all-light, professional ─────────────
+  const isG   = d.type === 'Groom';
+  const ACC   = isG ? '#1A4731' : '#6B1E1E';   // deep forest / deep burgundy
+  const ACC_L = isG ? '#F0F7F3' : '#FBF2F2';   // very pale tint
+  const ACC_M = isG ? '#D4EAE0' : '#F5D5D5';   // soft tint for borders
+  const TEAL  = isG ? '#2C6B4A' : '#8B2A2A';
+  const BG    = '#FFFFFF';
+  const BG2   = '#F8F7F5';                      // off-white section bg
+  const INK   = '#111111';
+  const INK2  = '#2A2A2A';
+  const INK3  = '#555555';
+  const MUTED = '#999999';
+  const RULE  = '#E5E2DC';
+  const RULE2 = '#EEEBE6';
+
+  // ── helpers ──────────────────────────────────────────────
+  function rr(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    ctx.closePath();
+  }
+
+  function wrapLines(text, maxW) {
+    const words = String(text).split(' ');
+    const lines = []; let cur = '';
+    for (const w of words) {
+      const t = cur ? cur + ' ' + w : w;
+      if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; }
+      else cur = t;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  function dw(text, x, y, maxW, lh, maxL) {
+    const lines = wrapLines(text, maxW).slice(0, maxL);
+    if (draw) lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
+    return lines.length * lh;
+  }
+
+  // Thin rule line
+  function rule(y, x0, x1, col) {
+    if (!draw) return;
+    ctx.strokeStyle = col || RULE; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0 !== undefined ? x0 : PAD, y); ctx.lineTo(x1 !== undefined ? x1 : W-PAD, y); ctx.stroke();
+  }
+
+  // Section header — accent left bar, bold uppercase label, rule to edge
+  function secHead(title, y) {
+    if (draw) {
+      ctx.fillStyle = ACC; ctx.fillRect(PAD, y + 2, 4, 20);
+      ctx.fillStyle = ACC; ctx.font = '700 12px Inter,sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(title.toUpperCase(), PAD + 14, y + 16);
+      ctx.strokeStyle = ACC_M; ctx.lineWidth = 1;
+      ctx.font = '700 12px Inter,sans-serif';
+      const labelW = ctx.measureText(title.toUpperCase()).width;
+      ctx.beginPath(); ctx.moveTo(PAD + 14 + labelW + 14, y + 12); ctx.lineTo(W - PAD, y + 12); ctx.stroke();
+    }
+    return 38;
+  }
+
+  // Two-column grid row
+  function gridRow(label, val, y, col, colW) {
+    if (!val) return 0;
+    const x = col === 0 ? PAD : PAD + colW + 28;
+    if (draw) {
+      ctx.fillStyle = MUTED; ctx.font = '500 11.5px Inter,sans-serif'; ctx.textAlign = 'left';
+      ctx.fillText(label.toUpperCase(), x, y);
+      ctx.fillStyle = INK; ctx.font = '500 17px Inter,sans-serif';
+    } else {
+      ctx.font = '500 17px Inter,sans-serif';
+    }
+    const h = dw(String(val), x, y + 20, colW, 25, 2);
+    return Math.max(h, 25) + 36;
+  }
+
+  // Full-width row
+  function fullRow(label, val, y) {
+    if (!val) return 0;
+    if (draw) {
+      ctx.fillStyle = MUTED; ctx.font = '500 11.5px Inter,sans-serif'; ctx.textAlign = 'left';
+      ctx.fillText(label.toUpperCase(), PAD, y);
+      ctx.fillStyle = INK3; ctx.font = '400 16px Inter,sans-serif';
+    } else { ctx.font = '400 16px Inter,sans-serif'; }
+    const h = dw(String(val), PAD, y + 20, W - PAD*2, 26, 5);
+    return Math.max(h, 26) + 36;
+  }
+
+  let y = 0;
+
+  // ════════════════════════════════════════════════════
+  // ── BACKGROUND
+  // ════════════════════════════════════════════════════
+  if (draw) {
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, CH);
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── TOP ACCENT STRIPE — thin colour bar at very top
+  // ════════════════════════════════════════════════════
+  if (draw) {
+    ctx.fillStyle = ACC; ctx.fillRect(0, 0, W, 6);
+  }
+  y = 6;
+
+  // ════════════════════════════════════════════════════
+  // ── HEADER — all white, minimal, typographic
+  // ════════════════════════════════════════════════════
+  const HDR_H = 202;
+  if (draw) {
+    // Header area bg — pure white
+    ctx.fillStyle = BG; ctx.fillRect(0, y, W, HDR_H);
+
+    // Left: brand name small caps
+    ctx.fillStyle = ACC; ctx.font = '700 11px Inter,sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('AKURANA NIKKAH SERVICE  ·  MATRIMONIAL BIODATA', PAD, y + 42);
+
+    // Thin rule under brand
+    ctx.strokeStyle = ACC_M; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, y + 50); ctx.lineTo(W - PAD, y + 50); ctx.stroke();
+
+    // Profile type — large serif
+    ctx.fillStyle = INK; ctx.font = '600 56px Lora,serif';
+    ctx.fillText(d.type + ' Profile', PAD, y + 116);
+
+    // Name — prominent, below headline
+    if (d.name) {
+      ctx.fillStyle = ACC; ctx.font = '500 26px Inter,sans-serif';
+      ctx.fillText(d.name, PAD, y + 152);
+    }
+
+    // Sub info — location · age · status
+    const subParts = [
+      d.location || null,
+      d.age ? d.age + ' years old' : null,
+      d.marital || null,
+    ].filter(Boolean);
+    if (subParts.length) {
+      ctx.fillStyle = INK3; ctx.font = '400 16px Inter,sans-serif';
+      ctx.fillText(subParts.join('   ·   '), PAD, y + (d.name ? 182 : 152));
+    }
+
+    // Right: akurananikkah.com watermark
+    ctx.fillStyle = MUTED; ctx.font = '400 13px Inter,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('akurananikkah.com', W - PAD, y + (d.name ? 182 : 152));
+    ctx.textAlign = 'left';
+  }
+  y += HDR_H + (d.name ? 32 : 0);
+
+  // Rule below header
+  if (draw) { ctx.strokeStyle = RULE; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  y += 1;
+
+  // ════════════════════════════════════════════════════
+  // ── STATS ROW — evenly spaced key facts
+  // ════════════════════════════════════════════════════
+  const statItems = [
+    d.age        ? { l: 'Age',        v: d.age + ' yrs' } : null,
+    d.marital    ? { l: 'Status',     v: d.marital }      : null,
+    d.height     ? { l: 'Height',     v: d.height }       : null,
+    d.complexion ? { l: 'Complexion', v: d.complexion }   : null,
+    d.dress      ? { l: 'Dress',      v: d.dress }        : null,
+  ].filter(Boolean).slice(0, 5);
+
+  if (statItems.length) {
+    const STAT_H = 72;
+    const colW2  = Math.floor((W - PAD*2) / statItems.length);
+    if (draw) {
+      ctx.fillStyle = ACC_L; ctx.fillRect(0, y, W, STAT_H);
+      // thin bottom rule on stats row
+      ctx.strokeStyle = ACC_M; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, y + STAT_H); ctx.lineTo(W, y + STAT_H); ctx.stroke();
+      statItems.forEach((s, i) => {
+        const sx = PAD + i * colW2;
+        // vertical divider between items
+        if (i > 0) {
+          ctx.strokeStyle = ACC_M; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(PAD + i * colW2, y + 14); ctx.lineTo(PAD + i * colW2, y + STAT_H - 14); ctx.stroke();
+        }
+        ctx.fillStyle = MUTED; ctx.font = '500 10.5px Inter,sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText(s.l.toUpperCase(), sx + 16, y + 26);
+        ctx.fillStyle = ACC; ctx.font = '600 16px Inter,sans-serif';
+        ctx.fillText(s.v.length > 16 ? s.v.slice(0,15)+'…' : s.v, sx + 16, y + 50);
+      });
+    }
+    y += STAT_H + 1;
+  }
+
+  y += 36;
+
+  // ════════════════════════════════════════════════════
+  // ── BIO QUOTE
+  // ════════════════════════════════════════════════════
+  if (d.bio) {
+    ctx.font = 'italic 400 21px Lora,serif';
+    const bioLines = wrapLines(d.bio, W - PAD*2 - 48);
+    const bioH = bioLines.length * 34 + 60;
+    if (draw) {
+      // Light tint bg
+      rr(PAD, y, W - PAD*2, bioH, 8);
+      ctx.fillStyle = ACC_L; ctx.fill();
+      ctx.strokeStyle = ACC_M; ctx.lineWidth = 1; ctx.stroke();
+      // Left accent border
+      ctx.fillStyle = ACC; ctx.fillRect(PAD, y, 4, bioH);
+      // Large quote glyph
+      ctx.fillStyle = ACC_M; ctx.font = '400 96px Lora,serif';
+      ctx.fillText('\u201C', PAD + 22, y + 70);
+      // Bio text
+      ctx.fillStyle = INK2; ctx.font = 'italic 400 21px Lora,serif';
+      bioLines.forEach((l, i) => ctx.fillText(l, PAD + 56, y + 42 + i * 34));
+    }
+    y += bioH + 36;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── PERSONAL DETAILS
+  // ════════════════════════════════════════════════════
+  const persRows = [
+    ['Date of Birth', d.dob],
+    ['Location',      d.location],
+    ['Weight',        d.weight],
+    ['Dress Code',    d.dress],
+  ].filter(r => r[1]);
+
+  if (persRows.length) {
+    y += secHead('Personal Details', y);
+    const colW = Math.floor((W - PAD*2 - 28) / 2);
+    for (let i = 0; i < persRows.length; i += 2) {
+      const h0 = gridRow(persRows[i][0], persRows[i][1], y, 0, colW);
+      const h1 = persRows[i+1] ? gridRow(persRows[i+1][0], persRows[i+1][1], y, 1, colW) : 0;
+      y += Math.max(h0, h1, 36);
+    }
+    rule(y); y += 28;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── EDUCATION
+  // ════════════════════════════════════════════════════
+  if (d.edus && d.edus.length) {
+    y += secHead('Education', y);
+    for (const e of d.edus) {
+      if (draw) {
+        ctx.fillStyle = ACC; ctx.fillRect(PAD, y + 6, 5, 5);
+        ctx.fillStyle = INK; ctx.font = '600 17px Inter,sans-serif'; ctx.textAlign = 'left';
+      }
+      ctx.font = '600 17px Inter,sans-serif';
+      const qh = dw(e.q, PAD + 16, y + 14, W - PAD*2 - 20, 26, 2);
+      y += Math.max(qh, 26) + 2;
+      if (e.i || e.y) {
+        if (draw) {
+          ctx.fillStyle = MUTED; ctx.font = '400 14px Inter,sans-serif';
+          ctx.fillText([e.i, e.y].filter(Boolean).join('  ·  '), PAD + 16, y + 4);
+        }
+        y += 22;
+      }
+      y += 14;
+    }
+    rule(y); y += 28;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── CAREER
+  // ════════════════════════════════════════════════════
+  const occStr = [d.occ, d.emp].filter(Boolean).join('  ·  ');
+  const carItems = [['Occupation', occStr], ['Work Location', d.workloc]].filter(r => r[1]);
+  if (carItems.length) {
+    y += secHead('Career', y);
+    const colW = Math.floor((W - PAD*2 - 28) / 2);
+    for (let i = 0; i < carItems.length; i += 2) {
+      const h0 = gridRow(carItems[i][0], carItems[i][1], y, 0, colW);
+      const h1 = carItems[i+1] ? gridRow(carItems[i+1][0], carItems[i+1][1], y, 1, colW) : 0;
+      y += Math.max(h0, h1, 36);
+    }
+    rule(y); y += 28;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── FAMILY
+  // ════════════════════════════════════════════════════
+  const famItems = [
+    ['Family Status', d.famstat],
+    ['Siblings',      d.sibs],
+    ['Father',        d.fath],
+    ['Mother',        d.moth],
+  ].filter(r => r[1]);
+  if (famItems.length || d.famnote) {
+    y += secHead('Family Background', y);
+    const colW = Math.floor((W - PAD*2 - 28) / 2);
+    for (let i = 0; i < famItems.length; i += 2) {
+      const h0 = gridRow(famItems[i][0], famItems[i][1], y, 0, colW);
+      const h1 = famItems[i+1] ? gridRow(famItems[i+1][0], famItems[i+1][1], y, 1, colW) : 0;
+      y += Math.max(h0, h1, 36);
+    }
+    if (d.famnote) y += fullRow('Additional Notes', d.famnote, y);
+    rule(y); y += 28;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── EXPECTATIONS
+  // ════════════════════════════════════════════════════
+  if (d.expects) {
+    y += secHead('Looking For', y);
+    ctx.font = 'italic 400 18px Lora,serif';
+    const expLines = wrapLines(d.expects, W - PAD*2 - 40);
+    const expH = expLines.length * 30 + 44;
+    if (draw) {
+      rr(PAD, y, W - PAD*2, expH, 8);
+      ctx.fillStyle = BG2; ctx.fill();
+      ctx.strokeStyle = RULE2; ctx.lineWidth = 1; ctx.stroke();
+      ctx.fillStyle = INK3; ctx.font = 'italic 400 18px Lora,serif';
+      expLines.forEach((l, i) => ctx.fillText(l, PAD + 20, y + 28 + i * 30));
+    }
+    y += expH + 28;
+    rule(y); y += 28;
+  }
+
+  // ════════════════════════════════════════════════════
+  // ── CONTACT BOX — light, clean
+  // ════════════════════════════════════════════════════
+  const CBH = 96;
+  if (draw) {
+    rr(PAD, y, W - PAD*2, CBH, 10);
+    ctx.fillStyle = ACC_L; ctx.fill();
+    ctx.strokeStyle = ACC_M; ctx.lineWidth = 1.5; ctx.stroke();
+    // Left bar
+    ctx.fillStyle = ACC; ctx.fillRect(PAD, y, 5, CBH);
+    // WA label
+    ctx.fillStyle = ACC; ctx.font = '700 11px Inter,sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('ENQUIRE VIA WHATSAPP', PAD + 22, y + 30);
+    // Number
+    ctx.fillStyle = INK; ctx.font = '600 26px Inter,sans-serif';
+    ctx.fillText(d.wanum || CONTACT_WA, PAD + 22, y + 62);
+    // Contact person
+    if (d.cperson) {
+      ctx.fillStyle = INK3; ctx.font = '400 14px Inter,sans-serif';
+      ctx.fillText('Contact: ' + d.cperson, PAD + 22, y + 82);
+    }
+    // WA badge right
+    ctx.fillStyle = '#25D366';
+    rr(W - PAD - 88, y + CBH/2 - 18, 80, 36, 18); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.font = '700 14px Inter,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('WhatsApp', W - PAD - 48, y + CBH/2 + 5);
+    ctx.textAlign = 'left';
+  }
+  y += CBH + 28;
+
+  // ════════════════════════════════════════════════════
+  // ── FOOTER — clean light strip
+  // ════════════════════════════════════════════════════
+  const FH = 48;
+  if (draw) {
+    ctx.fillStyle = BG2; ctx.fillRect(0, y, W, FH);
+    ctx.strokeStyle = RULE; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    // Brand left
+    ctx.fillStyle = ACC; ctx.font = '600 12px Inter,sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('AKURANA NIKKAH SERVICE', PAD, y + 20);
+    ctx.fillStyle = MUTED; ctx.font = '400 12px Inter,sans-serif';
+    ctx.fillText('akurananikkah.com  ·  Free Muslim Matrimony  ·  Central Province, Sri Lanka', PAD, y + 38);
+    // Right: consent
+    ctx.fillStyle = MUTED; ctx.font = '400 11px Inter,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('All details shared with consent', W - PAD, y + 29);
+    ctx.textAlign = 'left';
+  }
+  y += FH;
+
+  // Bottom accent stripe
+  if (draw) { ctx.fillStyle = ACC; ctx.fillRect(0, y, W, 6); }
+  y += 6;
+
+  return y;
+}
+</script>
+</body>
+</html>
