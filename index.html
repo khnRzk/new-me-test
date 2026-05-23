@@ -765,6 +765,25 @@ main {
   font-size: 14px; color: var(--ink2); line-height: 1.7;
 }
 
+.obox {
+  background: var(--gold-pale);
+  border: 1px solid #E8D89A;
+  border-radius: 10px; padding: 11px 13px;
+  margin-bottom: 14px;
+  display: flex; gap: 9px; align-items: flex-start;
+}
+.obox-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.obox-body { flex: 1; }
+.obox-label {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--gold); margin-bottom: 4px;
+}
+.obox-text {
+  font-size: 13px; color: var(--ink2); line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  white-space: pre-line;
+}
+
 .wabtn {
   display: flex; align-items: center; justify-content: center;
   gap: 10px; width: 100%; padding: 13px 16px;
@@ -1267,7 +1286,8 @@ const SUCCESSFUL_PROPOSALS = 23;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
-// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus
+// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus, OtherInfo
+// OtherInfo: any additional notes — e.g. "Has 1 child (age 3)" for previously married profiles
 // ProposalStatus: leave blank or write "open" = Accepting Proposals (default)
 //                 write "ongoing" or "in progress" = Proposal in Progress (pauses enquiries)
 // DOB formats accepted: DD/MM/YYYY or MM/YYYY or YYYY
@@ -1623,6 +1643,7 @@ function buildCard(p, i) {
       ${fi('Family Status', p.FamilyStatus)}
     </div>
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
+    ${(p.OtherInfo || p.otherinfo) ? `<div class="obox"><div class="obox-icon">ℹ️</div><div class="obox-body"><div class="obox-label">Additional Information</div><div class="obox-text">${(p.OtherInfo || p.otherinfo).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div></div>` : ''}
     ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
     ${isOngoing
       ? `<button class="wabtn wabtn-dim" onclick="showToast('This profile is currently in progress')" type="button">
