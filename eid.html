@@ -328,7 +328,7 @@ body{
 
 <script>
 // ── APPS SCRIPT URL ───────────────────────
-const API = 'https://script.google.com/macros/s/AKfycbwdjJVWG3AsW5BQTgN5N1G_r_ujDbJEZY0OZWFADhWYrxa07a-RcMciCwSMMqQr_j2K/exec';
+const API = 'https://script.google.com/macros/s/AKfycbz9HcwU9YIChd5UXReGYw9_oPGaBqE2S6xG0lVddoZp5ox0k3AzLLwuMmlYBktOttk0/exec';
 
 // ── EXPIRY ────────────────────────────────
 const EXPIRY = new Date('2026-05-29T23:59:59').getTime();
@@ -457,11 +457,9 @@ window.submitWish = async function(){
   btn.innerHTML = '<span>⏳</span> Sending…';
 
   try{
-    const res  = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ name, city, msg }),
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // Use URL params to avoid CORS preflight — Apps Script handles GET with action=post
+    const params = new URLSearchParams({ action:'post', name, city, msg });
+    const res  = await fetch(API + '?' + params.toString());
     const data = await res.json();
     if(data.error) throw new Error(data.error);
 
