@@ -711,43 +711,43 @@ main {
 
 /* ── REPOST / BOOST ── */
 .card.is-boosted {
-  border-color: #C9A84C;
-  box-shadow: 0 2px 16px rgba(154,123,47,0.18);
+  border-color: #DDD0B8;
+  box-shadow: 0 2px 14px rgba(154,123,47,0.10);
 }
 .card.is-boosted .cstrip {
-  background: linear-gradient(90deg, #9A7B2F, #E0C060, #9A7B2F) !important;
+  background: linear-gradient(90deg, #C8A84A, #E8D08A, #C8A84A) !important;
   background-size: 200% 100% !important;
-  animation: goldShimmer 2.4s ease-in-out infinite !important;
+  animation: goldShimmer 3s ease-in-out infinite !important;
 }
 @keyframes goldShimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 .repost-pill {
-  font-size: 9px; font-weight: 700;
-  padding: 3px 7px; border-radius: 20px;
-  background: var(--gold); color: #fff;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: 9px; font-weight: 600;
+  padding: 2px 8px 2px 6px; border-radius: 20px;
+  background: var(--gold-pale);
+  color: #7A5E1A;
+  border: 1px solid #DFC97A;
+  letter-spacing: 0.06em; text-transform: uppercase;
   display: inline-flex; align-items: center; gap: 4px;
-  animation: repostPulse 2.4s ease-in-out infinite;
 }
 .repost-pill::before {
-  content: '🔁';
-  font-size: 8px; flex-shrink: 0;
-}
-@keyframes repostPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(154,123,47,0.4); }
-  50%       { box-shadow: 0 0 0 5px rgba(154,123,47,0); }
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #C8A84A; flex-shrink: 0;
 }
 .repost-notice {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11.5px; font-weight: 500;
-  color: var(--gold); background: var(--gold-pale);
-  border: 1px solid #E0C060;
+  display: flex; align-items: center; gap: 9px;
+  font-size: 11.5px; font-weight: 400;
+  color: #6B5018;
+  background: linear-gradient(135deg, #FDF8EC, #FAF2D8);
+  border: 1px solid #EDD98A;
   border-radius: 8px; padding: 9px 12px;
   margin-bottom: 12px; line-height: 1.5;
 }
-.repost-notice-icon { font-size: 14px; flex-shrink: 0; }
+.repost-notice strong { font-weight: 600; }
+.repost-notice-icon { font-size: 13px; flex-shrink: 0; opacity: 0.75; }
 
 .chv {
   flex-shrink: 0;
@@ -1693,7 +1693,7 @@ function buildCard(p, i) {
     </div>
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
     ${(p.OtherInfo || p.otherinfo) ? `<div class="obox"><div class="obox-icon">ℹ️</div><div class="obox-body"><div class="obox-label">Additional Information</div><div class="obox-text">${(p.OtherInfo || p.otherinfo).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div></div>` : ''}
-    ${boostedCard ? `<div class="repost-notice"><span class="repost-notice-icon">🔁</span><span>This profile was <strong>re-listed today</strong> — still actively seeking proposals.</span></div>` : ''}
+    ${boostedCard ? `<div class="repost-notice"><span class="repost-notice-icon">↻</span><span>Re-listed today — <strong>still accepting proposals</strong></span></div>` : ''}
     ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
     ${isOngoing
       ? `<button class="wabtn wabtn-dim" onclick="showToast('This profile is currently in progress')" type="button">
