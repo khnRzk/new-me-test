@@ -133,6 +133,8 @@
   --purple: #5B3FA0;
   --purple-pale: #F0EBF9;
   --purple-soft: #C9B3E8;
+  --gold-deep: #7A5E1F;
+  --gold-mid: #9A7B2F;
   --ink: #1A1A1A;
   --ink2: #444;
   --ink3: #888;
@@ -399,9 +401,12 @@ main {
 /* ── BIO CARD BANNER ── */
 .bio-banner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   margin-bottom: 14px;
+}
+@media (max-width: 480px) {
+  .bio-banner { grid-template-columns: 1fr; }
 }
 .bio-banner-card {
   display: flex;
@@ -424,6 +429,7 @@ main {
   }
   .bio-banner-card.primary:hover { border-color: var(--g2); }
   .bio-banner-card.secondary:hover { border-color: var(--teal); }
+  .bio-banner-card.tertiary:hover { border-color: var(--gold-mid); }
 }
 .bio-banner-card-strip {
   height: 3px;
@@ -433,6 +439,9 @@ main {
 }
 .bio-banner-card.secondary .bio-banner-card-strip {
   background: linear-gradient(90deg, var(--teal), var(--teal-soft));
+}
+.bio-banner-card.tertiary .bio-banner-card-strip {
+  background: linear-gradient(90deg, var(--gold-deep), #E8D89A);
 }
 .bio-banner-card-body {
   padding: 13px 14px 14px;
@@ -451,6 +460,7 @@ main {
 }
 .bio-banner-card.primary .bio-banner-icon { background: var(--g-pale); }
 .bio-banner-card.secondary .bio-banner-icon { background: var(--teal-pale); }
+.bio-banner-card.tertiary .bio-banner-icon { background: var(--gold-pale); }
 .bio-banner-title {
   font-size: 13px; font-weight: 700;
   color: var(--ink); line-height: 1.25;
@@ -472,6 +482,9 @@ main {
 }
 .bio-banner-card.secondary .bio-banner-cta {
   background: var(--teal-pale); color: var(--teal);
+}
+.bio-banner-card.tertiary .bio-banner-cta {
+  background: var(--gold-pale); color: var(--gold-deep);
 }
 
 /* ── TOOL STRIP (below profiles divider) ── */
@@ -708,46 +721,6 @@ main {
   0%, 100% { opacity: 0.85; }
   50%       { opacity: 0.3; }
 }
-
-/* ── REPOST / BOOST ── */
-.card.is-boosted {
-  border-color: #DDD0B8;
-  box-shadow: 0 2px 14px rgba(154,123,47,0.10);
-}
-.card.is-boosted .cstrip {
-  background: linear-gradient(90deg, #C8A84A, #E8D08A, #C8A84A) !important;
-  background-size: 200% 100% !important;
-  animation: goldShimmer 3s ease-in-out infinite !important;
-}
-@keyframes goldShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.repost-pill {
-  font-size: 9px; font-weight: 600;
-  padding: 2px 8px 2px 6px; border-radius: 20px;
-  background: var(--gold-pale);
-  color: #7A5E1A;
-  border: 1px solid #DFC97A;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  display: inline-flex; align-items: center; gap: 4px;
-}
-.repost-pill::before {
-  content: '';
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #C8A84A; flex-shrink: 0;
-}
-.repost-notice {
-  display: flex; align-items: center; gap: 9px;
-  font-size: 11.5px; font-weight: 400;
-  color: #6B5018;
-  background: linear-gradient(135deg, #FDF8EC, #FAF2D8);
-  border: 1px solid #EDD98A;
-  border-radius: 8px; padding: 9px 12px;
-  margin-bottom: 12px; line-height: 1.5;
-}
-.repost-notice strong { font-weight: 600; }
-.repost-notice-icon { font-size: 13px; flex-shrink: 0; opacity: 0.75; }
 
 .chv {
   flex-shrink: 0;
@@ -1204,6 +1177,15 @@ footer a:hover { color: #fff; }
 
   <!-- ── BIO CARD GENERATOR BANNER ── -->
   <div class="bio-banner">
+    <a href="/second-marriage.html" class="bio-banner-card tertiary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🤍</div>
+        <div class="bio-banner-title">Second Marriage</div>
+        <div class="bio-banner-sub">A dedicated space for divorced &amp; widowed members</div>
+        <span class="bio-banner-cta">View Profiles →</span>
+      </div>
+    </a>
     <a href="/bio-generator.html" class="bio-banner-card primary">
       <div class="bio-banner-card-strip"></div>
       <div class="bio-banner-card-body">
@@ -1326,16 +1308,13 @@ const SUCCESSFUL_PROPOSALS = 23;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
-// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus, OtherInfo, Boosted
+// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus, OtherInfo
 // OtherInfo: any additional notes — e.g. "Has 1 child (age 3)" for previously married profiles
 // ProposalStatus: leave blank or write "open" = Accepting Proposals (default)
 //                 write "ongoing" or "in progress" = Proposal in Progress (pauses enquiries)
 // DOB formats accepted: DD/MM/YYYY or MM/YYYY or YYYY
 // DateAdded format: DD/MM/YYYY — profiles added within 24hrs show a NEW badge
 // Siblings and Education support multiple lines (press Alt+Enter in Google Sheets)
-// Boosted:   DD/MM/YYYY — enter today's date to boost a profile to the top for 24hrs
-//            Profile shows a 🔁 REPOSTED badge, gold border, and sorted above regular cards
-//            Leave blank normally. Clear after 24hrs or leave — it auto-expires.
 
 // ─── SAMPLE DATA ─────────────────────────
 const SAMPLE_DATA = [
@@ -1562,13 +1541,9 @@ function renderProfiles() {
   });
 
   filtered.sort((a, b) => {
-    const newA    = isNew(a.DateAdded)    ? 2 : 0;
-    const newB    = isNew(b.DateAdded)    ? 2 : 0;
-    const boostA  = isBoosted(a.Boosted)  ? 1 : 0;
-    const boostB  = isBoosted(b.Boosted)  ? 1 : 0;
-    const rankA   = newA || boostA;
-    const rankB   = newB || boostB;
-    if (rankB !== rankA) return rankB - rankA; // NEW(2) → BOOSTED(1) → regular(0)
+    const newA = isNew(a.DateAdded) ? 1 : 0;
+    const newB = isNew(b.DateAdded) ? 1 : 0;
+    if (newB !== newA) return newB - newA; // NEW profiles first
     const na = parseInt((a.RefNo||'').replace(/\D/g,'')) || 0;
     const nb = parseInt((b.RefNo||'').replace(/\D/g,'')) || 0;
     return nb - na; // then descending ref order
@@ -1648,11 +1623,10 @@ function buildCard(p, i) {
     ? `<span class="ci-status ${maritalCls}"><span class="ci-status-dot"></span>${maritalRaw}</span>`
     : '';
 
-  const newCard    = isNew(p.DateAdded);
-  const boostedCard = !newCard && isBoosted(p.Boosted);
+  const newCard = isNew(p.DateAdded);
 
   return `
-<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}${boostedCard?' is-boosted':''}${isOngoing?' is-ongoing':''}" id="card-${i}" data-card-idx="${i}">
+<div class="card ${isG?'gc':'bc'}${newCard?' is-new':''}${isOngoing?' is-ongoing':''}" id="card-${i}" data-card-idx="${i}">
   <div class="cstrip"></div>
   <div class="chead" onclick="toggleCard(${i})">
     <div class="ava ${c}">${ico}<span class="adot"></span></div>
@@ -1662,8 +1636,7 @@ function buildCard(p, i) {
         <button class="copybtn" onclick="copyRef(event,'${p.RefNo}',this)" title="Copy Ref No">📋</button>
         <button class="sharebtn" onclick="shareProfile(event,'${p.RefNo}',this)" title="Share profile link">🔗</button>
         <span class="tpill ${c}">${p.Type}</span>
-        ${newCard     ? `<span class="new-pill">NEW</span>` : ''}
-        ${boostedCard ? `<span class="repost-pill">REPOSTED</span>` : ''}
+        ${newCard ? `<span class="new-pill">NEW</span>` : ''}
       </div>
       <div class="cinfo-line">
         ${displayAge ? `<span class="ci-text">${displayAge} yrs</span>` : ''}
@@ -1693,7 +1666,6 @@ function buildCard(p, i) {
     </div>
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
     ${(p.OtherInfo || p.otherinfo) ? `<div class="obox"><div class="obox-icon">ℹ️</div><div class="obox-body"><div class="obox-label">Additional Information</div><div class="obox-text">${(p.OtherInfo || p.otherinfo).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div></div>` : ''}
-    ${boostedCard ? `<div class="repost-notice"><span class="repost-notice-icon">↻</span><span>Re-listed today — <strong>still accepting proposals</strong></span></div>` : ''}
     ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
     ${isOngoing
       ? `<button class="wabtn wabtn-dim" onclick="showToast('This profile is currently in progress')" type="button">
@@ -1815,15 +1787,6 @@ function isNew(dateAdded) {
   const added = new Date(+parts[2], +parts[1]-1, +parts[0]);
   if (isNaN(added)) return false;
   return (Date.now() - added.getTime()) < 24 * 60 * 60 * 1000;
-}
-
-function isBoosted(boosted) {
-  if (!boosted) return false;
-  const parts = boosted.trim().split('/');
-  if (parts.length < 3) return false;
-  const boostedDate = new Date(+parts[2], +parts[1]-1, +parts[0]);
-  if (isNaN(boostedDate)) return false;
-  return (Date.now() - boostedDate.getTime()) < 24 * 60 * 60 * 1000;
 }
 
 // ─── SUBMIT PROFILE SHEET ─────────────────
