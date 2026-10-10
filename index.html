@@ -762,6 +762,27 @@ main {
 }
 .dv { font-size: 13.5px; font-weight: 400; color: var(--ink2); line-height: 1.55; }
 
+/* Family block (Father / Mother / Siblings / Family Status) */
+.fam-block {
+  border: 1px solid var(--border); background: var(--surface);
+  border-radius: 10px; padding: 11px 13px 4px;
+  margin-bottom: 14px;
+}
+.fam-label {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--gold-mid);
+  margin-bottom: 8px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.fam-row {
+  display: grid; grid-template-columns: 92px 1fr; gap: 10px;
+  margin-bottom: 9px; align-items: start;
+}
+.fam-row .dk { margin-bottom: 0; padding-top: 3px; }
+@media (max-width: 380px) {
+  .fam-row { grid-template-columns: 78px 1fr; gap: 8px; }
+}
+
 .ebox {
   background: linear-gradient(135deg, var(--g-pale), #F2FAF5);
   border: 1px solid var(--g-soft);
@@ -1308,7 +1329,8 @@ const SUCCESSFUL_PROPOSALS = 23;
 
 // ─── GOOGLE SHEET COLUMN HEADERS ─────────
 // Required:  RefNo, Type, Height, Status, Siblings, Education, Occupation, Location, Expectations
-// Optional:  DOB, Age, Weight, Complexion, DressCode, FamilyStatus, DateAdded, ProposalStatus, OtherInfo
+// Optional:  DOB, Age, Weight, Complexion, DressCode, Father, Mother, FamilyStatus, DateAdded, ProposalStatus, OtherInfo
+// Father / Mother: short text e.g. "Retired Government Teacher", "Businessman", "Housewife", "Late" — blank hides the row
 // OtherInfo: any additional notes — e.g. "Has 1 child (age 3)" for previously married profiles
 // ProposalStatus: leave blank or write "open" = Accepting Proposals (default)
 //                 write "ongoing" or "in progress" = Proposal in Progress (pauses enquiries)
@@ -1322,6 +1344,7 @@ const SAMPLE_DATA = [
     RefNo: 'AKNS-0264', Type: 'Groom',
     DOB: '20/06/1996', Height: "5' 10\"", Status: 'Unmarried',
     Siblings: '1 Sister (Married)',
+    Father: 'Retired Government Teacher', Mother: 'Housewife',
     Age: '',
     Education: 'BSc(Sp)Hons, Computer Engineering\nPostgraduate Diploma in ICT',
     Occupation: 'IT Consultant (Sri Lanka)', Location: 'Gampola, Kandy',
@@ -1332,6 +1355,7 @@ const SAMPLE_DATA = [
     RefNo: 'AKNS-0265', Type: 'Bride',
     DOB: '14/03/1998', Height: "5' 4\"", Status: 'Unmarried',
     Siblings: '1 Brother (Unmarried)',
+    Father: 'Businessman', Mother: 'Teacher',
     Age: '',
     Education: 'BA (Hons) in Arabic & Islamic Civilisation',
     Occupation: 'Teacher (Government School)', Location: 'Akurana, Kandy',
@@ -1536,6 +1560,8 @@ function renderProfiles() {
       (p.Education||'').toLowerCase().includes(q) ||
       (p.Occupation||'').toLowerCase().includes(q) ||
       (p.FamilyStatus||'').toLowerCase().includes(q) ||
+      (p.Father||'').toLowerCase().includes(q) ||
+      (p.Mother||'').toLowerCase().includes(q) ||
       (p.Status||'').toLowerCase().includes(q);
     return matchGender(p) && matchLoc(p) && matchStatus(p) && ms;
   });
@@ -1591,6 +1617,17 @@ function buildCard(p, i) {
   const sibHTML = sibLines.length > 1
     ? sibLines.map(s=>`• ${s}`).join('<br>')
     : (sibLines[0] || '—');
+  // Family block — Father, Mother, Siblings, Family Status (each row only if present)
+  const esc = v => String(v||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const famData = [
+    ['Father',        esc(p.Father || p.father)],
+    ['Mother',        esc(p.Mother || p.mother)],
+    ['Siblings',      sibLines.length ? sibHTML : ''],
+    ['Family Status', esc(p.FamilyStatus)]
+  ].filter(r => r[1]);
+  const famBlock = famData.length
+    ? `<div class="fam-block"><div class="fam-label">Family</div>${famData.map(r => `<div class="fam-row"><div class="dk">${r[0]}</div><div class="dv">${r[1]}</div></div>`).join('')}</div>`
+    : '';
   const waNum = CONTACT_WA.replace(/^0/,'94');
   const waMsg = encodeURIComponent(`Assalamu Alaikum, I am interested in profile ${p.RefNo}. Please share more details. JazakAllah Khair.`);
   const waLink = `https://wa.me/${waNum}?text=${waMsg}`;
@@ -1656,14 +1693,13 @@ function buildCard(p, i) {
       <div class="di"><div class="dk">Height</div><div class="dv">${p.Height||'—'}</div></div>
       ${fi('Weight', p.Weight)}
       <div class="di"><div class="dk">Status</div><div class="dv">${p.Status||'—'}</div></div>
-      <div class="di full"><div class="dk">Siblings</div><div class="dv">${sibHTML}</div></div>
       <div class="di full"><div class="dk">Education</div><div class="dv">${eduLines.map(e=>`• ${e}`).join('<br>')||'—'}</div></div>
       <div class="di full"><div class="dk">Occupation</div><div class="dv">${p.Occupation||'—'}</div></div>
       <div class="di full"><div class="dk">Location</div><div class="dv">${p.Location||'—'}</div></div>
       ${fi('Complexion', p.Complexion)}
       ${fi('Dress Code', p.DressCode)}
-      ${fi('Family Status', p.FamilyStatus)}
     </div>
+    ${famBlock}
     ${p.Expectations ? `<div class="ebox"><div class="etext">${p.Expectations}</div></div>` : ''}
     ${(p.OtherInfo || p.otherinfo) ? `<div class="obox"><div class="obox-icon">ℹ️</div><div class="obox-body"><div class="obox-label">Additional Information</div><div class="obox-text">${(p.OtherInfo || p.otherinfo).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div></div>` : ''}
     ${isOngoing ? `<div class="ongoing-notice">⏳ This profile is currently in progress — enquiries are paused for now.</div>` : ''}
