@@ -762,6 +762,14 @@ main {
 }
 .dv { font-size: 13.5px; font-weight: 400; color: var(--ink2); line-height: 1.55; }
 
+/* Complexion swatch */
+.cx-val { display: inline-flex; align-items: center; gap: 8px; }
+.cx-swatch {
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  background: radial-gradient(circle at 30% 28%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 55%), var(--cx, #D9B79A);
+  box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--border2), 0 1px 3px rgba(0,0,0,0.12);
+}
+
 /* Family block (Father / Mother / Siblings / Family Status) */
 .fam-block {
   border: 1px solid var(--border); background: var(--surface);
@@ -1599,6 +1607,27 @@ function renderProfiles() {
   setupAutoCollapse();
 }
 
+// Complexion → swatch colour (neutral descriptive tones)
+function getComplexionRow(raw) {
+  const val = (raw || '').trim();
+  if (!val) return '';
+  const k = val.toLowerCase();
+  const map = [
+    [/very\s*fair|porcelain|pale/, '#F6DFCF'],
+    [/fair|light/,                  '#EFCBB0'],
+    [/wheat/,                       '#DDB48F'],
+    [/olive/,                       '#C9A074'],
+    [/medium|moderate|average|normal/, '#C58F63'],
+    [/tan|golden/,                  '#B97F52'],
+    [/brown|dusky|dusk/,            '#9A6440'],
+    [/dark|deep|ebony/,             '#6E4630']
+  ];
+  const hit = map.find(([re]) => re.test(k));
+  const safe = val.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const swatch = hit ? `<span class="cx-swatch" style="--cx:${hit[1]}" aria-hidden="true"></span>` : '';
+  return `<div class="di"><div class="dk">Complexion</div><div class="dv cx-val">${swatch}<span>${safe}</span></div></div>`;
+}
+
 // ─── BUILD CARD ───────────────────────────
 function buildCard(p, i) {
   const isG = p.Type === 'Groom';
@@ -1696,7 +1725,7 @@ function buildCard(p, i) {
       <div class="di full"><div class="dk">Education</div><div class="dv">${eduLines.map(e=>`• ${e}`).join('<br>')||'—'}</div></div>
       <div class="di full"><div class="dk">Occupation</div><div class="dv">${p.Occupation||'—'}</div></div>
       <div class="di full"><div class="dk">Location</div><div class="dv">${p.Location||'—'}</div></div>
-      ${fi('Complexion', p.Complexion)}
+      ${getComplexionRow(p.Complexion)}
       ${fi('Dress Code', p.DressCode)}
     </div>
     ${famBlock}
