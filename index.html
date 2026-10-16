@@ -1133,59 +1133,6 @@ footer a:hover { color: #fff; }
   margin-top: 12px; line-height: 1.6;
   font-family: 'Inter', sans-serif;
 }
-
-/* ── COMPACT TOOLS ROW (injected inside feed) ── */
-.tools-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 2px 0; }
-.tool-tile {
-  display: flex; align-items: center; justify-content: center; gap: 9px;
-  padding: 12px 8px; border-radius: var(--rs);
-  background: var(--surface); border: 1.5px solid var(--border);
-  text-decoration: none; color: var(--ink);
-  font-size: 12px; font-weight: 600; line-height: 1.25; text-align: left;
-  transition: border-color 0.18s, box-shadow 0.18s, transform 0.15s;
-  -webkit-tap-highlight-color: transparent; min-height: 52px;
-}
-.tool-tile:active { transform: scale(0.97); }
-.tool-ico {
-  width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 15px;
-}
-.tool-tile.t-gold .tool-ico { background: var(--gold-pale); }
-.tool-tile.t-green .tool-ico { background: var(--g-pale); }
-.tool-tile.t-teal .tool-ico { background: var(--teal-pale); }
-@media (hover: hover) {
-  .tool-tile.t-gold:hover { border-color: var(--gold-mid); }
-  .tool-tile.t-green:hover { border-color: var(--g2); }
-  .tool-tile.t-teal:hover { border-color: var(--teal); }
-}
-@media (max-width: 480px) {
-  .tool-tile { flex-direction: column; gap: 6px; padding: 11px 4px 10px; text-align: center; font-size: 11.5px; }
-}
-
-/* ── STICKY FILTER BAR (hides on scroll down, returns on scroll up) ── */
-.controls {
-  position: sticky; top: var(--hdr-h, 68px); z-index: 150;
-  background: var(--bg);
-  margin: 0 -12px 10px; padding: 8px 12px 2px;
-  transition: transform 0.28s ease, box-shadow 0.2s;
-}
-.controls.is-stuck { box-shadow: 0 6px 12px -8px rgba(0,0,0,0.18); }
-.controls.is-hidden { transform: translateY(calc(-100% - var(--hdr-h, 68px))); box-shadow: none; }
-.controls .seg { margin-bottom: 8px; }
-.controls .pill-bar { padding-bottom: 8px; }
-
-/* ── MOBILE: compact hero so profiles come first ── */
-.lbl-short { display: none; }
-@media (max-width: 480px) {
-  .hero { padding: 14px 14px 14px; }
-  .chip, .verse, .vref, .hdesc { display: none; }
-  .hero-sub { margin-bottom: 12px; }
-  .hbtns { flex-wrap: nowrap; gap: 6px; }
-  .hbtn { flex: 1; justify-content: center; padding: 8px 6px; font-size: 11.5px; min-height: 40px; gap: 5px; }
-  .lbl-full { display: none; }
-  .lbl-short { display: inline; }
-  .dvd { margin: 0 0 10px; }
-}
 </style>
 </head>
 <body>
@@ -1216,11 +1163,17 @@ footer a:hover { color: #fff; }
   <span class="vref">— Qur'an 78:8</span>
   <p class="hdesc">Browse profiles, copy the Ref No, and reach out via WhatsApp for full details.</p>
   <div class="hbtns">
-    <a class="hbtn" href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank" rel="noopener noreferrer">📱 <span class="lbl-full">Join WhatsApp Group</span><span class="lbl-short">Group</span></a>
-    <a class="hbtn" href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank" rel="noopener noreferrer">📢 <span class="lbl-full">Follow Channel</span><span class="lbl-short">Channel</span></a>
+    <a class="hbtn" href="https://chat.whatsapp.com/IFARZSaijXwFt5YpZyC73Y" target="_blank" rel="noopener noreferrer">📱 Join WhatsApp Group</a>
+    <a class="hbtn" href="https://whatsapp.com/channel/0029Vb6BaPy2v1IjHuL68Y20" target="_blank" rel="noopener noreferrer">📢 Follow Channel</a>
     <a class="hbtn" href="https://web.facebook.com/akurananikkah" target="_blank" rel="noopener noreferrer">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;opacity:0.9"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.514c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-      <span class="lbl-full">Facebook Page</span><span class="lbl-short">Facebook</span>
+      Facebook Page
+    </a>
+  </div>
+  <div style="margin-top:12px;">
+    <a href="/bio-generator.html" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.3);border-radius:10px;padding:10px 18px;color:#fff;text-decoration:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.01em;transition:background 0.18s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+      🪪 Create Your Bio Card — Free
+      <span style="font-size:11px;opacity:0.7;font-weight:400;">Fill &amp; Download Instantly</span>
     </a>
   </div>
 </div>
@@ -1251,6 +1204,36 @@ footer a:hover { color: #fff; }
 
   <div class="dvd" id="profilesDvd">profiles</div>
 
+  <!-- ── BIO CARD GENERATOR BANNER ── -->
+  <div class="bio-banner">
+    <a href="/second-marriage.html" class="bio-banner-card tertiary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🤍</div>
+        <div class="bio-banner-title">Second Marriage</div>
+        <div class="bio-banner-sub">A dedicated space for divorced &amp; widowed members</div>
+        <span class="bio-banner-cta">View Profiles →</span>
+      </div>
+    </a>
+    <a href="/bio-generator.html" class="bio-banner-card primary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🪪</div>
+        <div class="bio-banner-title">Create Your Bio Card</div>
+        <div class="bio-banner-sub">Fill your details — get a beautiful downloadable profile card instantly</div>
+        <span class="bio-banner-cta">Generate Free →</span>
+      </div>
+    </a>
+    <a href="/check.html" class="bio-banner-card secondary">
+      <div class="bio-banner-card-strip"></div>
+      <div class="bio-banner-card-body">
+        <div class="bio-banner-icon">🔍</div>
+        <div class="bio-banner-title">Check Profile Status</div>
+        <div class="bio-banner-sub">Saw a ref no. in WhatsApp? Verify it's still available here</div>
+        <span class="bio-banner-cta">Check Now →</span>
+      </div>
+    </a>
+  </div>
   <div class="loading-label" id="loadingLabel">
     <span class="loading-dot"></span>
     <span class="loading-dot"></span>
@@ -1605,15 +1588,7 @@ function renderProfiles() {
     el.innerHTML = `<div class="empty"><div class="ei">🔍</div><p>No profiles found.<br>Try a different filter or search term.</p></div>`;
     return;
   }
-  const toolsRow = `<div class="tools-row">
-    <a href="/second-marriage.html" class="tool-tile t-gold"><span class="tool-ico">🤍</span><span>Second<br>Marriage</span></a>
-    <a href="/bio-generator.html" class="tool-tile t-green"><span class="tool-ico">🪪</span><span>Create<br>Bio Card</span></a>
-    <a href="/check.html" class="tool-tile t-teal"><span class="tool-ico">🔍</span><span>Check<br>Status</span></a>
-  </div>`;
-  const cards = filtered.map((p,i) => buildCard(p,i));
-  const at = Math.min(3, cards.length);
-  cards.splice(at, 0, toolsRow);
-  el.innerHTML = cards.join('');
+  el.innerHTML = filtered.map((p,i) => buildCard(p,i)).join('');
 
   const hash = decodeURIComponent(location.hash.replace('#',''));
   if (hash) {
@@ -2034,31 +2009,6 @@ function getDegreeChip(education) {
   const short = best.label(best.line);
   return `<span class="deg-chip deg-${best.tier}">🎓 ${short}</span>`;
 }
-
-// ─── STICKY FILTER BAR: hide on scroll down, show on scroll up ───
-(function() {
-  const bar = document.querySelector('.controls');
-  const hdr = document.querySelector('header');
-  if (!bar || !hdr) return;
-  const setH = () => document.documentElement.style.setProperty('--hdr-h', hdr.offsetHeight + 'px');
-  setH(); window.addEventListener('resize', setH);
-  let lastY = window.scrollY, ticking = false;
-  window.addEventListener('scroll', () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const y = window.scrollY, d = y - lastY;
-      bar.classList.toggle('is-stuck', y > 40);
-      if (y < 200) bar.classList.remove('is-hidden');
-      else if (d > 8) bar.classList.add('is-hidden');
-      else if (d < -8) bar.classList.remove('is-hidden');
-      if (Math.abs(d) > 8) lastY = y;
-      ticking = false;
-    });
-  }, { passive: true });
-  bar.addEventListener('focusin', () => bar.classList.remove('is-hidden'));
-})();
-
 loadData();
 </script>
 </body>
